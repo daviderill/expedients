@@ -1,0 +1,2010 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>656</width>
+    <height>519</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QTabWidget" name="tabMain">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>641</width>
+     <height>461</height>
+    </rect>
+   </property>
+   <property name="tabPosition">
+    <enum>QTabWidget::North</enum>
+   </property>
+   <property name="tabShape">
+    <enum>QTabWidget::Rounded</enum>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="tabDades">
+    <attribute name="title">
+     <string>Dades Expedient</string>
+    </attribute>
+    <widget class="QGroupBox" name="gb1Expedient">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>611</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Expedient</string>
+     </property>
+     <widget class="QLabel" name="lblExp">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>61</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Núm. d'Exp.:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtNumExp">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>20</y>
+        <width>81</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblTip">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>20</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Tipus d'Obra:</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="cboTipus">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>20</y>
+        <width>311</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+      <property name="maxVisibleItems">
+       <number>20</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblAnn">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>50</y>
+        <width>61</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Annex:</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="cboAnnex">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>50</y>
+        <width>211</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtNumHab">
+      <property name="geometry">
+       <rect>
+        <x>540</x>
+        <y>50</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblHab">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>50</y>
+        <width>31</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Habit.:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblLl">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>81</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Data Llicència:</string>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="dateLlicencia">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>80</y>
+        <width>81</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="dateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2014</year>
+        <month>1</month>
+        <day>1</day>
+       </datetime>
+      </property>
+      <property name="minimumDateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2000</year>
+        <month>1</month>
+        <day>1</day>
+       </datetime>
+      </property>
+      <property name="maximumDate">
+       <date>
+        <year>2099</year>
+        <month>12</month>
+        <day>31</day>
+       </date>
+      </property>
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+      <property name="date">
+       <date>
+        <year>2014</year>
+        <month>1</month>
+        <day>1</day>
+       </date>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblAl">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>80</y>
+        <width>61</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Altres Llicèn.:</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="cboAltres">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>80</y>
+        <width>211</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtId">
+      <property name="geometry">
+       <rect>
+        <x>540</x>
+        <y>80</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="dateEntrada">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>50</y>
+        <width>81</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="dateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2014</year>
+        <month>1</month>
+        <day>1</day>
+       </datetime>
+      </property>
+      <property name="minimumDateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2000</year>
+        <month>1</month>
+        <day>1</day>
+       </datetime>
+      </property>
+      <property name="maximumDate">
+       <date>
+        <year>2099</year>
+        <month>12</month>
+        <day>31</day>
+       </date>
+      </property>
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+      <property name="date">
+       <date>
+        <year>2014</year>
+        <month>1</month>
+        <day>1</day>
+       </date>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblEn">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>91</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Data d'Entrada:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblId">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>80</y>
+        <width>41</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Id:</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="gb2Interessat">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>140</y>
+       <width>611</width>
+       <height>151</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Interessat</string>
+     </property>
+     <widget class="QLabel" name="lblSol">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>NIF/CIF Sol·licitant:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtRep">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>60</y>
+        <width>113</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblRep">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>NIF Representant:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblAdre">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>90</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Adreça notificació:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtAdresa">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>90</y>
+        <width>341</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblCp">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>120</y>
+        <width>21</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>C.P.:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtCp">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>120</y>
+        <width>61</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnJuridica">
+      <property name="geometry">
+       <rect>
+        <x>480</x>
+        <y>90</y>
+        <width>111</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Gestió P. Jurídiques</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnFisica">
+      <property name="geometry">
+       <rect>
+        <x>480</x>
+        <y>120</y>
+        <width>111</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Gestió P. Físiques</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtSolDades">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>30</y>
+        <width>351</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtRepDades">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>60</y>
+        <width>351</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtPoblacio">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>120</y>
+        <width>211</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="cboSol">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>30</y>
+        <width>111</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="gb3Emplasament">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>300</y>
+       <width>611</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Emplaçament</string>
+     </property>
+     <widget class="QLineEdit" name="refcat">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>20</y>
+        <width>191</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblRef">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>81</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Ref. Catastral:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblBe">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>20</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Be Inmoble:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblEmpl">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>91</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Emplaçament:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtEmpl">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>50</y>
+        <width>191</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="cboBe">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>20</y>
+        <width>191</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tabProjecte">
+    <attribute name="title">
+     <string>Projecte</string>
+    </attribute>
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>581</width>
+       <height>241</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Projecte</string>
+     </property>
+     <widget class="QLineEdit" name="txtVisatNum">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>180</y>
+        <width>113</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblVis">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>180</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Num. Visat:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblExe">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Director execució d'Obra:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblRed">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Redactor del Projecte:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblCol">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>150</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Col·legi profesional:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtRed">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>20</y>
+        <width>261</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblDir">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Director d'Obra:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtCol">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>150</y>
+        <width>113</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblCons">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>110</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Constructor:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblDat">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>210</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Data:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtRed_2">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>20</y>
+        <width>151</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtDir">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>50</y>
+        <width>261</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtDir_2">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>50</y>
+        <width>151</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtCons_2">
+      <property name="geometry">
+       <rect>
+        <x>418</x>
+        <y>110</y>
+        <width>151</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtExe_2">
+      <property name="geometry">
+       <rect>
+        <x>418</x>
+        <y>80</y>
+        <width>151</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnTecnic">
+      <property name="geometry">
+       <rect>
+        <x>460</x>
+        <y>140</y>
+        <width>111</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Gestió Tècnics</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtCons">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>110</y>
+        <width>261</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtExe">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>80</y>
+        <width>261</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="cboVisatData">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>210</y>
+        <width>111</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="minimumDateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2000</year>
+        <month>1</month>
+        <day>1</day>
+       </datetime>
+      </property>
+      <property name="maximumDate">
+       <date>
+        <year>2099</year>
+        <month>12</month>
+        <day>31</day>
+       </date>
+      </property>
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+      <property name="date">
+       <date>
+        <year>2000</year>
+        <month>9</month>
+        <day>20</day>
+       </date>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tabLiquidacio">
+    <attribute name="title">
+     <string>Liquidació</string>
+    </attribute>
+    <widget class="QLineEdit" name="txtPres">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>20</y>
+       <width>101</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="maxLength">
+      <number>15</number>
+     </property>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_15">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>10</y>
+       <width>381</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Impost i Taxes per  Expedició Documentació</string>
+     </property>
+     <widget class="QLabel" name="lblIcio">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ICIO</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtPlaca">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>30</y>
+        <width>61</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkPlaca">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>30</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Placa</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtIcio">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>30</y>
+        <width>113</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="gbUrb">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>80</y>
+       <width>341</width>
+       <height>341</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Taxa LLicències urbanístiques</string>
+     </property>
+     <widget class="QLineEdit" name="txtplur">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>30</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtEnr">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>60</y>
+        <width>101</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtMov_2">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>120</y>
+        <width>101</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtFig_2">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>150</y>
+        <width>101</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtPro">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>240</y>
+        <width>101</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtPar_2">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>210</y>
+        <width>101</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtFig_4">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>180</y>
+        <width>101</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkEn">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Enderrocs</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkMov">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>120</y>
+        <width>121</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Moviments Terres</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="txtFig_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>180</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Legalització</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkPar">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>210</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Parcel·lació</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkPro">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>240</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Pròrroga</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkPlur">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Plurifamiliars</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkRes">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>30</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Resta d'usos</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkFig">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>150</y>
+        <width>121</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Figures Planejament</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtRes">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>30</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtCar_2">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>90</y>
+        <width>101</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkCar">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>90</y>
+        <width>81</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Cartells</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtCar">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>90</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblNumExp_86">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>90</y>
+        <width>21</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>m2</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblNumExp_97">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>210</y>
+        <width>21</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>m2</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtPar">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>210</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtFig">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>150</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblNumExp_98">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>150</y>
+        <width>21</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>m2</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblNumExp_99">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>120</y>
+        <width>21</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>m3</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtMov">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>120</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtTot_2">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>290</y>
+        <width>113</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblTot_2">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>290</y>
+        <width>171</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Total Llicències Urbanístiques:</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="gbClave">
+     <property name="geometry">
+      <rect>
+       <x>360</x>
+       <y>80</y>
+       <width>261</width>
+       <height>161</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Clavegueram</string>
+     </property>
+     <widget class="QLineEdit" name="txtUni">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>20</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="nif_solic_75">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>20</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkUni">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Unifamiliar</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkRes_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Resta d'usos</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="cboRes">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>50</y>
+        <width>141</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtMes">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>80</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkMes">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>181</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Plurifamiliar mes de 13 hab. N:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblNumExp_79">
+      <property name="geometry">
+       <rect>
+        <x>-250</x>
+        <y>400</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Taxa de Clavegueram:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="nif_solic_24">
+      <property name="geometry">
+       <rect>
+        <x>-140</x>
+        <y>400</y>
+        <width>113</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtTot_3">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>130</y>
+        <width>113</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblTot_3">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>130</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Total Clavegueram</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="nif_solic_36">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>240</y>
+        <width>113</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblNumExp_82">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>240</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Total Clavegueram</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="gbTot">
+     <property name="geometry">
+      <rect>
+       <x>360</x>
+       <y>250</y>
+       <width>261</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Total a liquidar</string>
+     </property>
+     <widget class="QLineEdit" name="nif_solic_79">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>20</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblNumExp_84">
+      <property name="geometry">
+       <rect>
+        <x>-250</x>
+        <y>400</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Taxa de Clavegueram:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="nif_solic_25">
+      <property name="geometry">
+       <rect>
+        <x>-140</x>
+        <y>400</y>
+        <width>113</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="nif_solic_39">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>240</y>
+        <width>113</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblNumExp_87">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>240</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Total Clavegueram</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtTot">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>30</y>
+        <width>113</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblTot">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Impost i Taxes</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QLineEdit" name="txLiq">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>50</y>
+       <width>101</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="maxLength">
+      <number>15</number>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="chkPres">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>81</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Pressupost:</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="chkliq">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>50</y>
+       <width>81</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Liquidacio aj.:</string>
+     </property>
+    </widget>
+    <widget class="QGroupBox" name="gbGar">
+     <property name="geometry">
+      <rect>
+       <x>360</x>
+       <y>330</y>
+       <width>261</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Garanties</string>
+     </property>
+     <widget class="QLineEdit" name="txtRes_2">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>30</y>
+        <width>113</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkRes_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Residus</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtSer">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>60</y>
+        <width>113</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkSer">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Serveis</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tabComunicacio">
+    <attribute name="title">
+     <string>Comunicació i Esmenes</string>
+    </attribute>
+   </widget>
+  </widget>
+  <widget class="QLabel" name="lblInfo">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>480</y>
+     <width>281</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnSave">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>480</y>
+     <width>75</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Desar</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnClose">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>480</y>
+     <width>75</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Sortir</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnRefresh">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>480</y>
+     <width>75</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Actualitzar</string>
+   </property>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>tabMain</tabstop>
+  <tabstop>txtNumExp</tabstop>
+  <tabstop>cboTipus</tabstop>
+  <tabstop>dateEntrada</tabstop>
+  <tabstop>cboAnnex</tabstop>
+  <tabstop>txtNumHab</tabstop>
+  <tabstop>dateLlicencia</tabstop>
+  <tabstop>cboAltres</tabstop>
+  <tabstop>txtId</tabstop>
+  <tabstop>cboSol</tabstop>
+  <tabstop>txtSolDades</tabstop>
+  <tabstop>txtRep</tabstop>
+  <tabstop>txtRepDades</tabstop>
+  <tabstop>txtAdresa</tabstop>
+  <tabstop>txtCp</tabstop>
+  <tabstop>txtPoblacio</tabstop>
+  <tabstop>btnJuridica</tabstop>
+  <tabstop>btnFisica</tabstop>
+  <tabstop>refcat</tabstop>
+  <tabstop>cboBe</tabstop>
+  <tabstop>txtEmpl</tabstop>
+  <tabstop>txtRed</tabstop>
+  <tabstop>txtRed_2</tabstop>
+  <tabstop>txtDir</tabstop>
+  <tabstop>txtDir_2</tabstop>
+  <tabstop>txtExe</tabstop>
+  <tabstop>txtExe_2</tabstop>
+  <tabstop>txtCons</tabstop>
+  <tabstop>txtCons_2</tabstop>
+  <tabstop>txtCol</tabstop>
+  <tabstop>txtVisatNum</tabstop>
+  <tabstop>cboVisatData</tabstop>
+  <tabstop>btnTecnic</tabstop>
+  <tabstop>chkPres</tabstop>
+  <tabstop>txtPres</tabstop>
+  <tabstop>chkliq</tabstop>
+  <tabstop>txLiq</tabstop>
+  <tabstop>txtIcio</tabstop>
+  <tabstop>chkPlaca</tabstop>
+  <tabstop>txtPlaca</tabstop>
+  <tabstop>chkPlur</tabstop>
+  <tabstop>txtplur</tabstop>
+  <tabstop>chkRes</tabstop>
+  <tabstop>txtRes</tabstop>
+  <tabstop>chkEn</tabstop>
+  <tabstop>txtEnr</tabstop>
+  <tabstop>chkCar</tabstop>
+  <tabstop>txtCar</tabstop>
+  <tabstop>txtCar_2</tabstop>
+  <tabstop>chkMov</tabstop>
+  <tabstop>txtMov</tabstop>
+  <tabstop>txtMov_2</tabstop>
+  <tabstop>chkFig</tabstop>
+  <tabstop>txtFig</tabstop>
+  <tabstop>txtFig_2</tabstop>
+  <tabstop>txtFig_3</tabstop>
+  <tabstop>txtFig_4</tabstop>
+  <tabstop>chkPar</tabstop>
+  <tabstop>txtPar</tabstop>
+  <tabstop>txtPar_2</tabstop>
+  <tabstop>chkPro</tabstop>
+  <tabstop>txtPro</tabstop>
+  <tabstop>txtTot_2</tabstop>
+  <tabstop>chkUni</tabstop>
+  <tabstop>txtUni</tabstop>
+  <tabstop>nif_solic_75</tabstop>
+  <tabstop>chkRes_2</tabstop>
+  <tabstop>cboRes</tabstop>
+  <tabstop>chkMes</tabstop>
+  <tabstop>txtMes</tabstop>
+  <tabstop>txtTot_3</tabstop>
+  <tabstop>nif_solic_79</tabstop>
+  <tabstop>txtTot</tabstop>
+  <tabstop>chkRes_3</tabstop>
+  <tabstop>txtRes_2</tabstop>
+  <tabstop>chkSer</tabstop>
+  <tabstop>txtSer</tabstop>
+  <tabstop>nif_solic_24</tabstop>
+  <tabstop>btnRefresh</tabstop>
+  <tabstop>btnSave</tabstop>
+  <tabstop>btnClose</tabstop>
+  <tabstop>nif_solic_25</tabstop>
+  <tabstop>nif_solic_36</tabstop>
+  <tabstop>nif_solic_39</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
