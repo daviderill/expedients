@@ -76,6 +76,7 @@ def setComboModel(widget, vector):
 def sqlToList(sql):
     
     vector = []
+    vector.append('')
     cursor.execute(sql)
     rows = cursor.fetchall()
     for row in rows:
