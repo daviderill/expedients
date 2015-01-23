@@ -44,6 +44,9 @@ def formOpen(dialog,layerid,featureid):
     setComboModel(cboTipus, listTipus)
     setComboModel(cboSol, listNif)
     setComboModel(cboSolCif, listCif)
+    setComboModel(cboRedactor, listTecnic)
+    setComboModel(cboDirector, listTecnic)
+    setComboModel(cboExecutor, listTecnic)
     
     # Get 'immobles' from selected 'parcela'
     loadImmobles()
@@ -51,18 +54,29 @@ def formOpen(dialog,layerid,featureid):
     # Wire up our own signals
     setSignals()    
     
+    # Other default configuration
     getTipusSol()
-    
-    # Disable and set invisible some controls		
-    disableControls()
-                 
-    # Get number of activitites related to current emplacament
-    #updateTotals()	
+    boldGroupBoxes()
 
+
+# Connect to Database (only once, when loading map)
+def connectDb():
+
+    global conn, cursor
+    try:
+        conn = psycopg2.connect("host=127.0.0.1 port=5432 dbname=gis_cubelles user=gisadmin password=8u9ijn")        
+        #conn = psycopg2.connect("host=192.168.10.7 port=5432 dbname=gisdb user=gisadmin password=cubelles")        
+        cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        setCursor(cursor)        
+    except psycopg2.DatabaseError, e:
+        print 'Error %s' % e    
+        sys.exit(1)
+        
 
 def widgetsToGlobal():
     
     global refcat, lblInfo, txtId, txtNumExp, cboTipus, rbFisica, rbJuridica, lblSol, cboSol, cboSolCif, cboRep, txtSolDades, txtAdresa, txtCp, txtPoblacio, cboEmp
+    global cboRedactor, cboDirector, cboExecutor, txtRedactor, txtDirector, txtExecutor
         
     refcat = _dialog.findChild(QLineEdit, "refcat")        
     lblInfo = _dialog.findChild(QLabel, "lblInfo")        
@@ -81,25 +95,35 @@ def widgetsToGlobal():
     txtPoblacio = _dialog.findChild(QLineEdit, "txtPoblacio")          
     cboEmp = _dialog.findChild(QComboBox, "cboEmp")   
     
-
-# Connect to Database (only once, when loading map)
-def connectDb():
-
-    global conn, cursor
-    try:
-        conn = psycopg2.connect("host=127.0.0.1 port=5432 dbname=gis_cubelles user=gisadmin password=8u9ijn")        
-        #conn = psycopg2.connect("host=192.168.10.7 port=5432 dbname=gisdb user=gisadmin password=cubelles")        
-        cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        setCursor(cursor)        
-    except psycopg2.DatabaseError, e:
-        print 'Error %s' % e    
-        sys.exit(1)
+    # Tab 'Projecte'
+    cboRedactor = _dialog.findChild(QComboBox, "cboRedactor")   
+    cboDirector = _dialog.findChild(QComboBox, "cboDirector")   
+    cboExecutor = _dialog.findChild(QComboBox, "cboExecutor")   
+    txtRedactor = _dialog.findChild(QLineEdit, "txtRedactor")   
+    txtDirector = _dialog.findChild(QLineEdit, "txtDirector")   
+    txtExecutor = _dialog.findChild(QLineEdit, "txtExecutor")   
+    
+    
+# Set Group Boxes title font to bold    
+def boldGroupBoxes():   
+    
+    _dialog.findChild(QGroupBox, "gb1Expedient").setStyleSheet("QGroupBox { font-weight: bold; } ")
+    _dialog.findChild(QGroupBox, "gb2Interessat").setStyleSheet("QGroupBox { font-weight: bold; } ")
+    _dialog.findChild(QGroupBox, "gb3Emplasament").setStyleSheet("QGroupBox { font-weight: bold; } ")
+    _dialog.findChild(QGroupBox, "gbProjecte").setStyleSheet("QGroupBox { font-weight: bold; } ")
+    _dialog.findChild(QGroupBox, "gb5").setStyleSheet("QGroupBox { font-weight: bold; } ")
+    _dialog.findChild(QGroupBox, "gbUrb").setStyleSheet("QGroupBox { font-weight: bold; } ")
+    _dialog.findChild(QGroupBox, "gbClav").setStyleSheet("QGroupBox { font-weight: bold; } ")
+    _dialog.findChild(QGroupBox, "gbTot").setStyleSheet("QGroupBox { font-weight: bold; } ")
+    _dialog.findChild(QGroupBox, "gbGar").setStyleSheet("QGroupBox { font-weight: bold; } ")
         
-
+     
 # Wire up our own signals    
 def setSignals():
   
     _dialog.findChild(QPushButton, "btnFisica").clicked.connect(manageFisica)    
+    _dialog.findChild(QPushButton, "btnJuridica").clicked.connect(manageJuridica)    
+    _dialog.findChild(QPushButton, "btnTecnic").clicked.connect(manageTecnic)    
     _dialog.findChild(QPushButton, "btnRefresh").clicked.connect(refresh)    
     _dialog.findChild(QPushButton, "btnSave").clicked.connect(save)    
     _dialog.findChild(QPushButton, "btnClose").clicked.connect(close)
@@ -108,11 +132,15 @@ def setSignals():
     cboSol.currentIndexChanged.connect(solChanged)
     cboSolCif.currentIndexChanged.connect(solChanged)
     
+    cboRedactor.currentIndexChanged.connect(redactorChanged)
+    cboDirector.currentIndexChanged.connect(directorChanged)
+    cboExecutor.currentIndexChanged.connect(executorChanged)
+    
         
 # Load combos from domain tables (only first time)
 def loadData():
 
-    global listTipus, listNif, listCif
+    global listTipus, listNif, listCif, listTecnic
     
     sql = "SELECT id FROM data.tipus_om ORDER BY id"
     listTipus = sqlToList(sql)
@@ -120,6 +148,8 @@ def loadData():
     listNif = sqlToList(sql)
     sql = "SELECT id FROM data.juridica ORDER BY id"
     listCif = sqlToList(sql)
+    sql = "SELECT id FROM data.tecnic ORDER BY id"
+    listTecnic = sqlToList(sql)
         
         
 def loadImmobles():
@@ -127,14 +157,13 @@ def loadImmobles():
     global listEmp
     
     sql = "SELECT id FROM data.immoble WHERE refcat = '"+refcat.text()+"' ORDER BY id"
-    print sql
     listEmp = sqlToList(sql)
     setComboModel(cboEmp, listEmp)    
 
     
 def getLayers():
     
-    global layers, layerFisica, layerJuridica
+    global layers, layerFisica, layerJuridica, layerTecnic
     
     layers = _iface.legendInterface().layers()
     
@@ -146,18 +175,14 @@ def getLayers():
             layerFisica = layer
         if layer.name() == 'juridica':
             layerJuridica = layer
+        if layer.name() == 'tecnic':
+            layerTecnic = layer
         # Check if they are vector
         #if layerType == QgsMapLayer.VectorLayer:
             #self.layersList.append(layer)
             #self.dlg.ui.cboStreetLayer.addItem(layer.name())
             #self.dlg.ui.cboPortalLayer.addItem(layer.name()) 
                     
-    
-# Disable and set invisible some controls	
-def disableControls():
-    return
-    #_dialog.findChild(QLineEdit, "refcat").setEnabled(False)  
-
 
 # Save data from Tab 'Dades Expedient' into Database
 def saveDadesExpedient(update):
@@ -233,7 +258,6 @@ def solChanged():
         solId = getSelectedItem2("cboSolCif")
         
     sql = "SELECT COALESCE(nom, '') || ' ' || COALESCE(cognom_1, '') || ' ' || COALESCE(cognom_2, '') AS nom_complet, adreca, cp, poblacio "
-    sql+= ""
     sql+= "FROM data."+table+" WHERE id = "+solId
     #print sql
     cursor.execute(sql)
@@ -246,10 +270,38 @@ def solChanged():
     else:
         clearNotificacions()
         
+        
+def redactorChanged():
+    tecnicChanged('cboRedactor', txtRedactor)
+        
+def directorChanged():
+    tecnicChanged('cboDirector', txtDirector)
+        
+def executorChanged():
+    tecnicChanged('cboExecutor', txtExecutor)
+        
+        
+def tecnicChanged(cboName, txtWidget):
+    
+    sql = "SELECT COALESCE(nom, '') || ' ' || COALESCE(cognom_1, '') || ' ' || COALESCE(cognom_2, '') AS nom_complet "
+    sql+= "FROM data.tecnic WHERE id = "+getSelectedItem2(cboName)
+    print sql
+    cursor.execute(sql)
+    row = cursor.fetchone()
+    if row:
+        txtWidget.setText(row[0])
+    else:
+        txtWidget.setText('')
+        
                     
 def manageFisica():
-    print "manageFisica"
     iface.showAttributeTable(layerFisica)
+                    
+def manageJuridica():
+    iface.showAttributeTable(layerJuridica)
+                    
+def manageTecnic():
+    iface.showAttributeTable(layerTecnic)
     
     
 def refresh():
