@@ -51,6 +51,7 @@ def formOpen(dialog,layerid,featureid):
     setComboModel(cboRedactor, listTecnic)
     setComboModel(cboDirector, listTecnic)
     setComboModel(cboExecutor, listTecnic)
+    setComboModel(cboClavPlu, listClavPlu)
     
     # Fill date widgets with current Date
     dateEntrada.setDate(current_date)
@@ -87,7 +88,7 @@ def widgetsToGlobal():
     global refcat, lblInfo, txtId, txtNumExp, cboTipus, dateEntrada, dateLlicencia
     global rbFisica, rbJuridica, lblSol, cboSol, cboSolCif, cboRep, txtSolDades, txtAdresa, txtCp, txtPoblacio, txtRefcat20, cboEmp
     global cboRedactor, cboDirector, cboExecutor, txtRedactor, txtDirector, txtExecutor, dateVisat
-    global txtPress
+    global txtPress, cboClavPlu
 
     # Tab 'Dades Expedient'  
     refcat = _dialog.findChild(QLineEdit, "refcat")        
@@ -121,8 +122,8 @@ def widgetsToGlobal():
     dateVisat = _dialog.findChild(QDateEdit, "dateVisat")  
     
     # Tab 'Liquidació'
-    txtPress = _dialog.findChild(QLineEdit, "txtPress")          
-    
+    txtPress = _dialog.findChild(QLineEdit, "txtPress")    
+    cboClavPlu = _dialog.findChild(QComboBox, "cboClavPlu")   
     
     
 # Set Group Boxes title font to bold    
@@ -180,12 +181,20 @@ def setSignals():
     _dialog.findChild(QLineEdit, "txtMovM").editingFinished.connect(partial(llicChanged, 'chkMov'))   
     _dialog.findChild(QLineEdit, "txtFigM").editingFinished.connect(partial(llicChanged, 'chkFig'))   
     _dialog.findChild(QLineEdit, "txtParM").editingFinished.connect(partial(llicChanged, 'chkPar'))   
+    _dialog.findChild(QCheckBox, "chkClavUni").clicked.connect(partial(clavChanged, 'chkClavUni'))   
+    _dialog.findChild(QCheckBox, "chkClavPlu").clicked.connect(partial(clavChanged, 'chkClavPlu'))   
+    _dialog.findChild(QCheckBox, "chkClavMes").clicked.connect(partial(clavChanged, 'chkClavMes'))   
+    _dialog.findChild(QLineEdit, "txtClavUniN").editingFinished.connect(partial(clavChanged, 'chkClavUni'))   
+    cboClavPlu.currentIndexChanged.connect(partial(clavChanged, 'chkClavPlu'))   
+    _dialog.findChild(QLineEdit, "txtClavMesN").editingFinished.connect(partial(clavChanged, 'chkClavMes'))   
+    _dialog.findChild(QCheckBox, "chkGarRes").clicked.connect(partial(garChanged, 'chkGarRes'))   
+    _dialog.findChild(QCheckBox, "chkGarSer").clicked.connect(partial(garChanged, 'chkGarSer'))   
     
         
 # Load combos from domain tables (only first time)
 def loadData():
 
-    global listTipus, listNif, listCif, listTecnic
+    global listTipus, listNif, listCif, listTecnic, listClavPlu
     
     sql = "SELECT id FROM data.tipus_om ORDER BY id"
     listTipus = sqlToList(sql)
@@ -195,6 +204,11 @@ def loadData():
     listCif = sqlToList(sql)
     sql = "SELECT id FROM data.tecnic ORDER BY id"
     listTecnic = sqlToList(sql)
+    listClavPlu = []
+    listClavPlu.append('')
+    listClavPlu.append('2 a 5')
+    listClavPlu.append('6 a 9')
+    listClavPlu.append('10 a 13')
         
         
 def loadImmobles():
@@ -285,6 +299,12 @@ def getPress():
         return 0.0
     return float(press)
 
+
+def updateTotal():
+    
+    total = getFloat('txtIcio')+getFloat('txtPlaca')+getFloat('txtLlicTot')+getFloat('txtClavTot')
+    setText('txtTotalLiq', total)  
+      
     
 def clearNotificacions():       
     txtSolDades.setText('')
@@ -400,6 +420,9 @@ def pressChanged():
     llicChanged('chkEnd')
     llicChanged('chkLeg')
     llicChanged('chkPro')
+    garChanged('chkGarRes')
+    garChanged('chkGarSer')
+    updateTotal()
     
 
 def llicChanged(widgetName):
@@ -467,9 +490,65 @@ def llicChanged(widgetName):
         setText('txtPro', value)
         
     total = getFloat('txtPlu')+getFloat('txtRes')+getFloat('txtEnd')+getFloat('txtCar')+getFloat('txtMov')+getFloat('txtFig')+getFloat('txtLeg')+getFloat('txtPar')+getFloat('txtPro')
-    setText('txtTot_2', total)
+    setText('txtLlicTot', total)
+    updateTotal()    
     
     
+def clavChanged(widgetName):
+    
+    widget = _dialog.findChild(QCheckBox, widgetName)
+    
+    if widgetName == 'chkClavUni':
+        value = ''
+        if widget.isChecked():
+            value = getFloat('txtClavUniN') * 390.66
+        setText('txtClavUni', value)
+        
+    elif widgetName == 'chkClavMes':
+        value = ''
+        if widget.isChecked():
+            value = getFloat('txtClavMesN') * 65.025
+        setText('txtClavMes', value)
+        
+    elif widgetName == 'chkClavPlu':
+        value = ''
+        if widget.isChecked():
+            selIndex = cboClavPlu.currentIndex()
+            if selIndex == 1:
+                value = 650.76
+            elif selIndex == 2:
+                value = 910.86
+            elif selIndex == 3:
+                value = 1170.96
+        setText('txtClavPlu', value)
+        
+    total = getFloat('txtClavUni')+getFloat('txtClavPlu')+getFloat('txtClavMes')
+    setText('txtClavTot', total)   
+    updateTotal()    
+    
+         
+def garChanged(widgetName):
+    
+    widget = _dialog.findChild(QCheckBox, widgetName)
+    
+    if widgetName == 'chkGarRes':
+        value = ''
+        if widget.isChecked():
+            value = max(1000, getPress() * 0.01)
+        setText('txtGarRes', value)
+        
+    elif widgetName == 'chkGarSer':
+        value = ''
+        if widget.isChecked():
+            value = max(600, getPress() * 0.01)
+        setText('txtGarSer', value)
+        
+    updateTotal()        
+        
+    #total = getFloat('txtGarRes')+getFloat('txtGarSer')
+    #setText('txtClavTot', total)        
+            
+            
 # Slots: Window buttons    
 def manageFisica():
     iface.showAttributeTable(layerFisica)

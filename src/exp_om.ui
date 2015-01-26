@@ -1424,7 +1424,7 @@
        <number>15</number>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtTot_2">
+     <widget class="QLineEdit" name="txtLlicTot">
       <property name="enabled">
        <bool>false</bool>
       </property>
@@ -1475,9 +1475,9 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>190</x>
+        <x>180</x>
         <y>20</y>
-        <width>61</width>
+        <width>71</width>
         <height>20</height>
        </rect>
       </property>
@@ -1485,7 +1485,7 @@
        <string/>
       </property>
       <property name="maxLength">
-       <number>5</number>
+       <number>15</number>
       </property>
      </widget>
      <widget class="QLineEdit" name="nif_solic_75">
@@ -1504,7 +1504,7 @@
        <number>15</number>
       </property>
      </widget>
-     <widget class="QCheckBox" name="chkUni">
+     <widget class="QCheckBox" name="chkClavUni">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1517,7 +1517,7 @@
        <string>Unifamiliar</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="chkRes_2">
+     <widget class="QCheckBox" name="chkClavPlu">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1535,7 +1535,7 @@
        <rect>
         <x>110</x>
         <y>50</y>
-        <width>71</width>
+        <width>61</width>
         <height>22</height>
        </rect>
       </property>
@@ -1546,9 +1546,9 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>190</x>
+        <x>180</x>
         <y>80</y>
-        <width>61</width>
+        <width>71</width>
         <height>20</height>
        </rect>
       </property>
@@ -1556,15 +1556,15 @@
        <string/>
       </property>
       <property name="maxLength">
-       <number>5</number>
+       <number>15</number>
       </property>
      </widget>
-     <widget class="QCheckBox" name="chkMes">
+     <widget class="QCheckBox" name="chkClavMes">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>80</y>
-        <width>181</width>
+        <width>111</width>
         <height>21</height>
        </rect>
       </property>
@@ -1601,7 +1601,7 @@
        <number>15</number>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtTot_3">
+     <widget class="QLineEdit" name="txtClavTot">
       <property name="enabled">
        <bool>false</bool>
       </property>
@@ -1668,9 +1668,9 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>190</x>
+        <x>180</x>
         <y>50</y>
-        <width>61</width>
+        <width>71</width>
         <height>20</height>
        </rect>
       </property>
@@ -1678,13 +1678,13 @@
        <string/>
       </property>
       <property name="maxLength">
-       <number>5</number>
+       <number>15</number>
       </property>
      </widget>
      <widget class="QLineEdit" name="txtClavMesN">
       <property name="geometry">
        <rect>
-        <x>130</x>
+        <x>120</x>
         <y>80</y>
         <width>51</width>
         <height>20</height>
@@ -1700,7 +1700,7 @@
      <widget class="QLineEdit" name="txtClavUniN">
       <property name="geometry">
        <rect>
-        <x>130</x>
+        <x>120</x>
         <y>20</y>
         <width>51</width>
         <height>20</height>
@@ -1880,9 +1880,9 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>162</x>
         <y>30</y>
-        <width>113</width>
+        <width>91</width>
         <height>20</height>
        </rect>
       </property>
@@ -1893,7 +1893,7 @@
        <number>15</number>
       </property>
      </widget>
-     <widget class="QCheckBox" name="chkRes_3">
+     <widget class="QCheckBox" name="chkGarRes">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1912,9 +1912,9 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>162</x>
         <y>60</y>
-        <width>113</width>
+        <width>91</width>
         <height>20</height>
        </rect>
       </property>
@@ -1925,7 +1925,7 @@
        <number>15</number>
       </property>
      </widget>
-     <widget class="QCheckBox" name="chkSer">
+     <widget class="QCheckBox" name="chkGarSer">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -2066,25 +2066,25 @@
   <tabstop>chkPar</tabstop>
   <tabstop>txtParM</tabstop>
   <tabstop>chkPro</tabstop>
-  <tabstop>chkUni</tabstop>
+  <tabstop>chkClavUni</tabstop>
   <tabstop>txtClavUni</tabstop>
-  <tabstop>chkRes_2</tabstop>
+  <tabstop>chkClavPlu</tabstop>
   <tabstop>cboClavPlu</tabstop>
-  <tabstop>chkMes</tabstop>
+  <tabstop>chkClavMes</tabstop>
   <tabstop>txtClavMes</tabstop>
   <tabstop>btnRefresh</tabstop>
   <tabstop>btnSave</tabstop>
   <tabstop>btnClose</tabstop>
   <tabstop>nif_solic_75</tabstop>
-  <tabstop>txtTot_3</tabstop>
+  <tabstop>txtClavTot</tabstop>
   <tabstop>nif_solic_79</tabstop>
   <tabstop>txtTotalLiq</tabstop>
-  <tabstop>chkRes_3</tabstop>
+  <tabstop>chkGarRes</tabstop>
   <tabstop>txtGarRes</tabstop>
-  <tabstop>chkSer</tabstop>
+  <tabstop>chkGarSer</tabstop>
   <tabstop>txtGarSer</tabstop>
   <tabstop>nif_solic_24</tabstop>
-  <tabstop>txtTot_2</tabstop>
+  <tabstop>txtLlicTot</tabstop>
   <tabstop>txtPar</tabstop>
   <tabstop>txtPro</tabstop>
   <tabstop>nif_solic_25</tabstop>
