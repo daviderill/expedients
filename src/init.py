@@ -87,6 +87,7 @@ def widgetsToGlobal():
     global refcat, lblInfo, txtId, txtNumExp, cboTipus, dateEntrada, dateLlicencia
     global rbFisica, rbJuridica, lblSol, cboSol, cboSolCif, cboRep, txtSolDades, txtAdresa, txtCp, txtPoblacio, txtRefcat20, cboEmp
     global cboRedactor, cboDirector, cboExecutor, txtRedactor, txtDirector, txtExecutor, dateVisat
+    global txtPress
 
     # Tab 'Dades Expedient'  
     refcat = _dialog.findChild(QLineEdit, "refcat")        
@@ -119,6 +120,10 @@ def widgetsToGlobal():
     txtExecutor = _dialog.findChild(QLineEdit, "txtExecutor")   
     dateVisat = _dialog.findChild(QDateEdit, "dateVisat")  
     
+    # Tab 'Liquidació'
+    txtPress = _dialog.findChild(QLineEdit, "txtPress")          
+    
+    
     
 # Set Group Boxes title font to bold    
 def boldGroupBoxes():   
@@ -137,19 +142,18 @@ def boldGroupBoxes():
 # Wire up our own signals    
 def setSignals():
   
-    # General and Tab 'Dades Expedient'
+    # Buttons
     _dialog.findChild(QPushButton, "btnFisica").clicked.connect(manageFisica)    
     _dialog.findChild(QPushButton, "btnJuridica").clicked.connect(manageJuridica)    
     _dialog.findChild(QPushButton, "btnTecnic").clicked.connect(manageTecnic)    
     _dialog.findChild(QPushButton, "btnRefresh").clicked.connect(refresh)    
     _dialog.findChild(QPushButton, "btnSave").clicked.connect(save)    
     _dialog.findChild(QPushButton, "btnClose").clicked.connect(close)
+    
+    # General and Tab 'Dades Expedient'
     txtId.editingFinished.connect(idChanged)    
     rbFisica.clicked.connect(getTipusSol)    
     rbJuridica.clicked.connect(getTipusSol)    
-    #cboSol.currentIndexChanged.connect(solChanged, 'persona')
-    #cboSolCif.currentIndexChanged.connect(solChanged, 'juridica')
-    #cboRep.currentIndexChanged.connect(solChanged, 'representant')
     cboSol.currentIndexChanged.connect(partial(solChanged, 'persona'))
     cboSolCif.currentIndexChanged.connect(partial(solChanged, 'juridica'))
     cboRep.currentIndexChanged.connect(partial(solChanged, 'representant'))
@@ -159,6 +163,23 @@ def setSignals():
     cboRedactor.currentIndexChanged.connect(redactorChanged)
     cboDirector.currentIndexChanged.connect(directorChanged)
     cboExecutor.currentIndexChanged.connect(executorChanged)
+    
+    # Tab 'Liquidació'
+    txtPress.editingFinished.connect(pressChanged)    
+    _dialog.findChild(QCheckBox, "chkPlaca").clicked.connect(partial(llicChanged, 'chkPlaca'))    
+    _dialog.findChild(QCheckBox, "chkPlu").clicked.connect(partial(llicChanged, 'chkPlu'))    
+    _dialog.findChild(QCheckBox, "chkRes").clicked.connect(partial(llicChanged, 'chkRes'))    
+    _dialog.findChild(QCheckBox, "chkEnd").clicked.connect(partial(llicChanged, 'chkEnd'))   
+    _dialog.findChild(QCheckBox, "chkCar").clicked.connect(partial(llicChanged, 'chkCar'))   
+    _dialog.findChild(QCheckBox, "chkMov").clicked.connect(partial(llicChanged, 'chkMov'))   
+    _dialog.findChild(QCheckBox, "chkFig").clicked.connect(partial(llicChanged, 'chkFig'))   
+    _dialog.findChild(QCheckBox, "chkLeg").clicked.connect(partial(llicChanged, 'chkLeg'))   
+    _dialog.findChild(QCheckBox, "chkPar").clicked.connect(partial(llicChanged, 'chkPar'))   
+    _dialog.findChild(QCheckBox, "chkPro").clicked.connect(partial(llicChanged, 'chkPro'))   
+    _dialog.findChild(QLineEdit, "txtCarM").editingFinished.connect(partial(llicChanged, 'chkCar'))   
+    _dialog.findChild(QLineEdit, "txtMovM").editingFinished.connect(partial(llicChanged, 'chkMov'))   
+    _dialog.findChild(QLineEdit, "txtFigM").editingFinished.connect(partial(llicChanged, 'chkFig'))   
+    _dialog.findChild(QLineEdit, "txtParM").editingFinished.connect(partial(llicChanged, 'chkPar'))   
     
         
 # Load combos from domain tables (only first time)
@@ -255,6 +276,16 @@ def saveDadesExpedient(update):
     conn.commit()   
           
 
+def getPress():
+    
+    press = txtPress.text().replace(",", ".")
+    txtPress.setText(press)
+    if not isNumber(press):
+        showWarning(u"Format numèric incorrecte")
+        return 0.0
+    return float(press)
+
+    
 def clearNotificacions():       
     txtSolDades.setText('')
     txtAdresa.setText('')
@@ -279,8 +310,7 @@ def showWarning(text, duration = None):
         
 
 
-# Slots (Events)
-
+# Slots: Tab 'Dades expedient'
 def getTipusSol():
     
     if rbFisica.isChecked():
@@ -294,7 +324,6 @@ def getTipusSol():
     clearNotificacions()
  
  
-# Called when 'id' is updated
 def idChanged():
     
     expId = txtId.text()
@@ -305,8 +334,7 @@ def idChanged():
     numExp = expId[2:]+"/"+expId[:2]
     txtNumExp.setText(numExp)
     
-            
-# Called when 'Solicitant' is updated
+    
 def solChanged(aux):
 
     if aux == 'persona':
@@ -332,14 +360,14 @@ def solChanged(aux):
         clearNotificacions()
         
         
-# Called when 'Emplaçament' is updated
 def empChanged():
     
     selIndex = cboEmp.currentIndex()
     refcat20 = listEmp[selIndex]["refcat20"]
     txtRefcat20.setText(refcat20)     
+   
         
-        
+# Slots: Tab 'Projecte'        
 def redactorChanged():
     tecnicChanged('cboRedactor', txtRedactor)
         
@@ -348,7 +376,6 @@ def directorChanged():
         
 def executorChanged():
     tecnicChanged('cboExecutor', txtExecutor)
-        
         
 def tecnicChanged(cboName, txtWidget):
     
@@ -360,8 +387,90 @@ def tecnicChanged(cboName, txtWidget):
         txtWidget.setText(row[0])
     else:
         txtWidget.setText('')
+    
+    
+# Slots: Tab 'Liquidació'
+def pressChanged():
+    
+    press = getPress()
+    icio = float(press) * 0.04
+    setText("txtIcio", icio)
+    llicChanged('chkPlu')
+    llicChanged('chkRes')
+    llicChanged('chkEnd')
+    llicChanged('chkLeg')
+    llicChanged('chkPro')
+    
+
+def llicChanged(widgetName):
+    
+    widget = _dialog.findChild(QCheckBox, widgetName)
+    
+    if widgetName == 'chkPlaca':
+        value = ''
+        if widget.isChecked():
+            value = 12.9
+        setText('txtPlaca', value)
         
-                    
+    elif widgetName == 'chkPlu':
+        value = ''
+        if widget.isChecked():
+            value = max(38.15, getPress() * 0.0096)
+        setText('txtPlu', value)
+        
+    elif widgetName == 'chkRes':
+        value = ''
+        if widget.isChecked():
+            value = max(38.15, getPress() * 0.0094)
+        setText('txtRes', value)
+        
+    elif widgetName == 'chkEnd':
+        value = ''
+        if widget.isChecked():
+            value = max(0, getPress() * 0.0367)
+        setText('txtEnd', value)
+        
+    elif widgetName == 'chkCar':
+        value = ''
+        if widget.isChecked():
+            value = getFloat('txtCarM') * 8.9
+        setText('txtCar', value)
+        
+    elif widgetName == 'chkMov':
+        value = ''
+        if widget.isChecked():
+            value = getFloat('txtMovM') * 0.26
+        setText('txtMov', value)
+        
+    elif widgetName == 'chkFig':
+        value = ''
+        if widget.isChecked():
+            value = max(725.4, getFloat('txtFigM') * 0.02)
+        setText('txtFig', value)
+        
+    elif widgetName == 'chkLeg':
+        value = ''
+        if widget.isChecked():
+            value = getFloat('txtPlu') + getFloat('txtCar') + getFloat('txtEnd')
+        setText('txtLeg', value)
+    
+    elif widgetName == 'chkPar':
+        value = ''
+        if widget.isChecked():
+            value = max(244, getFloat('txtParM') * 0.02)
+        setText('txtPar', value)
+    
+    elif widgetName == 'chkPro':
+        value = ''
+        if widget.isChecked():
+            value = 22.2
+        setText('txtPro', value)
+        
+    total = getFloat('txtPlu')+getFloat('txtRes')+getFloat('txtEnd')+getFloat('txtCar')+getFloat('txtMov')+getFloat('txtFig')+getFloat('txtLeg')+getFloat('txtPar')+getFloat('txtPro')
+    setText('txtTot_2', total)
+    
+    
+# Slots: Window buttons    
 def manageFisica():
     iface.showAttributeTable(layerFisica)
                     
@@ -370,7 +479,6 @@ def manageJuridica():
                     
 def manageTecnic():
     iface.showAttributeTable(layerTecnic)
-    
     
 def refresh():
     #print "refresh"

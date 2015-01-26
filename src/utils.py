@@ -130,17 +130,14 @@ def getValue(widget):
     return elem_text
 
 
-def getValue2(widget):
+def getFloat(widgetName):
     
-    elem = _dialog.findChild(QLineEdit, widget)
-    if elem:	
-        if elem.text():
-            elem_text = elem.text().replace(",", ".")		      
-        else:
-            elem_text = "null"
-    else:
-        elem_text = "null"
-    return elem_text
+    widget = _dialog.findChild(QLineEdit, widgetName)
+    value = 0.0
+    if widget:	
+        if widget.text():
+            value = float(widget.text().replace(",", "."))	      
+    return value
 
 
 def getStringValue(widget):
@@ -215,6 +212,24 @@ def isNull(widget):
             empty = False
     return empty	
 
+
+def isNumber(elem):
+    
+    try:
+        float(elem)
+        return True
+    except ValueError:
+        return False
+
+
+def setText(widget, text):
+    
+    elem = _dialog.findChild(QLineEdit, widget)
+    if elem:    
+        elem.setText(str(text))
+    else:
+        print "setText"
+        
 
 def setLogger(name, folder, filename):
     
