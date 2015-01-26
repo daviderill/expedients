@@ -4,6 +4,7 @@ from qgis.core import *
 from qgis.gui import QgsMessageBar
 from qgis.utils import iface
 from utils import *
+from functools import partial
 from datetime import datetime
 import time
 import os.path
@@ -14,7 +15,7 @@ import sys
 
 def formOpen(dialog,layerid,featureid):
 
-    global _dialog, _iface, current_path
+    global _dialog, _iface, current_path, current_date
     global MSG_DURATION
     
     # Set global variables    
@@ -27,6 +28,8 @@ def formOpen(dialog,layerid,featureid):
     #if isFirstTime():
           
     current_path = os.path.dirname(os.path.abspath(__file__))
+    date_aux = time.strftime("%d/%m/%Y")
+    current_date = datetime.strptime(date_aux, "%d/%m/%Y")
 
     # Save reference to the QGIS interface
     _iface = iface
@@ -44,10 +47,16 @@ def formOpen(dialog,layerid,featureid):
     setComboModel(cboTipus, listTipus)
     setComboModel(cboSol, listNif)
     setComboModel(cboSolCif, listCif)
+    setComboModel(cboRep, listNif)
     setComboModel(cboRedactor, listTecnic)
     setComboModel(cboDirector, listTecnic)
     setComboModel(cboExecutor, listTecnic)
     
+    # Fill date widgets with current Date
+    dateEntrada.setDate(current_date)
+    dateLlicencia.setDate(current_date)
+    dateVisat.setDate(current_date)
+        
     # Get 'immobles' from selected 'parcela'
     loadImmobles()
     
@@ -75,14 +84,19 @@ def connectDb():
 
 def widgetsToGlobal():
     
-    global refcat, lblInfo, txtId, txtNumExp, cboTipus, rbFisica, rbJuridica, lblSol, cboSol, cboSolCif, cboRep, txtSolDades, txtAdresa, txtCp, txtPoblacio, cboEmp
-    global cboRedactor, cboDirector, cboExecutor, txtRedactor, txtDirector, txtExecutor
-        
+    global refcat, lblInfo, txtId, txtNumExp, cboTipus, dateEntrada, dateLlicencia
+    global rbFisica, rbJuridica, lblSol, cboSol, cboSolCif, cboRep, txtSolDades, txtAdresa, txtCp, txtPoblacio, txtRefcat20, cboEmp
+    global cboRedactor, cboDirector, cboExecutor, txtRedactor, txtDirector, txtExecutor, dateVisat
+
+    # Tab 'Dades Expedient'  
     refcat = _dialog.findChild(QLineEdit, "refcat")        
     lblInfo = _dialog.findChild(QLabel, "lblInfo")        
     txtId = _dialog.findChild(QLineEdit, "txtId")        
     txtNumExp = _dialog.findChild(QLineEdit, "txtNumExp")        
     cboTipus = _dialog.findChild(QComboBox, "cboTipus")  
+    dateEntrada = _dialog.findChild(QDateEdit, "dateEntrada")  
+    dateLlicencia = _dialog.findChild(QDateEdit, "dateLlicencia")  
+    
     rbFisica = _dialog.findChild(QRadioButton, "rbFisica")  
     rbJuridica = _dialog.findChild(QRadioButton, "rbJuridica")  
     lblSol = _dialog.findChild(QLabel, "lblSol")   
@@ -90,9 +104,10 @@ def widgetsToGlobal():
     cboSolCif = _dialog.findChild(QComboBox, "cboSolCif")   
     cboRep = _dialog.findChild(QComboBox, "cboRep")   
     txtSolDades = _dialog.findChild(QLineEdit, "txtSolDades")        
-    txtAdresa = _dialog.findChild(QLineEdit, "txtAdresa")        
-    txtCp = _dialog.findChild(QLineEdit, "txtCp")       
-    txtPoblacio = _dialog.findChild(QLineEdit, "txtPoblacio")          
+    txtAdresa = _dialog.findChild(QLineEdit, "txtNotifAdreca")        
+    txtCp = _dialog.findChild(QLineEdit, "txtNotifCp")       
+    txtPoblacio = _dialog.findChild(QLineEdit, "txtNotifPoblacio")          
+    txtRefcat20 = _dialog.findChild(QLineEdit, "txtRefcat20")          
     cboEmp = _dialog.findChild(QComboBox, "cboEmp")   
     
     # Tab 'Projecte'
@@ -102,6 +117,7 @@ def widgetsToGlobal():
     txtRedactor = _dialog.findChild(QLineEdit, "txtRedactor")   
     txtDirector = _dialog.findChild(QLineEdit, "txtDirector")   
     txtExecutor = _dialog.findChild(QLineEdit, "txtExecutor")   
+    dateVisat = _dialog.findChild(QDateEdit, "dateVisat")  
     
     
 # Set Group Boxes title font to bold    
@@ -121,17 +137,25 @@ def boldGroupBoxes():
 # Wire up our own signals    
 def setSignals():
   
+    # General and Tab 'Dades Expedient'
     _dialog.findChild(QPushButton, "btnFisica").clicked.connect(manageFisica)    
     _dialog.findChild(QPushButton, "btnJuridica").clicked.connect(manageJuridica)    
     _dialog.findChild(QPushButton, "btnTecnic").clicked.connect(manageTecnic)    
     _dialog.findChild(QPushButton, "btnRefresh").clicked.connect(refresh)    
     _dialog.findChild(QPushButton, "btnSave").clicked.connect(save)    
     _dialog.findChild(QPushButton, "btnClose").clicked.connect(close)
+    txtId.editingFinished.connect(idChanged)    
     rbFisica.clicked.connect(getTipusSol)    
     rbJuridica.clicked.connect(getTipusSol)    
-    cboSol.currentIndexChanged.connect(solChanged)
-    cboSolCif.currentIndexChanged.connect(solChanged)
+    #cboSol.currentIndexChanged.connect(solChanged, 'persona')
+    #cboSolCif.currentIndexChanged.connect(solChanged, 'juridica')
+    #cboRep.currentIndexChanged.connect(solChanged, 'representant')
+    cboSol.currentIndexChanged.connect(partial(solChanged, 'persona'))
+    cboSolCif.currentIndexChanged.connect(partial(solChanged, 'juridica'))
+    cboRep.currentIndexChanged.connect(partial(solChanged, 'representant'))
+    cboEmp.currentIndexChanged.connect(empChanged)
     
+    # Tab 'Projecte'
     cboRedactor.currentIndexChanged.connect(redactorChanged)
     cboDirector.currentIndexChanged.connect(directorChanged)
     cboExecutor.currentIndexChanged.connect(executorChanged)
@@ -156,9 +180,17 @@ def loadImmobles():
 
     global listEmp
     
-    sql = "SELECT id FROM data.immoble WHERE refcat = '"+refcat.text()+"' ORDER BY id"
-    listEmp = sqlToList(sql)
-    setComboModel(cboEmp, listEmp)    
+    listEmp = []
+    cboEmp.addItem('')
+    dAux = dict(refcat20 = '', emp = '')
+    listEmp.append(dAux)    
+    sql = "SELECT id, adreca FROM data.immoble WHERE refcat = '"+refcat.text()+"' ORDER BY id"
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+    for row in rows:
+        cboEmp.addItem(unicode(row[1]))
+        dAux = dict(refcat20 = row[0], emp = row[1])
+        listEmp.append(dAux)
 
     
 def getLayers():
@@ -187,22 +219,37 @@ def getLayers():
 # Save data from Tab 'Dades Expedient' into Database
 def saveDadesExpedient(update):
  
-    numExp = _dialog.findChild(QLineEdit, "txtNumExp")    
-    if not numExp.text():
+    # Check if we have set 'id'
+    if not txtNumExp.text():
         msgBox = QMessageBox()
-        msgBox.setText(u"Cal especificar un número d'expedient")
+        msgBox.setText(u"Cal especificar un identificador d'expedient")
         msgBox.exec_()
-        print "Cal especificar un número d'expedient"
         return
     
     # Get dates
     dEntrada = getDate("dateEntrada", "data_ent")
     dLlicencia = getDate("dateLlicencia", "data_llic")
+    dVisat = getDate("dateVisat", "visat_data")
 
+    # NIF or CIF?
+    if rbFisica.isChecked():
+        solic = "'persona', "+getSelectedItem2("cboSol")+", null"
+    else:
+        solic = "'juridica', null, "+getSelectedItem2("cboSolCif")
+    
     # Create SQL
-    sql = "INSERT INTO data.exp_om (num_exp, data_ent, data_llic, tipus_id, parcela_id, num_hab)"
-    sql+= " VALUES ("+getStringValue2("txtNumExp")+", '"+dEntrada["value"]+"', '"+dLlicencia["value"]+"', "+getSelectedItem2("cboTipus")
-    sql+= ", "+getStringValue2("refcat")+", "+getStringValue2("txtNumHab")+")"                        
+    sql_1 = "INSERT INTO data.exp_om (num_exp, data_ent, data_llic, tipus_id"
+    sql_1+= ", tipus_solic_id, solic_persona_id, solic_juridica_id, repre_id"    
+    sql_1+= ", parcela_id, immoble_id, num_hab, notif_adreca, notif_poblacio, notif_cp"
+    sql_1+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data"
+    sql_2= " ) VALUES ("
+    sql_2+= getStringValue2("txtNumExp")+", '"+dEntrada["value"]+"', '"+dLlicencia["value"]+"', "+getSelectedItem2("cboTipus")
+    sql_2+= ", "+solic+ ", "+getSelectedItem2("cboRep")
+    sql_2+= ", "+getStringValue2("refcat")+", "+getStringValue2("txtRefcat20")+", "+getStringValue2("txtNumHab")
+    sql_2+= ", "+getStringValue2("txtNotifAdreca")+", "+getStringValue2("txtNotifPoblacio")+", "+getStringValue2("txtNotifCp")   
+    sql_2+= ", "+getSelectedItem2("cboRedactor")+", "+getSelectedItem2("cboDirector")+", "+getSelectedItem2("cboExecutor")+", "+getStringValue2("txtConstructor")+", "+getStringValue2("txtVisatNum") +", '"+dVisat["value"]+"'"       
+    sql_2+= ")"      
+    sql= sql_1 + sql_2               
     print sql
     cursor.execute(sql)        
     conn.commit()   
@@ -245,21 +292,35 @@ def getTipusSol():
         cboSol.setVisible(False)
         lblSol.setText(u"CIF sol·licitant")
     clearNotificacions()
+ 
+ 
+# Called when 'id' is updated
+def idChanged():
+    
+    expId = txtId.text()
+    if len(expId) <> 5:
+        showInfo(u"El id ha de tenir exactament 5 caràcters amb el format: <any><xxx>")
+        txtNumExp.setText("")        
+        return
+    numExp = expId[2:]+"/"+expId[:2]
+    txtNumExp.setText(numExp)
     
             
 # Called when 'Solicitant' is updated
-def solChanged():
-    
-    if rbFisica.isChecked():
+def solChanged(aux):
+
+    if aux == 'persona':
         table = 'persona'
         solId = getSelectedItem2("cboSol")
+    elif aux == 'representant':
+        table = 'persona'
+        solId = getSelectedItem2("cboRep")
     else:
         table = 'juridica'
         solId = getSelectedItem2("cboSolCif")
         
     sql = "SELECT COALESCE(nom, '') || ' ' || COALESCE(cognom_1, '') || ' ' || COALESCE(cognom_2, '') AS nom_complet, adreca, cp, poblacio "
     sql+= "FROM data."+table+" WHERE id = "+solId
-    #print sql
     cursor.execute(sql)
     row = cursor.fetchone()
     if row:
@@ -269,6 +330,14 @@ def solChanged():
         txtPoblacio.setText(row[3])
     else:
         clearNotificacions()
+        
+        
+# Called when 'Emplaçament' is updated
+def empChanged():
+    
+    selIndex = cboEmp.currentIndex()
+    refcat20 = listEmp[selIndex]["refcat20"]
+    txtRefcat20.setText(refcat20)     
         
         
 def redactorChanged():
@@ -285,7 +354,6 @@ def tecnicChanged(cboName, txtWidget):
     
     sql = "SELECT COALESCE(nom, '') || ' ' || COALESCE(cognom_1, '') || ' ' || COALESCE(cognom_2, '') AS nom_complet "
     sql+= "FROM data.tecnic WHERE id = "+getSelectedItem2(cboName)
-    print sql
     cursor.execute(sql)
     row = cursor.fetchone()
     if row:
@@ -312,7 +380,6 @@ def refresh():
          
          
 def save():
-    print "save"
     saveDadesExpedient(True)
     _dialog.accept()        
     
