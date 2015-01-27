@@ -1,21 +1,5 @@
-CREATE TABLE "data"."tipus_om" (
+CREATE TABLE "data"."annex_om" (
 "id" varchar(200),
-"obs" varchar(200),
-PRIMARY KEY ("id") 
-);
-
-
-CREATE TABLE "data"."persona" (
-"id" varchar(9),
-"nom" varchar(100),
-"cognom_1" varchar(100),
-"cognom_2" varchar(100),
-"tfon" varchar(15),
-"mail" varchar(200),
-"adreca" varchar(255),
-"poblacio" varchar(100),
-"cp" varchar(5),
-"observacions" text,
 PRIMARY KEY ("id") 
 );
 
@@ -48,33 +32,46 @@ PRIMARY KEY ("id")
 );
 
 
-CREATE TABLE "data"."tecnic" (
-"id" varchar(25),
-"dni" varchar(9),
+CREATE TABLE "data"."immoble" (
+"id" varchar(20),
+"refcat" varchar(14),
+"adreca" varchar(200),
+PRIMARY KEY ("id") 
+);
+
+
+CREATE TABLE "data"."juridica" (
+"id" varchar(9),
+"rao_social" varchar(200),
 "nom" varchar(100),
 "cognom_1" varchar(100),
 "cognom_2" varchar(100),
-"titulacio" varchar(100),
+"tfon" varchar(15),
+"mail" varchar(200),
+"adreca" varchar(200),
+"poblacio" varchar(100),
+"cp" varchar(5),
 "observacions" text,
 PRIMARY KEY ("id") 
 );
 
 
-CREATE TABLE "data"."annex_om" (
-"id" varchar(200),
+CREATE TABLE "data"."persona" (
+"id" varchar(9),
+"nom" varchar(100),
+"cognom_1" varchar(100),
+"cognom_2" varchar(100),
+"tfon" varchar(15),
+"mail" varchar(200),
+"adreca" varchar(255),
+"poblacio" varchar(100),
+"cp" varchar(5),
+"observacions" text,
 PRIMARY KEY ("id") 
 );
 
 
-CREATE TABLE "data"."cat_15" (
-"id" varchar(20),
-"refcat" varchar(14),
-"adresa" varchar(200),
-PRIMARY KEY ("id") 
-);
-
-
-CREATE TABLE "press_om" (
+CREATE TABLE "data"."press_om" (
 "om_id" int4,
 "pressupost" numeric(15,2),
 "placa" bool,
@@ -94,26 +91,10 @@ CREATE TABLE "press_om" (
 "gar_ser" bool,
 PRIMARY KEY ("om_id") 
 );
-COMMENT ON COLUMN "press_om"."placa" IS 'OF.7 Taxa Placa';
+COMMENT ON COLUMN "data"."press_om"."placa" IS 'OF.7 Taxa Placa';
 
 
-CREATE TABLE "data"."juridica" (
-"id" varchar(9),
-"rao_social" varchar(200),
-"nom" varchar(100),
-"cognom_1" varchar(100),
-"cognom_2" varchar(100),
-"tfon" varchar(15),
-"mail" varchar(200),
-"adreca" varchar(200),
-"poblacio" varchar(100),
-"cp" varchar(5),
-"observacions" text,
-PRIMARY KEY ("id") 
-);
-
-
-CREATE TABLE "rpt_exp_parcela" (
+CREATE TABLE "data"."rpt_exp_parcela" (
 "om_id" int4,
 "num_exp" varchar(15),
 "parcela" varchar(14),
@@ -131,11 +112,31 @@ PRIMARY KEY ("om_id")
 );
 
 
-CREATE TABLE "rpt_parcela_total" (
+CREATE TABLE "data"."rpt_parcela_total" (
 "parcela_id" varchar(14),
 "total" int4,
 PRIMARY KEY ("parcela_id") 
 );
+
+
+CREATE TABLE "data"."tecnic" (
+"id" varchar(25),
+"dni" varchar(9),
+"nom" varchar(100),
+"cognom_1" varchar(100),
+"cognom_2" varchar(100),
+"titulacio" varchar(100),
+"observacions" text,
+PRIMARY KEY ("id") 
+);
+
+
+CREATE TABLE "data"."tipus_om" (
+"id" varchar(200),
+"obs" varchar(200),
+PRIMARY KEY ("id") 
+);
+
 
 
 ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_tipus_om" FOREIGN KEY ("tipus_id") REFERENCES "data"."tipus_om" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
