@@ -113,6 +113,31 @@ PRIMARY KEY ("id")
 );
 
 
+CREATE TABLE "rpt_exp_parcela" (
+"om_id" int4,
+"num_exp" varchar(15),
+"parcela" varchar(14),
+"immoble" varchar(20),
+"pressupost" numeric(15,2),
+"taxa_icio" numeric(15,2),
+"taxa_placa" numeric(15,2),
+"taxa_llic" numeric(15,2),
+"taxa_clav" numeric(15,2),
+"tot_liq" numeric(15,2),
+"gar_res" numeric(15,2),
+"gar_ser" numeric(15,2),
+"total" numeric(15,2),
+PRIMARY KEY ("om_id") 
+);
+
+
+CREATE TABLE "rpt_parcela_total" (
+"parcela_id" varchar(14),
+"total" int4,
+PRIMARY KEY ("parcela_id") 
+);
+
+
 ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_tipus_om" FOREIGN KEY ("tipus_id") REFERENCES "data"."tipus_om" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_annex_om" FOREIGN KEY ("annex_id") REFERENCES "data"."annex_om" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
