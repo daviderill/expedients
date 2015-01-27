@@ -43,6 +43,7 @@ CREATE TABLE "data"."exp_om" (
 "notif_adreca" varchar(200),
 "notif_poblacio" varchar(100),
 "notif_cp" varchar(5),
+"observacions" text,
 PRIMARY KEY ("id") 
 );
 
@@ -73,26 +74,27 @@ PRIMARY KEY ("id")
 );
 
 
-CREATE TABLE "data"."press_om" (
+CREATE TABLE "press_om" (
 "om_id" int4,
-"import" numeric(15,2),
-"taxa_placa" numeric(15,2),
-"taxa_llic" numeric(15,2),
-"taxa_clav" numeric(15,2),
-"gar_res" numeric(15,2),
-"gar_ser" numeric(15,2),
-"tot_liq" numeric(15,2),
-"tot_gar" numeric(15,2),
-"data_pag" date,
-"data_1us" date,
-"observacions" text,
-"rgar_ser" varchar(255),
-"rgar_res" varchar(255),
-"liq_def" varchar(255),
+"pressupost" numeric(15,2),
+"placa" bool,
+"plu" bool,
+"res" bool,
+"ende" bool,
+"car" numeric(15,2),
+"mov" numeric(15,2),
+"fig" numeric(15,2),
+"leg" bool,
+"par" numeric(15,2),
+"pro" bool,
+"clav_uni" int4,
+"clav_plu" int4,
+"clav_mes" int4,
+"gar_res" bool,
+"gar_ser" bool,
 PRIMARY KEY ("om_id") 
 );
-
-COMMENT ON COLUMN "data"."press_om"."taxa_placa" IS 'OF.7 Taxa Placa';
+COMMENT ON COLUMN "press_om"."placa" IS 'OF.7 Taxa Placa';
 
 
 CREATE TABLE "data"."juridica" (

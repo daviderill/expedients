@@ -222,6 +222,15 @@ def isNumber(elem):
         return False
 
 
+def isChecked(widgetName):
+    
+    widget = _dialog.findChild(QCheckBox, widgetName)
+    value = False    
+    if widget:    
+        value = widget.isChecked()
+    return str(value)   
+
+
 def setText(widget, text):
     
     elem = _dialog.findChild(QLineEdit, widget)

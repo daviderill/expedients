@@ -43,30 +43,8 @@ def formOpen(dialog,layerid,featureid):
     loadData()
     
     
-    # Fill combo boxes and completers with data stored in memory
-    setComboModel(cboTipus, listTipus)
-    setComboModel(cboSol, listNif)
-    setComboModel(cboSolCif, listCif)
-    setComboModel(cboRep, listNif)
-    setComboModel(cboRedactor, listTecnic)
-    setComboModel(cboDirector, listTecnic)
-    setComboModel(cboExecutor, listTecnic)
-    setComboModel(cboClavPlu, listClavPlu)
-    
-    # Fill date widgets with current Date
-    dateEntrada.setDate(current_date)
-    dateLlicencia.setDate(current_date)
-    dateVisat.setDate(current_date)
-        
-    # Get 'immobles' from selected 'parcela'
-    loadImmobles()
-    
-    # Wire up our own signals
-    setSignals()    
-    
-    # Other default configuration
-    getTipusSol()
-    boldGroupBoxes()
+    # Initial configuration
+    initConfig()
 
 
 # Connect to Database (only once, when loading map)
@@ -84,6 +62,7 @@ def connectDb():
         
 
 def widgetsToGlobal():
+
     
     global refcat, lblInfo, txtId, txtNumExp, cboTipus, dateEntrada, dateLlicencia
     global rbFisica, rbJuridica, lblSol, cboSol, cboSolCif, cboRep, txtSolDades, txtAdresa, txtCp, txtPoblacio, txtRefcat20, cboEmp
@@ -124,6 +103,40 @@ def widgetsToGlobal():
     # Tab 'Liquidació'
     txtPress = _dialog.findChild(QLineEdit, "txtPress")    
     cboClavPlu = _dialog.findChild(QComboBox, "cboClavPlu")   
+    
+    
+def initConfig():    
+    
+    # Fill combo boxes and completers with data stored in memory
+    setComboModel(cboTipus, listTipus)
+    setComboModel(cboSol, listNif)
+    setComboModel(cboSolCif, listCif)
+    setComboModel(cboRep, listNif)
+    setComboModel(cboRedactor, listTecnic)
+    setComboModel(cboDirector, listTecnic)
+    setComboModel(cboExecutor, listTecnic)
+    setComboModel(cboClavPlu, listClavPlu)
+    
+    # Fill date widgets with current Date
+    dateEntrada.setDate(current_date)
+    dateLlicencia.setDate(current_date)
+    dateVisat.setDate(current_date)
+        
+    # Get 'immobles' from selected 'parcela'
+    loadImmobles()
+    
+    # Wire up our own signals
+    setSignals()    
+    
+    # Other default configuration
+    getTipusSol()
+    boldGroupBoxes()
+    
+    # Test values
+    txtId.setText('15111')
+    txtPress.setText('10000')
+    idChanged()
+    pressChanged()
     
     
 # Set Group Boxes title font to bold    
@@ -251,8 +264,8 @@ def getLayers():
             #self.dlg.ui.cboPortalLayer.addItem(layer.name()) 
                     
 
-# Save data from Tab 'Dades Expedient' into Database
-def saveDadesExpedient(update):
+# Save data from Tab 'Dades Expedient' and 'Projecte' into Database
+def saveDadesExpedient():
  
     # Check if we have set 'id'
     if not txtNumExp.text():
@@ -276,16 +289,45 @@ def saveDadesExpedient(update):
     sql_1 = "INSERT INTO data.exp_om (num_exp, data_ent, data_llic, tipus_id"
     sql_1+= ", tipus_solic_id, solic_persona_id, solic_juridica_id, repre_id"    
     sql_1+= ", parcela_id, immoble_id, num_hab, notif_adreca, notif_poblacio, notif_cp"
-    sql_1+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data"
-    sql_2= " ) VALUES ("
+    sql_1+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions"
+    sql_2= ") VALUES ("
     sql_2+= getStringValue2("txtNumExp")+", '"+dEntrada["value"]+"', '"+dLlicencia["value"]+"', "+getSelectedItem2("cboTipus")
     sql_2+= ", "+solic+ ", "+getSelectedItem2("cboRep")
     sql_2+= ", "+getStringValue2("refcat")+", "+getStringValue2("txtRefcat20")+", "+getStringValue2("txtNumHab")
     sql_2+= ", "+getStringValue2("txtNotifAdreca")+", "+getStringValue2("txtNotifPoblacio")+", "+getStringValue2("txtNotifCp")   
-    sql_2+= ", "+getSelectedItem2("cboRedactor")+", "+getSelectedItem2("cboDirector")+", "+getSelectedItem2("cboExecutor")+", "+getStringValue2("txtConstructor")+", "+getStringValue2("txtVisatNum") +", '"+dVisat["value"]+"'"       
+    sql_2+= ", "+getSelectedItem2("cboRedactor")+", "+getSelectedItem2("cboDirector")+", "+getSelectedItem2("cboExecutor")+", "+getStringValue2("txtConstructor")+", "+getStringValue2("txtVisatNum") +", '"+dVisat["value"]+"', "+getStringValue2("txtObs")    
     sql_2+= ")"      
     sql= sql_1 + sql_2               
-    print sql
+    #print sql
+    cursor.execute(sql)        
+    conn.commit()   
+    
+    
+# Save data from Tab 'Liquidació' into Database
+def saveLiquidacio():
+ 
+    # Get id from Database
+    sql = "SELECT last_value FROM data.exp_om_id_seq"
+    cursor.execute(sql)
+    row = cursor.fetchone()
+    expId = row[0]
+    
+    selItem = getSelectedItem2('cboClavPlu')
+    clavPlu = selItem[-3:-1]
+    if not isNumber(clavPlu):
+        clavPlu = 'null'
+   
+    # Create SQL
+    sql_1 = "INSERT INTO data.press_om (om_id, pressupost, placa, plu, res, ende"
+    sql_1+= ", car, mov, fig, leg, par, pro"    
+    sql_1+= ", clav_uni, clav_plu, clav_mes, gar_res, gar_ser"
+    sql_2= ") VALUES ("
+    sql_2+= str(expId)+", "+getStringValue2("txtPress")+", "+isChecked("chkPlaca")+", "+isChecked("chkPlu")+", "+isChecked("chkRes")+", "+isChecked("chkEnd") 
+    sql_2+= ", "+getStringValue2("txtCarM")+", "+getStringValue2("txtMovM")+", "+getStringValue2("txtFigM")+", "+isChecked("chkLeg")+", "+getStringValue2("txtParM")+", "+isChecked("chkPro")
+    sql_2+= ", "+getStringValue2("txtClavUniN")+", "+str(clavPlu)+", "+getStringValue2("txtClavMesN")+", "+isChecked("chkGarRes")+", "+isChecked("chkGarSer")
+    sql_2+= ")"      
+    sql= sql_1 + sql_2               
+    #↨print sql
     cursor.execute(sql)        
     conn.commit()   
           
@@ -567,7 +609,8 @@ def refresh():
          
          
 def save():
-    saveDadesExpedient(True)
+    saveDadesExpedient()
+    saveLiquidacio()
     _dialog.accept()        
     
     
