@@ -83,6 +83,19 @@ def sqlToList(sql):
         vector.append(unicode(row[0]))   
     return vector 
         
+		
+def sqlToTable(sql, fieldNumber):
+    
+    table = []
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+    for row in rows:
+        vector = []
+        for i in range(0, fieldNumber):
+            vector.append(unicode(row[i]))   
+        table.append(vector)
+    return table 
+
 
 def setSelectedItem(widget, sql):
     

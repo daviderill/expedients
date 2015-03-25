@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>554</width>
+    <height>494</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QGroupBox" name="gb1">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>531</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Emplaçament seleccionat</string>
+   </property>
+   <widget class="QLineEdit" name="refcat">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>20</y>
+      <width>141</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="maxLength">
+     <number>14</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblRef_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Parcela:</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="gb3">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>180</y>
+     <width>531</width>
+     <height>261</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Expedients emplaçament</string>
+   </property>
+   <widget class="QPushButton" name="btnCreate">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>220</y>
+      <width>70</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Afegir</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnUpdate">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>220</y>
+      <width>70</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Modificar</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnDelete">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>220</y>
+      <width>70</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Eliminar</string>
+    </property>
+   </widget>
+   <widget class="QTableView" name="tblExp">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>25</y>
+      <width>500</width>
+      <height>185</height>
+     </rect>
+    </property>
+    <property name="dragEnabled">
+     <bool>false</bool>
+    </property>
+    <property name="dragDropMode">
+     <enum>QAbstractItemView::NoDragDrop</enum>
+    </property>
+    <property name="alternatingRowColors">
+     <bool>true</bool>
+    </property>
+    <property name="selectionBehavior">
+     <enum>QAbstractItemView::SelectRows</enum>
+    </property>
+    <property name="sortingEnabled">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnRefresh">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>220</y>
+      <width>70</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Actualitzar</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="btnClose">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>450</y>
+     <width>70</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Sortir</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="gb2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>70</y>
+     <width>531</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Filtres cerca</string>
+   </property>
+   <widget class="QComboBox" name="cboEmp">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>20</y>
+      <width>211</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblRef_3">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Emplaçament:</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

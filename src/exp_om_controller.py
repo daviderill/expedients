@@ -13,7 +13,7 @@ import psycopg2.extras
 import sys
 
 
-def formOpen(dialog,layerid,featureid):
+def openExpOm(dialog, parcela, featureid = None):
 
     global _dialog, _iface, current_path, current_date
     global MSG_DURATION
@@ -27,6 +27,7 @@ def formOpen(dialog,layerid,featureid):
     # Check if it is the first time we execute this module
     #if isFirstTime():
           
+    # Get current path and date		  
     current_path = os.path.dirname(os.path.abspath(__file__))
     date_aux = time.strftime("%d/%m/%Y")
     current_date = datetime.strptime(date_aux, "%d/%m/%Y")
@@ -44,9 +45,13 @@ def formOpen(dialog,layerid,featureid):
     
     
     # Initial configuration
+    refcat.setText(str(parcela))
     initConfig()
+    print "openExpOm"
+    ret = _dialog.exec_()		
+    print str(ret)	
 
-
+	
 # Connect to Database (only once, when loading map)
 def connectDb():
 
@@ -62,7 +67,6 @@ def connectDb():
         
 
 def widgetsToGlobal():
-
     
     global refcat, lblInfo, txtId, txtNumExp, cboTipus, dateEntrada, dateLlicencia
     global rbFisica, rbJuridica, lblSol, cboSol, cboSolCif, cboRep, txtSolDades, txtAdresa, txtCp, txtPoblacio, txtRefcat20, cboEmp
@@ -131,7 +135,6 @@ def initConfig():
     # Other default configuration
     getTipusSol()
     boldGroupBoxes()
-    _dialog.hideButtonBox()    
     
     # Test values
     txtId.setText('15111')
@@ -258,11 +261,6 @@ def getLayers():
             layerJuridica = layer
         if layer.name() == 'tecnic':
             layerTecnic = layer
-        # Check if they are vector
-        #if layerType == QgsMapLayer.VectorLayer:
-            #self.layersList.append(layer)
-            #self.dlg.ui.cboStreetLayer.addItem(layer.name())
-            #self.dlg.ui.cboPortalLayer.addItem(layer.name()) 
                     
 
 # Save data from Tab 'Dades Expedient' and 'Projecte' into Database
@@ -328,7 +326,6 @@ def saveLiquidacio():
     sql_2+= ", "+getStringValue2("txtClavUniN")+", "+str(clavPlu)+", "+getStringValue2("txtClavMesN")+", "+isChecked("chkGarRes")+", "+isChecked("chkGarSer")
     sql_2+= ")"      
     sql= sql_1 + sql_2               
-    #↨print sql
     cursor.execute(sql)        
     conn.commit()   
           
@@ -603,22 +600,16 @@ def manageTecnic():
     iface.showAttributeTable(layerTecnic)
     
 def refresh():
-    #print "refresh"
     loadData()
     setComboModel(cboTipus, listTipus)
-    setComboModel(cboSol, listNif)
-         
+    setComboModel(cboSol, listNif)       
          
 def save():
     saveDadesExpedient()
     saveLiquidacio()
-    _dialog.accept()        
-    
+    _dialog.accept()         
     
 def close():
-    print "close"
     #_dialog.reject() 
-    #_dialog.parent().close() 
-    _dialog.parent().setVisible(False)
-    
+    _dialog.close()    
     
