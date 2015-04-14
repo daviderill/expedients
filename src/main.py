@@ -9,6 +9,7 @@ from functools import partial
 from datetime import datetime
 from exp_om_dialog import ExpOmDialog
 from exp_om_controller import *
+from main_dao import MainDao
 import time
 import os.path
 import sys
@@ -18,49 +19,46 @@ def formOpen(dialog,layerid,featureid):
 
     global _dialog, _iface, current_path, current_date
     global MSG_DURATION
-    
-    # Set global variables    
-    _dialog = dialog
-    setDialog(dialog)   
-    MSG_DURATION = 5
-    widgetsToGlobal()
-    
+       
     # Check if it is the first time we execute this module
-    #if isFirstTime():
+    #if True:		
+    if isFirstTime():
           
-    current_path = os.path.dirname(os.path.abspath(__file__))
-    date_aux = time.strftime("%d/%m/%Y")
-    current_date = datetime.strptime(date_aux, "%d/%m/%Y")
+        # Get current path and save reference to the QGIS interface		  
+        current_path = os.path.dirname(os.path.abspath(__file__))
+        date_aux = time.strftime("%d/%m/%Y")
+        current_date = datetime.strptime(date_aux, "%d/%m/%Y")
+        _iface = iface
+        MSG_DURATION = 5		
 
-    # Save reference to the QGIS interface
-    _iface = iface
+        # Connect to Database (only once, when loading map)
+        showInfo("Attempting to connect to DB")
+        connectDb()
 
-    # Connect to Database (only once, when loading map)
-    #showInfo("Attempting to connect to DB")
-    connectDb()
-
+	# If not, close previous dialog	if already opened
+    else:
+        if _dialog.isVisible():
+            _dialog.parent().setVisible(False)			
+		
+    # Get dialog and his widgets
+    _dialog = dialog	
+    widgetsToGlobal()
+	
     # Get 'Expedients' from selected 'parcela' and filter conditions
     getExpedients()
-    
     
     # Initial configuration
     initConfig()
 
 
-# Connect to Database (only once, when loading map)
 def connectDb():
 
-    global db
+    global mainDao
 	
-    db = QSqlDatabase.addDatabase("QPSQL")
-    db.setHostName("127.0.0.1")
-    db.setPort(5432)	
-    db.setDatabaseName("gis_cubelles")
-    db.setUserName("gisadmin")
-    db.setPassword("8u9ijn")
-    ok = db.open()
-    if ok is False:	
-        showWarning('Error connecting Database')
+    mainDao = MainDao()
+    status = mainDao.initDb()
+    if status is False:
+        showWarning("Error connecting to Database")
 	
 
 def widgetsToGlobal():
@@ -80,6 +78,9 @@ def initConfig():
     # Other default configuration
     boldGroupBoxes()
     _dialog.hideButtonBox()    
+	
+	# Refresh map
+    _iface.mapCanvas().refresh()	
 	
     # TEST
     #dlg = ExpOmDialog()   
@@ -209,7 +210,7 @@ def create():
          
 def update(modelIndex):
     print "update"    
-    print str(modelIndex.row())	
+    #print str(modelIndex.row())	
 	
 	
 def delete():
@@ -240,10 +241,12 @@ def delete():
     
 
 def refresh():
+	# Refresh table and map
     tblExp.model().select()
+    _iface.mapCanvas().refresh()		
 
     
 def close():
-    db.close()
+    mainDao.close()	
     _dialog.parent().setVisible(False) 
     
