@@ -2,17 +2,14 @@
 from PyQt4.QtGui import *  # @UnusedWildImport
 from PyQt4.QtSql import *  # @UnusedWildImport
 from qgis.core import *
-from qgis.gui import QgsMessageBar
-from qgis.utils import iface
-from utils import *
-from functools import partial
+from qgis.gui import QgsMessageBar  # @UnresolvedImport
+from qgis.utils import iface  # @UnresolvedImport
+from utils import *  # @UnusedWildImport
 from datetime import datetime
-from exp_om_dialog import ExpOmDialog
-from exp_om_controller import *
-from main_dao import MainDao
 import time
-import os.path
-import sys
+from exp_om_dialog import ExpOmDialog
+from exp_om_controller import openExpOm
+from main_dao import MainDao
 
 
 def formOpen(dialog,layerid,featureid):
@@ -115,13 +112,6 @@ def getExpedients():
     global model
     
     # Define model
-    sql = "SELECT id AS Id, num_exp AS Num. Exp, data_ent AS Data entrada, immoble_id AS Immoble, tipus_id AS Tipus FROM data.exp_om WHERE parcela_id = '"+refcat.text()+"' ORDER BY id"
-    sql = "SELECT \"id\", \"num_exp\" FROM data.exp_om WHERE parcela_id = '"+refcat.text()+"'"	
-    #print sql	
-    #query = QSqlQuery(sql)
-    #model = QSqlQueryModel();
-    #model.setQuery(query);	
-
     model = QSqlTableModel();
     model.setTable("data.exp_om")		
     model.setFilter("parcela_id = '"+refcat.text()+"'")	

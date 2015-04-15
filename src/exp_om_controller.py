@@ -14,8 +14,6 @@ def openExpOm(dialog, parcela, featureid = None):
 
     global _dialog, _iface, _parcela, current_path, current_date
     global MSG_DURATION
-    
-    #print "openExpOm"
 
     # Check if it is the first time we execute this module
     #if isFirstTime():
@@ -41,8 +39,8 @@ def openExpOm(dialog, parcela, featureid = None):
     # Initial configuration
     initConfig()
 
-    ret = _dialog.exec_()		
-    print str(ret)	
+    # Open form as modeless dialog
+    _dialog.show()
     
 
 def widgetsToGlobal():
@@ -285,7 +283,8 @@ def saveDadesExpedient():
     result = query.exec_()
     if result is False:
         showWarning(query.lastError().text(), 100)
-        return False
+    
+    return result
 
     
 # Save data from Tab 'Liquidació' into Database
@@ -609,7 +608,7 @@ def save():
     result = saveDadesExpedient()
     if result:
         saveLiquidacio()
-        _dialog.accept()         
+        _dialog.accept()   
     
 def close():
     _dialog.close()   
