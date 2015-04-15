@@ -1,5 +1,6 @@
-﻿from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+﻿from PyQt4.QtCore import * #@UnusedWildImport
+from PyQt4.QtGui import * #@UnusedWildImport
+from PyQt4.QtSql import *  # @UnusedWildImport
 import logging
 import os.path
 
@@ -16,18 +17,6 @@ def isFirstTime():
         first = False
     return first
 
-    
-def getProva():
-    
-    global prova
-    if not 'prova' in globals():
-        print "Not defined"
-        prova = 1
-    else:
-        print "Defined"
-        prova = prova + 1
-    return prova
-    
     
 def setDialog(p_dialog):
     
@@ -73,17 +62,17 @@ def setComboModel(widget, vector):
     widget.setCompleter(completer)        
 
 
-def sqlToList(sql):
+def queryToList(sql):
     
     vector = []
     vector.append('')
-    cursor.execute(sql)
-    rows = cursor.fetchall()
-    for row in rows:
-        vector.append(unicode(row[0]))   
+    query = QSqlQuery(sql)    
+    while (query.next()):
+        value = query.value(0)   
+        vector.append(unicode(value))          
     return vector 
         
-		
+
 def sqlToTable(sql, fieldNumber):
     
     table = []
@@ -113,10 +102,9 @@ def getSelectedItem(widget):
     
     elem = _dialog.findChild(QComboBox, widget)
     if not elem.currentText():
-        elem_text = "null"
+        elem_text = None
     else:
-        elem_text = "'"+elem.currentText()+"'"	
-    elem_text = widget+"="+elem_text
+        elem_text = elem.currentText()	
     return elem_text	
 
 
@@ -158,18 +146,18 @@ def getStringValue(widget):
     elem = _dialog.findChild(QLineEdit, widget)
     if elem:	
         if (not elem.text() or elem.text().lower() == "null"):
-            elem_text = widget + " = null"    
+            elem_text = None    
         else:
-            elem_text = widget + " = '"+elem.text().replace("'", "''")+"'"
+            elem_text = elem.text()
     else:
         elem = _dialog.findChild(QTextEdit, widget)	
         if elem:	
             if (not elem.toPlainText() or elem.toPlainText().lower() == "null"):  
-                elem_text = widget + " = null"    
+                elem_text = None  
             else:
-                elem_text = widget + " = '"+elem.toPlainText().replace("'", "''")+"'"
+                elem_text = elem.toPlainText()
         else:				
-            elem_text = widget + " = null"
+            elem_text = None
     return elem_text
 
 
@@ -238,10 +226,10 @@ def isNumber(elem):
 def isChecked(widgetName):
     
     widget = _dialog.findChild(QCheckBox, widgetName)
-    value = False    
+    value = False
     if widget:    
         value = widget.isChecked()
-    return str(value)   
+    return value
 
 
 def setText(widget, text):

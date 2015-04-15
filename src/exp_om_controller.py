@@ -1,70 +1,49 @@
-﻿from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+﻿from PyQt4.QtCore import * #@UnusedWildImport
+from PyQt4.QtGui import * #@UnusedWildImport
+from PyQt4.QtSql import *  # @UnusedWildImport
 from qgis.core import *
-from qgis.gui import QgsMessageBar
-from qgis.utils import iface
-from utils import *
+from qgis.gui import QgsMessageBar  # @UnresolvedImport
+from qgis.utils import iface  # @UnresolvedImport
+from utils import * #@UnusedWildImport
 from functools import partial
 from datetime import datetime
 import time
-import os.path
-import psycopg2
-import psycopg2.extras
-import sys
 
 
 def openExpOm(dialog, parcela, featureid = None):
 
-    global _dialog, _iface, current_path, current_date
+    global _dialog, _iface, _parcela, current_path, current_date
     global MSG_DURATION
     
-    # Set global variables    
-    _dialog = dialog
-    setDialog(dialog)    
-    MSG_DURATION = 5
-    widgetsToGlobal()
-    
+    #print "openExpOm"
+
     # Check if it is the first time we execute this module
     #if isFirstTime():
-          
-    # Get current path and date		  
+    
     current_path = os.path.dirname(os.path.abspath(__file__))
     date_aux = time.strftime("%d/%m/%Y")
     current_date = datetime.strptime(date_aux, "%d/%m/%Y")
 
     # Save reference to the QGIS interface
+    MSG_DURATION = 5	
     _iface = iface
     getLayers()
 
-    # Connect to Database (only once, when loading map)
-    showInfo("Attempting to connect to DB")
-    connectDb()
-
     # Load data from domain tables 
     loadData()
-    
+
+    # Get dialog and his widgets
+    _parcela = parcela		
+    _dialog = dialog	
+    setDialog(dialog)
+    widgetsToGlobal()	
     
     # Initial configuration
-    refcat.setText(str(parcela))
     initConfig()
-    print "openExpOm"
+
     ret = _dialog.exec_()		
     print str(ret)	
-
-	
-# Connect to Database (only once, when loading map)
-def connectDb():
-
-    global conn, cursor
-    try:
-        conn = psycopg2.connect("host=127.0.0.1 port=5432 dbname=gis_cubelles user=gisadmin password=8u9ijn")        
-        #conn = psycopg2.connect("host=192.168.10.7 port=5432 dbname=gisdb user=gisadmin password=cubelles")        
-        cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        setCursor(cursor)        
-    except psycopg2.DatabaseError, e:
-        print 'Error %s' % e    
-        sys.exit(1)
-        
+    
 
 def widgetsToGlobal():
     
@@ -106,11 +85,13 @@ def widgetsToGlobal():
     
     # Tab 'Liquidació'
     txtPress = _dialog.findChild(QLineEdit, "txtPress")    
-    cboClavPlu = _dialog.findChild(QComboBox, "cboClavPlu")   
-    
-    
+    cboClavPlu = _dialog.findChild(QComboBox, "cboClavPlu") 
+
+
 def initConfig():    
     
+    refcat.setText(str(_parcela))
+
     # Fill combo boxes and completers with data stored in memory
     setComboModel(cboTipus, listTipus)
     setComboModel(cboSol, listNif)
@@ -135,14 +116,8 @@ def initConfig():
     # Other default configuration
     getTipusSol()
     boldGroupBoxes()
-    
-    # Test values
-    txtId.setText('15111')
-    txtPress.setText('10000')
-    idChanged()
-    pressChanged()
-    
-    
+
+        
 # Set Group Boxes title font to bold    
 def boldGroupBoxes():   
     
@@ -214,13 +189,14 @@ def loadData():
     global listTipus, listNif, listCif, listTecnic, listClavPlu
     
     sql = "SELECT id FROM data.tipus_om ORDER BY id"
-    listTipus = sqlToList(sql)
+    listTipus = queryToList(sql)
     sql = "SELECT id FROM data.persona ORDER BY id"
-    listNif = sqlToList(sql)
+    listNif = queryToList(sql)
     sql = "SELECT id FROM data.juridica ORDER BY id"
-    listCif = sqlToList(sql)
+    listCif = queryToList(sql)
     sql = "SELECT id FROM data.tecnic ORDER BY id"
-    listTecnic = sqlToList(sql)
+    listTecnic = queryToList(sql)
+    
     listClavPlu = []
     listClavPlu.append('')
     listClavPlu.append('2 a 5')
@@ -230,28 +206,18 @@ def loadData():
         
 def loadImmobles():
 
-    global listEmp
-    
-    listEmp = []
-    cboEmp.addItem('')
-    dAux = dict(refcat20 = '', emp = '')
-    listEmp.append(dAux)    
-    sql = "SELECT id, adreca FROM data.immoble WHERE refcat = '"+refcat.text()+"' ORDER BY id"
-    cursor.execute(sql)
-    rows = cursor.fetchall()
-    for row in rows:
-        cboEmp.addItem(unicode(row[1]))
-        dAux = dict(refcat20 = row[0], emp = row[1])
-        listEmp.append(dAux)
+    model = QSqlQueryModel();
+    sql = "SELECT adreca FROM data.immoble WHERE refcat = '"+refcat.text()+"' ORDER BY id"
+    model.setQuery(sql);
+    cboEmp.setModel(model)
 
     
 def getLayers():
     
     global layers, layerFisica, layerJuridica, layerTecnic
-    
-    layers = _iface.legendInterface().layers()
-    
+       
     # Iterate over all layers
+    layers = _iface.legendInterface().layers()	
     for layer in layers:
         #layerType = layer.type()
         #print layer.name()
@@ -271,64 +237,103 @@ def saveDadesExpedient():
         msgBox = QMessageBox()
         msgBox.setText(u"Cal especificar un identificador d'expedient")
         msgBox.exec_()
-        return
+        return False
     
     # Get dates
     dEntrada = getDate("dateEntrada", "data_ent")
     dLlicencia = getDate("dateLlicencia", "data_llic")
     dVisat = getDate("dateVisat", "visat_data")
-
+    
+    # Create SQLbody
+    sql = "INSERT INTO data.exp_om (num_exp, data_ent, data_llic, tipus_id, tipus_solic_id, solic_persona_id, solic_juridica_id, repre_id"
+    sql+= ", parcela_id, immoble_id, num_hab, notif_adreca, notif_poblacio, notif_cp"
+    sql+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions)"
+    sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"     
+    query = QSqlQuery()   
+    query.prepare(sql)   
+    
+    # Bind values
+    query.addBindValue(getStringValue("txtNumExp")) 
+    query.addBindValue(dEntrada["value"]) 
+    query.addBindValue(dLlicencia["value"]) 
+    query.addBindValue(getSelectedItem("cboTipus"))
     # NIF or CIF?
     if rbFisica.isChecked():
-        solic = "'persona', "+getSelectedItem2("cboSol")+", null"
+        query.addBindValue('persona') 
+        query.addBindValue(getSelectedItem("cboSol")) 
+        query.addBindValue(None)
     else:
-        solic = "'juridica', null, "+getSelectedItem2("cboSolCif")
-    
-    # Create SQL
-    sql_1 = "INSERT INTO data.exp_om (num_exp, data_ent, data_llic, tipus_id"
-    sql_1+= ", tipus_solic_id, solic_persona_id, solic_juridica_id, repre_id"    
-    sql_1+= ", parcela_id, immoble_id, num_hab, notif_adreca, notif_poblacio, notif_cp"
-    sql_1+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions"
-    sql_2= ") VALUES ("
-    sql_2+= getStringValue2("txtNumExp")+", '"+dEntrada["value"]+"', '"+dLlicencia["value"]+"', "+getSelectedItem2("cboTipus")
-    sql_2+= ", "+solic+ ", "+getSelectedItem2("cboRep")
-    sql_2+= ", "+getStringValue2("refcat")+", "+getStringValue2("txtRefcat20")+", "+getStringValue2("txtNumHab")
-    sql_2+= ", "+getStringValue2("txtNotifAdreca")+", "+getStringValue2("txtNotifPoblacio")+", "+getStringValue2("txtNotifCp")   
-    sql_2+= ", "+getSelectedItem2("cboRedactor")+", "+getSelectedItem2("cboDirector")+", "+getSelectedItem2("cboExecutor")+", "+getStringValue2("txtConstructor")+", "+getStringValue2("txtVisatNum") +", '"+dVisat["value"]+"', "+getStringValue2("txtObs")    
-    sql_2+= ")"      
-    sql= sql_1 + sql_2               
-    #print sql
-    cursor.execute(sql)        
-    conn.commit()   
-    
+        query.addBindValue('juridica') 
+        query.addBindValue(None)
+        query.addBindValue(getSelectedItem("cboSolCif")) 
+    query.addBindValue(getSelectedItem("cboRep")) 
+    query.addBindValue(getStringValue("refcat")) 
+    query.addBindValue(getStringValue("txtRefcat20")) 
+    query.addBindValue(getStringValue("txtNumHab"))
+    query.addBindValue(getStringValue("txtNotifAdreca"))
+    query.addBindValue(getStringValue("txtNotifPoblacio"))
+    query.addBindValue(getStringValue("txtNotifCp"))
+    query.addBindValue(getSelectedItem("cboRedactor"))
+    query.addBindValue(getSelectedItem("cboDirector"))
+    query.addBindValue(getSelectedItem("cboExecutor"))
+    query.addBindValue(getStringValue("txtConstructor"))
+    query.addBindValue(getStringValue("txtVisatNum"))
+    query.addBindValue(dVisat["value"])
+    query.addBindValue(getStringValue("txtObs"))
+
+    # Execute SQL
+    result = query.exec_()
+    if result is False:
+        showWarning(query.lastError().text(), 100)
+        return False
+
     
 # Save data from Tab 'Liquidació' into Database
 def saveLiquidacio():
  
     # Get id from Database
     sql = "SELECT last_value FROM data.exp_om_id_seq"
-    cursor.execute(sql)
-    row = cursor.fetchone()
-    expId = row[0]
+    query = QSqlQuery(sql)    
+    if (query.next()):    
+        expId = query.value(0)
     
     selItem = getSelectedItem2('cboClavPlu')
     clavPlu = selItem[-3:-1]
     if not isNumber(clavPlu):
-        clavPlu = 'null'
+        clavPlu = None
    
     # Create SQL
-    sql_1 = "INSERT INTO data.press_om (om_id, pressupost, placa, plu, res, ende"
-    sql_1+= ", car, mov, fig, leg, par, pro"    
-    sql_1+= ", clav_uni, clav_plu, clav_mes, gar_res, gar_ser"
-    sql_2= ") VALUES ("
-    sql_2+= str(expId)+", "+getStringValue2("txtPress")+", "+isChecked("chkPlaca")+", "+isChecked("chkPlu")+", "+isChecked("chkRes")+", "+isChecked("chkEnd") 
-    sql_2+= ", "+getStringValue2("txtCarM")+", "+getStringValue2("txtMovM")+", "+getStringValue2("txtFigM")+", "+isChecked("chkLeg")+", "+getStringValue2("txtParM")+", "+isChecked("chkPro")
-    sql_2+= ", "+getStringValue2("txtClavUniN")+", "+str(clavPlu)+", "+getStringValue2("txtClavMesN")+", "+isChecked("chkGarRes")+", "+isChecked("chkGarSer")
-    sql_2+= ")"      
-    sql= sql_1 + sql_2               
-    cursor.execute(sql)        
-    conn.commit()   
-          
+    sql= "INSERT INTO data.press_om (om_id, pressupost, placa, plu, res, ende, car, mov, fig, leg, par, pro, clav_uni, clav_plu, clav_mes, gar_res, gar_ser)"
+    sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"           
+    query = QSqlQuery()   
+    query.prepare(sql)   
+    
+    # Bind values
+    query.addBindValue(expId) 
+    query.addBindValue(getStringValue("txtPress")) 
+    query.addBindValue(isChecked("chkPlaca")) 
+    query.addBindValue(isChecked("chkPlu")) 
+    query.addBindValue(isChecked("chkRes")) 
+    query.addBindValue(isChecked("chkEnd")) 
+    query.addBindValue(getStringValue("txtCarM")) 
+    query.addBindValue(getStringValue("txtMovM")) 
+    query.addBindValue(getStringValue("txtFigM")) 
+    query.addBindValue(isChecked("chkLeg")) 
+    query.addBindValue(getStringValue("txtParM")) 
+    query.addBindValue(isChecked("chkPro")) 
+    query.addBindValue(getStringValue("txtClavUniN")) 
+    query.addBindValue(clavPlu) 
+    query.addBindValue(getStringValue("txtClavMesN")) 
+    query.addBindValue(isChecked("chkGarRes")) 
+    query.addBindValue(isChecked("chkGarSer")) 
+    
+    # Execute SQL
+    result = query.exec_()
+    if result is False:
+        showWarning(query.lastError().text(), 100)
+    else:
+        showInfo("Expedient guardat correctament")
+                  
 
 def getPress():
     
@@ -341,7 +346,6 @@ def getPress():
 
 
 def updateTotal():
-    
     total = getFloat('txtIcio')+getFloat('txtPlaca')+getFloat('txtLlicTot')+getFloat('txtClavTot')
     setText('txtTotalLiq', total)  
       
@@ -354,7 +358,6 @@ def clearNotificacions():
            
 
 def showInfo(text, duration = None):
-    
     if duration is None:
         _iface.messageBar().pushMessage("", text, QgsMessageBar.INFO, MSG_DURATION)  
     else:
@@ -362,7 +365,6 @@ def showInfo(text, duration = None):
     
       
 def showWarning(text, duration = None):
-    
     if duration is None:
         _iface.messageBar().pushMessage("", text, QgsMessageBar.WARNING, MSG_DURATION)  
     else:
@@ -409,22 +411,22 @@ def solChanged(aux):
         
     sql = "SELECT COALESCE(nom, '') || ' ' || COALESCE(cognom_1, '') || ' ' || COALESCE(cognom_2, '') AS nom_complet, adreca, cp, poblacio "
     sql+= "FROM data."+table+" WHERE id = "+solId
-    cursor.execute(sql)
-    row = cursor.fetchone()
-    if row:
-        txtSolDades.setText(row[0])
-        txtAdresa.setText(row[1])
-        txtCp.setText(row[2])
-        txtPoblacio.setText(row[3])
+    query = QSqlQuery(sql)    
+    if (query.next()):      
+        txtSolDades.setText(query.value(0))
+        txtAdresa.setText(query.value(1))
+        txtCp.setText(query.value(2))
+        txtPoblacio.setText(query.value(3))
     else:
         clearNotificacions()
         
-        
+       
 def empChanged():
-    
-    selIndex = cboEmp.currentIndex()
-    refcat20 = listEmp[selIndex]["refcat20"]
-    txtRefcat20.setText(refcat20)     
+
+    sql = "SELECT id FROM data.immoble WHERE adreca = "+getSelectedItem2("cboEmp")+" ORDER BY id"
+    query = QSqlQuery(sql)    
+    if (query.next()):        
+        txtRefcat20.setText(query.value(0))    
    
         
 # Slots: Tab 'Projecte'        
@@ -441,10 +443,9 @@ def tecnicChanged(cboName, txtWidget):
     
     sql = "SELECT COALESCE(nom, '') || ' ' || COALESCE(cognom_1, '') || ' ' || COALESCE(cognom_2, '') AS nom_complet "
     sql+= "FROM data.tecnic WHERE id = "+getSelectedItem2(cboName)
-    cursor.execute(sql)
-    row = cursor.fetchone()
-    if row:
-        txtWidget.setText(row[0])
+    query = QSqlQuery(sql)    
+    if (query.next()):      
+        txtWidget.setText(query.value(0))
     else:
         txtWidget.setText('')
     
@@ -605,11 +606,11 @@ def refresh():
     setComboModel(cboSol, listNif)       
          
 def save():
-    saveDadesExpedient()
-    saveLiquidacio()
-    _dialog.accept()         
+    result = saveDadesExpedient()
+    if result:
+        saveLiquidacio()
+        _dialog.accept()         
     
 def close():
-    #_dialog.reject() 
-    _dialog.close()    
+    _dialog.close()   
     

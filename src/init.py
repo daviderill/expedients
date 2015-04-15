@@ -1,15 +1,15 @@
-﻿from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+﻿from PyQt4.QtCore import *  # @UnusedWildImport
+from PyQt4.QtGui import *  # @UnusedWildImport
 from qgis.core import *
-from qgis.gui import QgsMessageBar
-from qgis.utils import iface
-from utils import *
+from qgis.gui import QgsMessageBar  # @UnresolvedImport
+from qgis.utils import iface  # @UnresolvedImport
+from utils import *  # @UnusedWildImport
 from functools import partial
 from datetime import datetime
 import time
-import os.path
-import psycopg2
-import psycopg2.extras
+import os.path  # @Reimport
+import psycopg2  # @UnresolvedImport
+import psycopg2.extras  # @UnresolvedImport
 import sys
 
 

@@ -1,6 +1,6 @@
-﻿from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from PyQt4.QtSql import *
+﻿from PyQt4.QtCore import *  # @UnusedWildImport
+from PyQt4.QtGui import *  # @UnusedWildImport
+from PyQt4.QtSql import *  # @UnusedWildImport
 from qgis.core import *
 from qgis.gui import QgsMessageBar
 from qgis.utils import iface
@@ -35,15 +35,15 @@ def formOpen(dialog,layerid,featureid):
         showInfo("Attempting to connect to DB")
         connectDb()
 
-	# If not, close previous dialog	if already opened
+    # If not, close previous dialog	if already opened
     else:
         if _dialog.isVisible():
             _dialog.parent().setVisible(False)			
-		
+
     # Get dialog and his widgets
     _dialog = dialog	
     widgetsToGlobal()
-	
+
     # Get 'Expedients' from selected 'parcela' and filter conditions
     getExpedients()
     
@@ -54,12 +54,12 @@ def formOpen(dialog,layerid,featureid):
 def connectDb():
 
     global mainDao
-	
+
     mainDao = MainDao()
     status = mainDao.initDb()
     if status is False:
         showWarning("Error connecting to Database")
-	
+
 
 def widgetsToGlobal():
     
@@ -68,7 +68,7 @@ def widgetsToGlobal():
     refcat = _dialog.findChild(QLineEdit, "refcat")             
     cboEmp = _dialog.findChild(QComboBox, "cboEmp")    
     tblExp = _dialog.findChild(QTableView, "tblExp")   
-	
+
     
 def initConfig():    
     
@@ -78,10 +78,10 @@ def initConfig():
     # Other default configuration
     boldGroupBoxes()
     _dialog.hideButtonBox()    
-	
-	# Refresh map
+
+    # Refresh map
     _iface.mapCanvas().refresh()	
-	
+
     # TEST
     #dlg = ExpOmDialog()   
     #if not dlg:        
@@ -114,19 +114,19 @@ def getExpedients():
 
     global model
     
-	# Define model
+    # Define model
     sql = "SELECT id AS Id, num_exp AS Num. Exp, data_ent AS Data entrada, immoble_id AS Immoble, tipus_id AS Tipus FROM data.exp_om WHERE parcela_id = '"+refcat.text()+"' ORDER BY id"
     sql = "SELECT \"id\", \"num_exp\" FROM data.exp_om WHERE parcela_id = '"+refcat.text()+"'"	
     #print sql	
     #query = QSqlQuery(sql)
     #model = QSqlQueryModel();
     #model.setQuery(query);	
-	
+
     model = QSqlTableModel();
     model.setTable("data.exp_om")		
     model.setFilter("parcela_id = '"+refcat.text()+"'")	
     model.setSort(0, Qt.AscendingOrder)	
-	
+
     model.setEditStrategy(QSqlTableModel.OnRowChange)   # OnManualSubmit
     model.select()
 
@@ -134,18 +134,18 @@ def getExpedients():
     model.setHeaderData(1, Qt.Horizontal, "Num. Exp");
     model.dataChanged.connect(dataChanged)
 
-	# Set this model to the view
+    # Set this model to the view
     tblExp.setModel(model)
     hideColumns(tblExp)
     verticalHeader = tblExp.verticalHeader()
     verticalHeader.setResizeMode(QHeaderView.Fixed)
     verticalHeader.setDefaultSectionSize(20)
     tblExp.resizeColumnsToContents()
-	
-	# Load 'immobles' from selected 'parcela'
+
+    # Load 'immobles' from selected 'parcela'
     loadImmobles()
        
-	   
+   
 def hideColumns(tblExp):
     for i in range (5, 16):	
         tblExp.hideColumn(i)	
@@ -155,16 +155,16 @@ def hideColumns(tblExp):
 def dataChanged():
     ok = model.submitAll()
     if not ok:
-	    showWarning(u"Error d'actualització de la taula")
+        showWarning(u"Error d'actualització de la taula")
 
-	
+
 def loadImmobles():
-		
+
     sql = "SELECT adreca FROM data.immoble WHERE refcat = '"+refcat.text()+"' ORDER BY id"
-    query = QSqlQuery(sql)	
-    fieldNo = query.record().indexOf("adreca")
-    while (query.next()):
-        country = query.value(fieldNo)
+    #query = QSqlQuery(sql)	
+    #fieldNo = query.record().indexOf("adreca")
+    #while (query.next()):
+    #    country = query.value(fieldNo)
     model = QSqlQueryModel();
     model.setQuery(sql);
     cboEmp.setModel(model)
@@ -211,21 +211,21 @@ def create():
 def update(modelIndex):
     print "update"    
     #print str(modelIndex.row())	
-	
-	
+
+
 def delete():
    
     # Get selected rows
     #selModel = tblExp.selectionModel()   #QItemSelectionModel
     #itemSel = selModel.selection()       #QItemSelection
     #indexes = itemSel.indexes()          #QModelIndexList
-	
+
     msg = "Ha seleccionat els expedients:\n"	
     listId = ''
     selectedList = tblExp.selectionModel().selectedRows()    
     for i in range(0, len(selectedList)):
         row = selectedList[i].row()               #QModelIndex
-        id = model.record(row).value("id")		
+        id = model.record(row).value("id")		  # @ReservedAssignment
         num_exp = model.record(row).value("num_exp")
         msg = msg + num_exp + ", "		
         listId = listId + str(id) + ", "
@@ -241,7 +241,7 @@ def delete():
     
 
 def refresh():
-	# Refresh table and map
+    # Refresh table and map
     tblExp.model().select()
     _iface.mapCanvas().refresh()		
 
