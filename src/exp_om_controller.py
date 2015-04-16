@@ -10,14 +10,11 @@ from datetime import datetime
 import time
 
 
-def openExpOm(dialog, parcela, featureid = None):
+def openExpOm(dialog, parcela, expOmId = None):
 
-    global _dialog, _iface, _parcela, current_path, current_date
+    global _dialog, _iface, _parcela, _expOmId, current_path, current_date
     global MSG_DURATION
-
-    # Check if it is the first time we execute this module
-    #if isFirstTime():
-    
+   
     current_path = os.path.dirname(os.path.abspath(__file__))
     date_aux = time.strftime("%d/%m/%Y")
     current_date = datetime.strptime(date_aux, "%d/%m/%Y")
@@ -33,11 +30,29 @@ def openExpOm(dialog, parcela, featureid = None):
     # Get dialog and his widgets
     _parcela = parcela		
     _dialog = dialog	
+    _expOmId = None            
     setDialog(dialog)
     widgetsToGlobal()	
     
     # Initial configuration
     initConfig()
+    
+    # Check if we are in mode 'Create' or 'Update'
+    if expOmId is None:
+        
+        # Fill date widgets with current Date
+        dateEntrada.setDate(current_date)
+        dateLlicencia.setDate(current_date)
+        dateVisat.setDate(current_date)   
+        
+        # Manage 'Tipus solicitatnt'
+        getTipusSol() 
+        
+    else:
+        _expOmId = expOmId
+        getDadesExpedient()
+        getLiquidacio()
+    
 
     # Open form as modeless dialog
     _dialog.show()
@@ -99,12 +114,7 @@ def initConfig():
     setComboModel(cboDirector, listTecnic)
     setComboModel(cboExecutor, listTecnic)
     setComboModel(cboClavPlu, listClavPlu)
-    
-    # Fill date widgets with current Date
-    dateEntrada.setDate(current_date)
-    dateLlicencia.setDate(current_date)
-    dateVisat.setDate(current_date)
-        
+           
     # Get 'immobles' from selected 'parcela'
     loadImmobles()
     
@@ -112,7 +122,6 @@ def initConfig():
     setSignals()    
     
     # Other default configuration
-    getTipusSol()
     boldGroupBoxes()
 
         
@@ -217,8 +226,6 @@ def getLayers():
     # Iterate over all layers
     layers = _iface.legendInterface().layers()	
     for layer in layers:
-        #layerType = layer.type()
-        #print layer.name()
         if layer.name() == 'persona':
             layerFisica = layer
         if layer.name() == 'juridica':
@@ -226,6 +233,57 @@ def getLayers():
         if layer.name() == 'tecnic':
             layerTecnic = layer
                     
+
+def getDadesExpedient():
+
+    sql = "SELECT num_exp, data_ent, data_llic, tipus_id, tipus_solic_id, solic_persona_id, solic_juridica_id, repre_id"
+    sql+= ", parcela_id, immoble_id, num_hab, notif_adreca, notif_poblacio, notif_cp"
+    sql+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions "
+    sql+= "FROM data.exp_om WHERE id = "+str(_expOmId)
+    query = QSqlQuery(sql) 
+       
+    if (query.next()):    
+        txtNumExp.setText(getQueryValue(query, 0))
+        dateEntrada.setDate(query.value(1))
+        dateLlicencia.setDate(query.value(2))
+        setSelectedItem("cboTipus", getQueryValue(query, 3))
+        if (query.value(4) == 'persona'):
+            rbFisica.setChecked(True)
+            cboSol.setVisible(True)
+            cboSolCif.setVisible(False)            
+            setSelectedItem("cboSol", getQueryValue(query, 5))
+            setSelectedItem("cboSolCif", None)
+        else:
+            rbJuridica.setChecked(True)
+            setSelectedItem("cboSol", None)
+            setSelectedItem("cboSolCif", getQueryValue(query, 6))  
+             
+        setSelectedItem("cboRep", getQueryValue(query, 7))   
+        setText("refcat", query.value(8))
+        
+        # TODO: Gestió immoble
+        setText("txtRefcat20", getQueryValue(query, 9))
+        
+        setText("txtNumHab", getQueryValue(query, 10))
+        setText("txtNotifAdreca", getQueryValue(query, 11))
+        setText("txtNotifPoblacio", getQueryValue(query, 12))
+        setText("txtNotifCp", getQueryValue(query, 13))
+        setSelectedItem("cboRedactor", getQueryValue(query, 14))  
+        setSelectedItem("cboDirector", getQueryValue(query, 15))  
+        setSelectedItem("cboExecutor", getQueryValue(query, 16))  
+        setText("txtConstructor", getQueryValue(query, 17))
+        setText("txtVisatNum", getQueryValue(query, 18))
+        dateVisat.setDate(query.value(19))
+        setText("txtVisatNum", getQueryValue(query, 20))
+                           
+    else:
+        showWarning(query.lastError().text(), 100)
+    
+
+# TODO Update: Get Dades Liquidacio
+def getLiquidacio():
+    pass
+
 
 # Save data from Tab 'Dades Expedient' and 'Projecte' into Database
 def saveDadesExpedient():
@@ -242,42 +300,52 @@ def saveDadesExpedient():
     dLlicencia = getDate("dateLlicencia", "data_llic")
     dVisat = getDate("dateVisat", "visat_data")
     
-    # Create SQLbody
-    sql = "INSERT INTO data.exp_om (num_exp, data_ent, data_llic, tipus_id, tipus_solic_id, solic_persona_id, solic_juridica_id, repre_id"
-    sql+= ", parcela_id, immoble_id, num_hab, notif_adreca, notif_poblacio, notif_cp"
-    sql+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions)"
-    sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"     
-    query = QSqlQuery()   
-    query.prepare(sql)   
+    # Create SQL body
+    if _expOmId is None:
+        sql = "INSERT INTO data.exp_om (num_exp, data_ent, data_llic, tipus_id, tipus_solic_id, solic_persona_id, solic_juridica_id, repre_id"
+        sql+= ", parcela_id, immoble_id, num_hab, notif_adreca, notif_poblacio, notif_cp"
+        sql+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions)"
+        sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"   
+    else:
+        sql = "UPDATE data.exp_om SET"
+        sql+= " num_exp=:0, data_ent=:1, data_llic=:2, tipus_id=:3, tipus_solic_id=:4, solic_persona_id=:5, solic_juridica_id=:6, repre_id=:7"
+        sql+= ", parcela_id=:8, immoble_id=:9, num_hab=:10, notif_adreca=:11, notif_poblacio=:12, notif_cp=:13"     
+        sql+= ", redactor_id=:14, director_id=:15, executor_id=:16, constructor=:17, visat_num=:18, visat_data=:19, observacions=:20"
+        sql+= " WHERE id=:id"       
     
     # Bind values
-    query.addBindValue(getStringValue("txtNumExp")) 
-    query.addBindValue(dEntrada["value"]) 
-    query.addBindValue(dLlicencia["value"]) 
-    query.addBindValue(getSelectedItem("cboTipus"))
+    query = QSqlQuery()    
+    query.prepare(sql)           
+    query.bindValue(":id", str(_expOmId))        
+    query.bindValue(0, getStringValue("txtNumExp")) 
+    query.bindValue(1, dEntrada["value"]) 
+    query.bindValue(2, dLlicencia["value"]) 
+    query.bindValue(3, getSelectedItem("cboTipus")) 
+
     # NIF or CIF?
     if rbFisica.isChecked():
-        query.addBindValue('persona') 
-        query.addBindValue(getSelectedItem("cboSol")) 
-        query.addBindValue(None)
+        query.bindValue(4, 'persona') 
+        query.bindValue(5, getSelectedItem("cboSol")) 
+        query.bindValue(6, None)
     else:
-        query.addBindValue('juridica') 
-        query.addBindValue(None)
-        query.addBindValue(getSelectedItem("cboSolCif")) 
-    query.addBindValue(getSelectedItem("cboRep")) 
-    query.addBindValue(getStringValue("refcat")) 
-    query.addBindValue(getStringValue("txtRefcat20")) 
-    query.addBindValue(getStringValue("txtNumHab"))
-    query.addBindValue(getStringValue("txtNotifAdreca"))
-    query.addBindValue(getStringValue("txtNotifPoblacio"))
-    query.addBindValue(getStringValue("txtNotifCp"))
-    query.addBindValue(getSelectedItem("cboRedactor"))
-    query.addBindValue(getSelectedItem("cboDirector"))
-    query.addBindValue(getSelectedItem("cboExecutor"))
-    query.addBindValue(getStringValue("txtConstructor"))
-    query.addBindValue(getStringValue("txtVisatNum"))
-    query.addBindValue(dVisat["value"])
-    query.addBindValue(getStringValue("txtObs"))
+        query.bindValue(4, 'juridica') 
+        query.bindValue(5, None)
+        query.bindValue(6, getSelectedItem("cboSolCif")) 
+    
+    query.bindValue(7, getSelectedItem("cboRep")) 
+    query.bindValue(8, getStringValue("refcat")) 
+    query.bindValue(9, getStringValue("txtRefcat20")) 
+    query.bindValue(10, getStringValue("txtNumHab"))
+    query.bindValue(11, getStringValue("txtNotifAdreca"))
+    query.bindValue(12, getStringValue("txtNotifPoblacio"))
+    query.bindValue(13, getStringValue("txtNotifCp"))
+    query.bindValue(14, getSelectedItem("cboRedactor"))
+    query.bindValue(15, getSelectedItem("cboDirector"))
+    query.bindValue(16, getSelectedItem("cboExecutor"))
+    query.bindValue(17, getStringValue("txtConstructor"))
+    query.bindValue(18, getStringValue("txtVisatNum"))
+    query.bindValue(19, dVisat["value"])
+    query.bindValue(20, getStringValue("txtObs"))  
 
     # Execute SQL
     result = query.exec_()
@@ -290,41 +358,50 @@ def saveDadesExpedient():
 # Save data from Tab 'Liquidació' into Database
 def saveLiquidacio():
  
-    # Get id from Database
-    sql = "SELECT last_value FROM data.exp_om_id_seq"
-    query = QSqlQuery(sql)    
-    if (query.next()):    
-        expId = query.value(0)
-    
-    selItem = getSelectedItem2('cboClavPlu')
-    clavPlu = selItem[-3:-1]
-    if not isNumber(clavPlu):
-        clavPlu = None
+    clavPlu = None
+    selItem = getSelectedItem('cboClavPlu')
+    if selItem is not None:
+        clavPlu = selItem[:2]
+        if not isNumber(clavPlu):
+            clavPlu = None        
    
     # Create SQL
-    sql= "INSERT INTO data.press_om (om_id, pressupost, placa, plu, res, ende, car, mov, fig, leg, par, pro, clav_uni, clav_plu, clav_mes, gar_res, gar_ser)"
-    sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"           
     query = QSqlQuery()   
-    query.prepare(sql)   
+    if _expOmId is None:    
+        # Get last id
+        sql = "SELECT last_value FROM data.exp_om_id_seq"
+        query = QSqlQuery(sql)    
+        if (query.next()):    
+            expId = query.value(0)
+        sql= "INSERT INTO data.press_om (pressupost, placa, plu, res, ende, car, mov, fig, leg, par, pro, clav_uni, clav_mes, gar_res, gar_ser, clav_plu, om_id)"
+        sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"         
+        query.prepare(sql)   
+        query.bindValue(16, expId)         
+    else:   
+        sql = "UPDATE data.press_om SET"
+        sql+= " pressupost=:0, placa=:1, plu=:2, res=:3, ende=:4, car=:5, mov=:6, fig=:7, leg=:8, par=:9"
+        sql+= ", pro=:10, clav_uni=:11, clav_mes=:12, gar_res=:13, gar_ser=:14, clav_plu=:15"
+        sql+= " WHERE om_id=:om_id"                
+        query.prepare(sql)                
+        query.bindValue(":om_id", _expOmId) 
     
     # Bind values
-    query.addBindValue(expId) 
-    query.addBindValue(getStringValue("txtPress")) 
-    query.addBindValue(isChecked("chkPlaca")) 
-    query.addBindValue(isChecked("chkPlu")) 
-    query.addBindValue(isChecked("chkRes")) 
-    query.addBindValue(isChecked("chkEnd")) 
-    query.addBindValue(getStringValue("txtCarM")) 
-    query.addBindValue(getStringValue("txtMovM")) 
-    query.addBindValue(getStringValue("txtFigM")) 
-    query.addBindValue(isChecked("chkLeg")) 
-    query.addBindValue(getStringValue("txtParM")) 
-    query.addBindValue(isChecked("chkPro")) 
-    query.addBindValue(getStringValue("txtClavUniN")) 
-    query.addBindValue(clavPlu) 
-    query.addBindValue(getStringValue("txtClavMesN")) 
-    query.addBindValue(isChecked("chkGarRes")) 
-    query.addBindValue(isChecked("chkGarSer")) 
+    query.bindValue(0, getStringValue("txtPress")) 
+    query.bindValue(1, isChecked("chkPlaca")) 
+    query.bindValue(2, isChecked("chkPlu")) 
+    query.bindValue(3, isChecked("chkRes")) 
+    query.bindValue(4, isChecked("chkEnd")) 
+    query.bindValue(5, getStringValue("txtCarM")) 
+    query.bindValue(6, getStringValue("txtMovM")) 
+    query.bindValue(7, getStringValue("txtFigM")) 
+    query.bindValue(8, isChecked("chkLeg")) 
+    query.bindValue(9, getStringValue("txtParM")) 
+    query.bindValue(10, isChecked("chkPro")) 
+    query.bindValue(11, getStringValue("txtClavUniN")) 
+    query.bindValue(12, getStringValue("txtClavMesN")) 
+    query.bindValue(13, isChecked("chkGarRes")) 
+    query.bindValue(14, isChecked("chkGarSer")) 
+    query.bindValue(15, clavPlu) 
     
     # Execute SQL
     result = query.exec_()

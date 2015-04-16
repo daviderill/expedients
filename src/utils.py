@@ -22,32 +22,7 @@ def setDialog(p_dialog):
     
     global _dialog
     _dialog = p_dialog
-
-
-def setCursor(p_cursor):
-    
-    global cursor
-    cursor = p_cursor
-
-
-def fillComboBox(widget, sql):
-    
-    elem = _dialog.findChild(QComboBox, widget)
-    elem.clear()	
-    elem.addItem("")	
-    print sql
-    if not 'cursor' in globals():
-        print "cursor error"
-        return
-    else:
-        print "defined"
-    return
-
-    cursor.execute(sql)
-    rows = cursor.fetchall()
-    for row in rows:
-        elem.addItem(row[0])	
-        
+ 
         
 def setComboModel(widget, vector):
     
@@ -72,31 +47,25 @@ def queryToList(sql):
         vector.append(unicode(value))          
     return vector 
         
+            
+def getQueryValue(query, index):
 
-def sqlToTable(sql, fieldNumber):
-    
-    table = []
-    cursor.execute(sql)
-    rows = cursor.fetchall()
-    for row in rows:
-        vector = []
-        for i in range(0, fieldNumber):
-            vector.append(unicode(row[i]))   
-        table.append(vector)
-    return table 
+    value = ""
+    if not query.isNull(index):
+        value = query.value(index)
+    return value
 
 
-def setSelectedItem(widget, sql):
-    
-    cursor.execute(sql)
-    row = cursor.fetchone()
-    if not row:
-        return				
+def setSelectedItem(widget, text):
+
     elem = _dialog.findChild(QComboBox, widget)
     if elem:
-        index = elem.findText(row[0])
-        elem.setCurrentIndex(index);		
-
+        if text is not None:
+            index = elem.findText(text)
+            elem.setCurrentIndex(index);	
+        else:
+            elem.setCurrentIndex(0);     
+            
 
 def getSelectedItem(widget):
     
@@ -186,7 +155,6 @@ def getDate(widget, fieldName):
     try:    
         date_widget = _dialog.findChild(QDateEdit, widget)
         if not date_widget:
-            print "not found"
             return
         
         dateAux = date_widget.date()
@@ -237,8 +205,6 @@ def setText(widget, text):
     elem = _dialog.findChild(QLineEdit, widget)
     if elem:    
         elem.setText(str(text))
-    else:
-        print "setText"
         
 
 def setLogger(name, folder, filename):

@@ -13,7 +13,8 @@ class MainDao():
     PWD = "8u9ijn"	
 
     def __init__(self): 
-        print "initMainDao"
+        pass
+        #print "initMainDao"
 
     def initDb(self):
 

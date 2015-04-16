@@ -191,28 +191,48 @@ def askQuestion(text, infText = None):
 # Slots: Window buttons  
   
 def create():
+    
     dlg = ExpOmDialog()   
     if not dlg:        
-        showInfo("UI form not loaded")            
+        showWarning("No s'ha pogut carregar el formulari")            
         return	
     openExpOm(dlg, refcat.text())	
          
          
 def update(modelIndex):
-    print "update"    
-    #print str(modelIndex.row())	
+     
+    #print str(modelIndex)	
+    dlg = ExpOmDialog()   
+    if not dlg:        
+        showWarning("No s'ha pogut carregar el formulari")            
+        return    
+    
+    # Get selected rows, but we only process first one
+    selectedList = tblExp.selectionModel().selectedRows()    
+    if len(selectedList) == 0:
+        showWarning("No ha seleccionat cap registre per modificar")
+        return
+    row = selectedList[0].row()               #QModelIndex
+    expOmId = model.record(row).value("id")          # @ReservedAssignment
+    
+    # Open 'expOm' form
+    openExpOm(dlg, refcat.text(), expOmId)        
 
 
 def delete():
    
-    # Get selected rows
     #selModel = tblExp.selectionModel()   #QItemSelectionModel
     #itemSel = selModel.selection()       #QItemSelection
     #indexes = itemSel.indexes()          #QModelIndexList
 
+    # Get selected rows
+    selectedList = tblExp.selectionModel().selectedRows()    
+    if len(selectedList) == 0:
+        showWarning("No ha seleccionat cap registre per eliminar")
+        return
+    
     msg = "Ha seleccionat els expedients:\n"	
     listId = ''
-    selectedList = tblExp.selectionModel().selectedRows()    
     for i in range(0, len(selectedList)):
         row = selectedList[i].row()               #QModelIndex
         id = model.record(row).value("id")		  # @ReservedAssignment
