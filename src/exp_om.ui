@@ -2038,7 +2038,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QLineEdit" name="txLiq">
+    <widget class="QLineEdit" name="txtLiq">
      <property name="geometry">
       <rect>
        <x>110</x>
@@ -2054,7 +2054,7 @@
       <number>15</number>
      </property>
     </widget>
-    <widget class="QCheckBox" name="chkliq">
+    <widget class="QCheckBox" name="chkLiq">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -2251,8 +2251,8 @@
   <tabstop>btnTecnic</tabstop>
   <tabstop>dateVisat</tabstop>
   <tabstop>txtPress</tabstop>
-  <tabstop>chkliq</tabstop>
-  <tabstop>txLiq</tabstop>
+  <tabstop>chkLiq</tabstop>
+  <tabstop>txtLiq</tabstop>
   <tabstop>txtIcio</tabstop>
   <tabstop>chkPlaca</tabstop>
   <tabstop>txtPlaca</tabstop>

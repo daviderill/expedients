@@ -98,6 +98,7 @@ CREATE TABLE "data"."press_om" (
 "clav_mes" int4,
 "gar_res" bool,
 "gar_ser" bool,
+"liq_aj" numeric(15,2),
 PRIMARY KEY ("om_id") 
 );
 COMMENT ON COLUMN "data"."press_om"."placa" IS 'OF.7 Taxa Placa';

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'exp_om.ui'
 #
-# Created: Mon Oct 05 14:34:14 2015
+# Created: Mon Oct 05 18:09:19 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -571,14 +571,14 @@ class Ui_Dialog(object):
         self.lblTot = QtGui.QLabel(self.gbTot)
         self.lblTot.setGeometry(QtCore.QRect(40, 20, 81, 21))
         self.lblTot.setObjectName(_fromUtf8("lblTot"))
-        self.txLiq = QtGui.QLineEdit(self.tabLiquidacio)
-        self.txLiq.setGeometry(QtCore.QRect(110, 50, 101, 20))
-        self.txLiq.setText(_fromUtf8(""))
-        self.txLiq.setMaxLength(15)
-        self.txLiq.setObjectName(_fromUtf8("txLiq"))
-        self.chkliq = QtGui.QCheckBox(self.tabLiquidacio)
-        self.chkliq.setGeometry(QtCore.QRect(20, 50, 81, 21))
-        self.chkliq.setObjectName(_fromUtf8("chkliq"))
+        self.txtLiq = QtGui.QLineEdit(self.tabLiquidacio)
+        self.txtLiq.setGeometry(QtCore.QRect(110, 50, 101, 20))
+        self.txtLiq.setText(_fromUtf8(""))
+        self.txtLiq.setMaxLength(15)
+        self.txtLiq.setObjectName(_fromUtf8("txtLiq"))
+        self.chkLiq = QtGui.QCheckBox(self.tabLiquidacio)
+        self.chkLiq.setGeometry(QtCore.QRect(20, 50, 81, 21))
+        self.chkLiq.setObjectName(_fromUtf8("chkLiq"))
         self.gbGar = QtGui.QGroupBox(self.tabLiquidacio)
         self.gbGar.setGeometry(QtCore.QRect(350, 310, 261, 111))
         self.gbGar.setObjectName(_fromUtf8("gbGar"))
@@ -656,9 +656,9 @@ class Ui_Dialog(object):
         Dialog.setTabOrder(self.txtVisatNum, self.btnTecnic)
         Dialog.setTabOrder(self.btnTecnic, self.dateVisat)
         Dialog.setTabOrder(self.dateVisat, self.txtPress)
-        Dialog.setTabOrder(self.txtPress, self.chkliq)
-        Dialog.setTabOrder(self.chkliq, self.txLiq)
-        Dialog.setTabOrder(self.txLiq, self.txtIcio)
+        Dialog.setTabOrder(self.txtPress, self.chkLiq)
+        Dialog.setTabOrder(self.chkLiq, self.txtLiq)
+        Dialog.setTabOrder(self.txtLiq, self.txtIcio)
         Dialog.setTabOrder(self.txtIcio, self.chkPlaca)
         Dialog.setTabOrder(self.chkPlaca, self.txtPlaca)
         Dialog.setTabOrder(self.txtPlaca, self.chkPlu)
@@ -776,7 +776,7 @@ class Ui_Dialog(object):
         self.lblNumExp_84.setText(_translate("Dialog", "Taxa de Clavegueram:", None))
         self.lblNumExp_87.setText(_translate("Dialog", "Total Clavegueram", None))
         self.lblTot.setText(_translate("Dialog", "Impost i Taxes", None))
-        self.chkliq.setText(_translate("Dialog", "Liquidacio aj.:", None))
+        self.chkLiq.setText(_translate("Dialog", "Liquidacio aj.:", None))
         self.gbGar.setTitle(_translate("Dialog", "Garanties", None))
         self.chkGarRes.setText(_translate("Dialog", "Residus", None))
         self.chkGarSer.setText(_translate("Dialog", "Serveis", None))

@@ -200,6 +200,13 @@ def isChecked(widgetName):
     return value
 
 
+def setChecked(widget, value):
+    
+    elem = _dialog.findChild(QCheckBox, widget)
+    if elem:    
+        elem.setChecked(value)
+            
+
 def setText(widget, text):
     
     elem = _dialog.findChild(QLineEdit, widget)

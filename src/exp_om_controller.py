@@ -247,8 +247,8 @@ def getDadesExpedient():
 
     sql = "SELECT num_exp, data_ent, data_llic, tipus_id, tipus_solic_id, solic_persona_id, solic_juridica_id, repre_id"
     sql+= ", parcela_id, immoble_id, num_hab, notif_adreca, notif_poblacio, notif_cp"
-    sql+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions, id, reg_ent, data_liq, documentacio "
-    sql+= "FROM data.exp_om WHERE id = "+str(_expOmId)
+    sql+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions, id, reg_ent, data_liq, documentacio"
+    sql+= " FROM data.exp_om WHERE id = "+str(_expOmId)
     query = QSqlQuery(sql) 
        
     if (query.next()):    
@@ -293,11 +293,76 @@ def getDadesExpedient():
         showWarning(query.lastError().text(), 100)
     
 
-# TODO Update: Get Dades Liquidacio
+# Get Dades Liquidacio
 def getLiquidacio():
-    pass
+
+    sql = "SELECT pressupost, placa, plu, res, ende, car, mov, fig, leg, par, pro"
+    sql+= ", clav_uni, clav_plu, clav_mes, gar_res, gar_ser, liq_aj"
+    sql+= " FROM data.press_om WHERE om_id = "+str(_expOmId)
+    print sql
+    query = QSqlQuery(sql) 
+       
+    if (query.next()):   
+        #print "A" 
+        setText("txtPress", getQueryValue(query, 0))     
+        setChecked("chkPlaca", getQueryValue(query, 1))     
+        setChecked("chkPlu", getQueryValue(query, 2))     
+        setChecked("chkRes", getQueryValue(query, 3))     
+        setChecked("chkEnd", getQueryValue(query, 4))     
+        setText("txtCarM", getQueryValue(query, 5))     
+        setText("txtMovM", getQueryValue(query, 6))     
+        setText("txtFigM", getQueryValue(query, 7))     
+        setChecked("chkLeg", getQueryValue(query, 8))     
+        setText("txtParM", getQueryValue(query, 9))     
+        setChecked("chkPro", getQueryValue(query, 10))     
+        setText("txtClavUniN", getQueryValue(query, 11))     
+        aux = getQueryValue(query, 12)
+        if aux == 2:
+            cboClavPlu.setCurrentIndex(1)     
+        elif aux == 6:
+            cboClavPlu.setCurrentIndex(2)     
+        elif aux == 10:
+            cboClavPlu.setCurrentIndex(3)     
+        setText("txtClavMesN", getQueryValue(query, 13))     
+        setChecked("chkGarRes", getQueryValue(query, 14))     
+        setChecked("chkGarSer", getQueryValue(query, 15))     
+        setText("txtLiq", getQueryValue(query, 16))     
+        
+        updateTabLiquidacio()
+        pressChanged()
 
 
+def updateTabLiquidacio():
+    
+    if getStringValue("txtLiq") is not None:
+        setChecked("chkLiq", True)
+    if getStringValue("txtCarM") is not None:
+        setChecked("chkCar", True)
+    if getStringValue("txtMovM") is not None:
+        setChecked("chkMov", True)
+    if getStringValue("txtFigM") is not None:
+        setChecked("chkFig", True)
+    if getStringValue("txtParM") is not None:
+        setChecked("chkPar", True)
+    if getStringValue("txtClavUniN") is not None:
+        setChecked("chkClavUni", True)
+    selItem = getSelectedItem('cboClavPlu')
+    if selItem is not None:
+        clavPlu = selItem[:2]
+        if isNumber(clavPlu):    
+            setChecked("chkClavPlu", True)
+    if getStringValue("txtClavMesN") is not None:
+        setChecked("chkClavMes", True)
+    llicChanged('chkPlaca')        
+    llicChanged('chkCar')        
+    llicChanged('chkMov')        
+    llicChanged('chkFig')        
+    llicChanged('chkPar')        
+    clavChanged('chkClavUni')        
+    clavChanged('chkClavPlu')        
+    clavChanged('chkClavMes')        
+        
+    
 def checkId():
     
 #     if not txtNumExp.text():
@@ -399,14 +464,14 @@ def saveLiquidacio():
         query = QSqlQuery(sql)    
         if (query.next()):    
             expId = query.value(0)
-        sql= "INSERT INTO data.press_om (pressupost, placa, plu, res, ende, car, mov, fig, leg, par, pro, clav_uni, clav_mes, gar_res, gar_ser, clav_plu, om_id)"
-        sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"         
+        sql= "INSERT INTO data.press_om (pressupost, placa, plu, res, ende, car, mov, fig, leg, par, pro, clav_uni, clav_plu, clav_mes, gar_res, gar_ser, liq_aj, om_id)"
+        sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"         
         query.prepare(sql)   
-        query.bindValue(16, expId)         
+        query.bindValue(17, expId)         
     else:   
         sql = "UPDATE data.press_om SET"
         sql+= " pressupost=:0, placa=:1, plu=:2, res=:3, ende=:4, car=:5, mov=:6, fig=:7, leg=:8, par=:9"
-        sql+= ", pro=:10, clav_uni=:11, clav_mes=:12, gar_res=:13, gar_ser=:14, clav_plu=:15"
+        sql+= ", pro=:10, clav_uni=:11, clav_plu=:12, clav_mes=:13, gar_res=:14, gar_ser=:15, liq_aj=:16"
         sql+= " WHERE om_id=:om_id"                
         query.prepare(sql)                
         query.bindValue(":om_id", _expOmId) 
@@ -417,17 +482,32 @@ def saveLiquidacio():
     query.bindValue(2, isChecked("chkPlu")) 
     query.bindValue(3, isChecked("chkRes")) 
     query.bindValue(4, isChecked("chkEnd")) 
-    query.bindValue(5, getStringValue("txtCarM")) 
-    query.bindValue(6, getStringValue("txtMovM")) 
-    query.bindValue(7, getStringValue("txtFigM")) 
+    if isChecked("chkCar"):    
+        query.bindValue(5, getStringValue("txtCarM")) 
+    if isChecked("chkMov"):            
+        query.bindValue(6, getStringValue("txtMovM")) 
+    if isChecked("chkFig"):                    
+        query.bindValue(7, getStringValue("txtFigM")) 
     query.bindValue(8, isChecked("chkLeg")) 
-    query.bindValue(9, getStringValue("txtParM")) 
+    if isChecked("chkPar"):            
+        query.bindValue(9, getStringValue("txtParM")) 
     query.bindValue(10, isChecked("chkPro")) 
-    query.bindValue(11, getStringValue("txtClavUniN")) 
-    query.bindValue(12, getStringValue("txtClavMesN")) 
-    query.bindValue(13, isChecked("chkGarRes")) 
-    query.bindValue(14, isChecked("chkGarSer")) 
-    query.bindValue(15, clavPlu) 
+    if isChecked("chkClavUni"):
+        aux = getStringValue("txtClavUniN")
+        if aux is None:
+            aux = 1
+        query.bindValue(11, aux) 
+    if isChecked("chkClavPlu"):          
+        query.bindValue(12, clavPlu) 
+    if isChecked("chkClavMes"):    
+        aux = getStringValue("txtClavMesN")
+        if aux is None:
+            aux = 13
+        query.bindValue(13, aux)         
+    query.bindValue(14, isChecked("chkGarRes")) 
+    query.bindValue(15, isChecked("chkGarSer")) 
+    if isChecked("chkLiq"):      
+        query.bindValue(16, getStringValue("txtLiq"))     
     
     # Execute SQL
     result = query.exec_()
