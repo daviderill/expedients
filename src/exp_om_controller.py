@@ -54,6 +54,7 @@ def openExpOm(dialog, parcela, expOmId = None):
         _expOmId = expOmId
         getDadesExpedient()
         getLiquidacio()
+        checkDocument()           
     
 
     # Open form as modeless dialog
@@ -64,7 +65,7 @@ def widgetsToGlobal():
     
     global refcat, lblInfo, txtId, txtNumExp, cboTipus, txtEntrada, dateLiquidacio, dateEntrada, dateLlicencia
     global rbFisica, rbJuridica, lblSol, cboSol, cboSolCif, cboRep, txtSolDades, txtAdresa, txtCp, txtPoblacio, txtRefcat20, cboEmp
-    global cboRedactor, cboDirector, cboExecutor, txtRedactor, txtDirector, txtExecutor, dateVisat
+    global cboRedactor, cboDirector, cboExecutor, txtRedactor, txtDirector, txtExecutor, dateVisat, txtDoc
     global txtPress, cboClavPlu
 
     # Tab 'Dades Expedient'  
@@ -99,6 +100,7 @@ def widgetsToGlobal():
     txtDirector = _dialog.findChild(QLineEdit, "txtDirector")   
     txtExecutor = _dialog.findChild(QLineEdit, "txtExecutor")   
     dateVisat = _dialog.findChild(QDateEdit, "dateVisat")  
+    txtDoc = _dialog.findChild(QTextEdit, "txtDoc")   
     
     # Tab 'Liquidació'
     txtPress = _dialog.findChild(QLineEdit, "txtPress")    
@@ -127,6 +129,7 @@ def initConfig():
     
     # Other default configuration
     boldGroupBoxes()
+    _dialog.findChild(QPushButton, "btnOpenDoc").setEnabled(False)         
 
         
 # Set Group Boxes title font to bold    
@@ -150,6 +153,8 @@ def setSignals():
     _dialog.findChild(QPushButton, "btnFisica").clicked.connect(manageFisica)    
     _dialog.findChild(QPushButton, "btnJuridica").clicked.connect(manageJuridica)    
     _dialog.findChild(QPushButton, "btnTecnic").clicked.connect(manageTecnic)    
+    _dialog.findChild(QPushButton, "btnDoc").clicked.connect(selectDocument)    
+    _dialog.findChild(QPushButton, "btnOpenDoc").clicked.connect(openDocument)    
     _dialog.findChild(QPushButton, "btnRefresh").clicked.connect(refresh)    
     _dialog.findChild(QPushButton, "btnSave").clicked.connect(save)    
     _dialog.findChild(QPushButton, "btnClose").clicked.connect(close)
@@ -242,7 +247,7 @@ def getDadesExpedient():
 
     sql = "SELECT num_exp, data_ent, data_llic, tipus_id, tipus_solic_id, solic_persona_id, solic_juridica_id, repre_id"
     sql+= ", parcela_id, immoble_id, num_hab, notif_adreca, notif_poblacio, notif_cp"
-    sql+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions, id, reg_ent, data_liq "
+    sql+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions, id, reg_ent, data_liq, documentacio "
     sql+= "FROM data.exp_om WHERE id = "+str(_expOmId)
     query = QSqlQuery(sql) 
        
@@ -282,6 +287,7 @@ def getDadesExpedient():
         setText("txtVisatNum", getQueryValue(query, 18))
         dateVisat.setDate(query.value(19))
         setText("txtObs", getQueryValue(query, 20)) 
+        setText("txtDoc", getQueryValue(query, 24)) 
                            
     else:
         showWarning(query.lastError().text(), 100)
@@ -319,13 +325,14 @@ def saveDadesExpedient():
     if _expOmId is None:
         sql = "INSERT INTO data.exp_om (num_exp, data_ent, data_llic, tipus_id, tipus_solic_id, solic_persona_id, solic_juridica_id, repre_id"
         sql+= ", parcela_id, immoble_id, num_hab, notif_adreca, notif_poblacio, notif_cp"
-        sql+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions, reg_ent, data_liq)"
-        sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"           
+        sql+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions, reg_ent, data_liq, documentacio)"
+        sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"           
     else:
         sql = "UPDATE data.exp_om SET"
         sql+= " num_exp=:0, data_ent=:1, data_llic=:2, tipus_id=:3, tipus_solic_id=:4, solic_persona_id=:5, solic_juridica_id=:6, repre_id=:7"
         sql+= ", parcela_id=:8, immoble_id=:9, num_hab=:10, notif_adreca=:11, notif_poblacio=:12, notif_cp=:13"     
-        sql+= ", redactor_id=:14, director_id=:15, executor_id=:16, constructor=:17, visat_num=:18, visat_data=:19, observacions=:20, reg_ent=:21, data_liq=:22"
+        sql+= ", redactor_id=:14, director_id=:15, executor_id=:16, constructor=:17, visat_num=:18, visat_data=:19, observacions=:20"
+        sql+= ", reg_ent=:21, data_liq=:22, documentacio=:23"
         sql+= " WHERE id=:id"       
     
     # Bind values
@@ -363,6 +370,7 @@ def saveDadesExpedient():
     query.bindValue(20, getStringValue("txtObs"))  
     query.bindValue(21, getStringValue("txtEntrada"))  
     query.bindValue(22, dLiquidacio["value"])  
+    query.bindValue(23, getStringValue("txtDoc"))  
 
     # Execute SQL
     result = query.exec_()
@@ -693,6 +701,26 @@ def manageJuridica():
                     
 def manageTecnic():
     iface.showAttributeTable(layerTecnic)
+    
+def selectDocument():
+    os.chdir(os.getcwd())
+    fileDialog = QFileDialog()
+    fileDialog.setFileMode(QFileDialog.ExistingFile);
+    filePath = fileDialog.getOpenFileName(None, "Select doc file")
+    txtDoc.setText(filePath)
+    checkDocument()
+    
+def openDocument():
+    filePath = getStringValue("txtDoc")
+    if filePath is not None:    
+        if os.path.isfile(filePath):
+            os.startfile(filePath)
+        
+def checkDocument():
+    filePath = getStringValue("txtDoc")
+    if filePath is not None:
+        if os.path.isfile(filePath):
+            _dialog.findChild(QPushButton, "btnOpenDoc").setEnabled(True)         
     
 def refresh():
     loadData()

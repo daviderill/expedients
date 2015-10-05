@@ -29,7 +29,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tabDades">
     <attribute name="title">
@@ -1018,6 +1018,68 @@
         <width>421</width>
         <height>71</height>
        </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="gbDocumentacio">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>310</y>
+       <width>601</width>
+       <height>80</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Documentació</string>
+     </property>
+     <widget class="QPushButton" name="btnDoc">
+      <property name="geometry">
+       <rect>
+        <x>450</x>
+        <y>20</y>
+        <width>111</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Adjuntar Document</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblDoc">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Ruta documentació:</string>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="txtDoc">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>20</y>
+        <width>301</width>
+        <height>51</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnOpenDoc">
+      <property name="geometry">
+       <rect>
+        <x>450</x>
+        <y>50</y>
+        <width>111</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Veure Document</string>
       </property>
      </widget>
     </widget>

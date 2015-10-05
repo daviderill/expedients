@@ -205,6 +205,10 @@ def setText(widget, text):
     elem = _dialog.findChild(QLineEdit, widget)
     if elem:    
         elem.setText(str(text))
+    else:
+        elem = _dialog.findChild(QTextEdit, widget)    
+        if elem:    
+            elem.setText(str(text))  
         
 
 def setLogger(name, folder, filename):

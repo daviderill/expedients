@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'exp_om.ui'
 #
-# Created: Mon Oct 05 11:27:12 2015
+# Created: Mon Oct 05 13:31:05 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -287,6 +287,21 @@ class Ui_Dialog(object):
         self.txtObs = QtGui.QTextEdit(self.gbProjecte)
         self.txtObs.setGeometry(QtCore.QRect(140, 210, 421, 71))
         self.txtObs.setObjectName(_fromUtf8("txtObs"))
+        self.gbDocumentacio = QtGui.QGroupBox(self.tabProjecte)
+        self.gbDocumentacio.setGeometry(QtCore.QRect(10, 310, 601, 80))
+        self.gbDocumentacio.setObjectName(_fromUtf8("gbDocumentacio"))
+        self.btnDoc = QtGui.QPushButton(self.gbDocumentacio)
+        self.btnDoc.setGeometry(QtCore.QRect(450, 20, 111, 23))
+        self.btnDoc.setObjectName(_fromUtf8("btnDoc"))
+        self.lblDoc = QtGui.QLabel(self.gbDocumentacio)
+        self.lblDoc.setGeometry(QtCore.QRect(10, 30, 101, 21))
+        self.lblDoc.setObjectName(_fromUtf8("lblDoc"))
+        self.txtDoc = QtGui.QTextEdit(self.gbDocumentacio)
+        self.txtDoc.setGeometry(QtCore.QRect(140, 20, 301, 51))
+        self.txtDoc.setObjectName(_fromUtf8("txtDoc"))
+        self.btnOpenDoc = QtGui.QPushButton(self.gbDocumentacio)
+        self.btnOpenDoc.setGeometry(QtCore.QRect(450, 50, 111, 23))
+        self.btnOpenDoc.setObjectName(_fromUtf8("btnOpenDoc"))
         self.tabMain.addTab(self.tabProjecte, _fromUtf8(""))
         self.tabLiquidacio = QtGui.QWidget()
         self.tabLiquidacio.setObjectName(_fromUtf8("tabLiquidacio"))
@@ -598,7 +613,7 @@ class Ui_Dialog(object):
         self.btnRefresh.setObjectName(_fromUtf8("btnRefresh"))
 
         self.retranslateUi(Dialog)
-        self.tabMain.setCurrentIndex(0)
+        self.tabMain.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         Dialog.setTabOrder(self.tabMain, self.txtId)
         Dialog.setTabOrder(self.txtId, self.txtNumExp)
@@ -717,6 +732,10 @@ class Ui_Dialog(object):
         self.lblDat.setText(_translate("Dialog", "Data Visat:", None))
         self.btnTecnic.setText(_translate("Dialog", "Gestió Tècnics", None))
         self.lblObs.setText(_translate("Dialog", "Observacions:", None))
+        self.gbDocumentacio.setTitle(_translate("Dialog", "Documentació", None))
+        self.btnDoc.setText(_translate("Dialog", "Adjuntar Document", None))
+        self.lblDoc.setText(_translate("Dialog", "Ruta documentació:", None))
+        self.btnOpenDoc.setText(_translate("Dialog", "Veure Document", None))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabProjecte), _translate("Dialog", "Projecte", None))
         self.gb5.setTitle(_translate("Dialog", "Impost i Taxes per Expedició Documentació", None))
         self.lblIcio.setText(_translate("Dialog", "ICIO", None))

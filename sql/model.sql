@@ -32,6 +32,7 @@ CREATE TABLE "data"."exp_om" (
 "observacions" text,
 "reg_exp" varchar(15),
 "data_liq" date,
+"documentacio" text,
 PRIMARY KEY ("id") 
 );
 
