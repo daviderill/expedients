@@ -644,13 +644,20 @@ def clavChanged(widgetName):
     if widgetName == 'chkClavUni':
         value = ''
         if widget.isChecked():
-            value = getFloat('txtClavUniN') * 390.66
+            aux = getFloat('txtClavUniN')
+            if aux == 0:
+                aux = 1
+            value = aux * 390.66
         setText('txtClavUni', value)
         
     elif widgetName == 'chkClavMes':
         value = ''
         if widget.isChecked():
-            value = getFloat('txtClavMesN') * 65.025
+            aux = getFloat('txtClavMesN')
+            aux = aux - 13
+            value = 1170.96            
+            if aux > 0:
+                value = value + (aux * 65.025)
         setText('txtClavMes', value)
         
     elif widgetName == 'chkClavPlu':
