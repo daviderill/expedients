@@ -1,9 +1,11 @@
+DROP TABLE IF EXISTS "data"."annex_om" 
 CREATE TABLE "data"."annex_om" (
 "id" varchar(200),
 PRIMARY KEY ("id") 
 );
 
 
+DROP TABLE IF EXISTS "data"."exp_om" 
 CREATE TABLE "data"."exp_om" (
 "id" serial4,
 "num_exp" varchar(15),
@@ -28,10 +30,13 @@ CREATE TABLE "data"."exp_om" (
 "notif_poblacio" varchar(100),
 "notif_cp" varchar(5),
 "observacions" text,
+"reg_exp" varchar(15),
+"data_liq" date,
 PRIMARY KEY ("id") 
 );
 
 
+DROP TABLE IF EXISTS "data"."immoble" 
 CREATE TABLE "data"."immoble" (
 "id" varchar(20),
 "refcat" varchar(14),
@@ -40,6 +45,7 @@ PRIMARY KEY ("id")
 );
 
 
+DROP TABLE IF EXISTS "data"."juridica" 
 CREATE TABLE "data"."juridica" (
 "id" varchar(9),
 "rao_social" varchar(200),
@@ -56,6 +62,7 @@ PRIMARY KEY ("id")
 );
 
 
+DROP TABLE IF EXISTS "data"."persona" 
 CREATE TABLE "data"."persona" (
 "id" varchar(9),
 "nom" varchar(100),
@@ -71,6 +78,7 @@ PRIMARY KEY ("id")
 );
 
 
+DROP TABLE IF EXISTS "data"."press_om" 
 CREATE TABLE "data"."press_om" (
 "om_id" int4,
 "pressupost" numeric(15,2),
@@ -94,6 +102,7 @@ PRIMARY KEY ("om_id")
 COMMENT ON COLUMN "data"."press_om"."placa" IS 'OF.7 Taxa Placa';
 
 
+DROP TABLE IF EXISTS "data"."rpt_exp_parcela" 
 CREATE TABLE "data"."rpt_exp_parcela" (
 "om_id" int4,
 "num_exp" varchar(15),
@@ -112,6 +121,7 @@ PRIMARY KEY ("om_id")
 );
 
 
+DROP TABLE IF EXISTS "data"."rpt_parcela_total" 
 CREATE TABLE "data"."rpt_parcela_total" (
 "parcela_id" varchar(14),
 "total" int4,
@@ -119,6 +129,7 @@ PRIMARY KEY ("parcela_id")
 );
 
 
+DROP TABLE IF EXISTS "data"."tecnic" 
 CREATE TABLE "data"."tecnic" (
 "id" varchar(25),
 "dni" varchar(9),
@@ -131,6 +142,7 @@ PRIMARY KEY ("id")
 );
 
 
+DROP TABLE IF EXISTS "data"."tipus_om" 
 CREATE TABLE "data"."tipus_om" (
 "id" varchar(200),
 "obs" varchar(200),

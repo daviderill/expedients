@@ -4,10 +4,11 @@ from PyQt4.QtSql import *  # @UnusedWildImport
 from qgis.core import *
 from qgis.gui import QgsMessageBar  # @UnresolvedImport
 from qgis.utils import iface  # @UnresolvedImport
-from utils import * #@UnusedWildImport
 from functools import partial
 from datetime import datetime
 import time
+import os
+from utils import *  # @UnusedWildImport
 
 
 def openExpOm(dialog, parcela, expOmId = None):
@@ -41,6 +42,7 @@ def openExpOm(dialog, parcela, expOmId = None):
     if expOmId is None:
         
         # Fill date widgets with current Date
+        dateLiquidacio.setDate(current_date)        
         dateEntrada.setDate(current_date)
         dateLlicencia.setDate(current_date)
         dateVisat.setDate(current_date)   
@@ -60,7 +62,7 @@ def openExpOm(dialog, parcela, expOmId = None):
 
 def widgetsToGlobal():
     
-    global refcat, lblInfo, txtId, txtNumExp, cboTipus, dateEntrada, dateLlicencia
+    global refcat, lblInfo, txtId, txtNumExp, cboTipus, txtEntrada, dateLiquidacio, dateEntrada, dateLlicencia
     global rbFisica, rbJuridica, lblSol, cboSol, cboSolCif, cboRep, txtSolDades, txtAdresa, txtCp, txtPoblacio, txtRefcat20, cboEmp
     global cboRedactor, cboDirector, cboExecutor, txtRedactor, txtDirector, txtExecutor, dateVisat
     global txtPress, cboClavPlu
@@ -69,8 +71,10 @@ def widgetsToGlobal():
     refcat = _dialog.findChild(QLineEdit, "refcat")        
     lblInfo = _dialog.findChild(QLabel, "lblInfo")        
     txtId = _dialog.findChild(QLineEdit, "txtId")        
-    txtNumExp = _dialog.findChild(QLineEdit, "txtNumExp")        
-    cboTipus = _dialog.findChild(QComboBox, "cboTipus")  
+    txtNumExp = _dialog.findChild(QLineEdit, "txtNumExp")  
+    txtEntrada = _dialog.findChild(QLineEdit, "txtEntrada")            
+    cboTipus = _dialog.findChild(QComboBox, "cboTipus") 
+    dateLiquidacio = _dialog.findChild(QDateEdit, "dateLiquidacio")      
     dateEntrada = _dialog.findChild(QDateEdit, "dateEntrada")  
     dateLlicencia = _dialog.findChild(QDateEdit, "dateLlicencia")  
     
@@ -151,7 +155,7 @@ def setSignals():
     _dialog.findChild(QPushButton, "btnClose").clicked.connect(close)
     
     # General and Tab 'Dades Expedient'
-    txtId.editingFinished.connect(idChanged)    
+    #txtId.editingFinished.connect(idChanged)    
     rbFisica.clicked.connect(getTipusSol)    
     rbJuridica.clicked.connect(getTipusSol)    
     cboSol.currentIndexChanged.connect(partial(solChanged, 'persona'))
@@ -238,11 +242,14 @@ def getDadesExpedient():
 
     sql = "SELECT num_exp, data_ent, data_llic, tipus_id, tipus_solic_id, solic_persona_id, solic_juridica_id, repre_id"
     sql+= ", parcela_id, immoble_id, num_hab, notif_adreca, notif_poblacio, notif_cp"
-    sql+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions "
+    sql+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions, id, reg_ent, data_liq "
     sql+= "FROM data.exp_om WHERE id = "+str(_expOmId)
     query = QSqlQuery(sql) 
        
     if (query.next()):    
+        setText("txtId", getQueryValue(query, 21))        
+        setText("txtEntrada", getQueryValue(query, 22))        
+        dateLiquidacio.setDate(query.value(23))
         txtNumExp.setText(getQueryValue(query, 0))
         dateEntrada.setDate(query.value(1))
         dateLlicencia.setDate(query.value(2))
@@ -274,7 +281,7 @@ def getDadesExpedient():
         setText("txtConstructor", getQueryValue(query, 17))
         setText("txtVisatNum", getQueryValue(query, 18))
         dateVisat.setDate(query.value(19))
-        setText("txtVisatNum", getQueryValue(query, 20))
+        setText("txtObs", getQueryValue(query, 20)) 
                            
     else:
         showWarning(query.lastError().text(), 100)
@@ -285,17 +292,25 @@ def getLiquidacio():
     pass
 
 
+def checkId():
+    
+#     if not txtNumExp.text():
+#         msgBox = QMessageBox()
+#         msgBox.setText(u"Cal especificar un identificador d'expedient")
+#         msgBox.exec_()
+#         return False 
+    return True
+
+
 # Save data from Tab 'Dades Expedient' and 'Projecte' into Database
 def saveDadesExpedient():
  
     # Check if we have set 'id'
-    if not txtNumExp.text():
-        msgBox = QMessageBox()
-        msgBox.setText(u"Cal especificar un identificador d'expedient")
-        msgBox.exec_()
-        return False
+    if not checkId():
+        return    
     
     # Get dates
+    dLiquidacio = getDate("dateLiquidacio", "data_liq")       
     dEntrada = getDate("dateEntrada", "data_ent")
     dLlicencia = getDate("dateLlicencia", "data_llic")
     dVisat = getDate("dateVisat", "visat_data")
@@ -304,13 +319,13 @@ def saveDadesExpedient():
     if _expOmId is None:
         sql = "INSERT INTO data.exp_om (num_exp, data_ent, data_llic, tipus_id, tipus_solic_id, solic_persona_id, solic_juridica_id, repre_id"
         sql+= ", parcela_id, immoble_id, num_hab, notif_adreca, notif_poblacio, notif_cp"
-        sql+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions)"
-        sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"   
+        sql+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions, reg_ent, data_liq)"
+        sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"           
     else:
         sql = "UPDATE data.exp_om SET"
         sql+= " num_exp=:0, data_ent=:1, data_llic=:2, tipus_id=:3, tipus_solic_id=:4, solic_persona_id=:5, solic_juridica_id=:6, repre_id=:7"
         sql+= ", parcela_id=:8, immoble_id=:9, num_hab=:10, notif_adreca=:11, notif_poblacio=:12, notif_cp=:13"     
-        sql+= ", redactor_id=:14, director_id=:15, executor_id=:16, constructor=:17, visat_num=:18, visat_data=:19, observacions=:20"
+        sql+= ", redactor_id=:14, director_id=:15, executor_id=:16, constructor=:17, visat_num=:18, visat_data=:19, observacions=:20, reg_ent=:21, data_liq=:22"
         sql+= " WHERE id=:id"       
     
     # Bind values
@@ -346,11 +361,14 @@ def saveDadesExpedient():
     query.bindValue(18, getStringValue("txtVisatNum"))
     query.bindValue(19, dVisat["value"])
     query.bindValue(20, getStringValue("txtObs"))  
+    query.bindValue(21, getStringValue("txtEntrada"))  
+    query.bindValue(22, dLiquidacio["value"])  
 
     # Execute SQL
     result = query.exec_()
     if result is False:
         showWarning(query.lastError().text(), 100)
+        showWarning(query.lastQuery(), 100)        
     
     return result
 

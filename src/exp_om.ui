@@ -47,28 +47,31 @@
      <property name="title">
       <string>Expedient</string>
      </property>
-     <widget class="QLabel" name="lblExp">
+     <widget class="QLabel" name="lblNumExp">
       <property name="geometry">
        <rect>
-        <x>220</x>
+        <x>440</x>
         <y>20</y>
-        <width>71</width>
+        <width>56</width>
         <height>20</height>
        </rect>
       </property>
       <property name="text">
-       <string>Núm. d'Exp.:</string>
+       <string>Núm. Exp:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
      <widget class="QLineEdit" name="txtNumExp">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="geometry">
        <rect>
-        <x>300</x>
+        <x>510</x>
         <y>20</y>
-        <width>91</width>
+        <width>81</width>
         <height>20</height>
        </rect>
       </property>
@@ -92,9 +95,9 @@
      <widget class="QComboBox" name="cboTipus">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>100</x>
         <y>50</y>
-        <width>481</width>
+        <width>311</width>
         <height>22</height>
        </rect>
       </property>
@@ -108,9 +111,9 @@
      <widget class="QLineEdit" name="txtNumHab">
       <property name="geometry">
        <rect>
-        <x>480</x>
-        <y>20</y>
-        <width>51</width>
+        <x>510</x>
+        <y>50</y>
+        <width>81</width>
         <height>20</height>
        </rect>
       </property>
@@ -121,35 +124,41 @@
      <widget class="QLabel" name="lblHab">
       <property name="geometry">
        <rect>
-        <x>410</x>
-        <y>20</y>
-        <width>61</width>
+        <x>430</x>
+        <y>50</y>
+        <width>66</width>
         <height>21</height>
        </rect>
       </property>
       <property name="text">
        <string>Habitatges:</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
-     <widget class="QLabel" name="lblLl">
+     <widget class="QLabel" name="lblDataLlicencia">
       <property name="geometry">
        <rect>
-        <x>220</x>
+        <x>420</x>
         <y>80</y>
-        <width>71</width>
+        <width>76</width>
         <height>21</height>
        </rect>
       </property>
       <property name="text">
        <string>Data Llicència:</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
      <widget class="QDateEdit" name="dateLlicencia">
       <property name="geometry">
        <rect>
-        <x>300</x>
+        <x>510</x>
         <y>80</y>
-        <width>91</width>
+        <width>81</width>
         <height>22</height>
        </rect>
       </property>
@@ -163,6 +172,13 @@
         <day>1</day>
        </datetime>
       </property>
+      <property name="date">
+       <date>
+        <year>2014</year>
+        <month>1</month>
+        <day>1</day>
+       </date>
+      </property>
       <property name="minimumDateTime">
        <datetime>
         <hour>0</hour>
@@ -183,20 +199,16 @@
       <property name="calendarPopup">
        <bool>true</bool>
       </property>
-      <property name="date">
-       <date>
-        <year>2014</year>
-        <month>1</month>
-        <day>1</day>
-       </date>
-      </property>
      </widget>
      <widget class="QLineEdit" name="txtId">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>100</x>
         <y>20</y>
-        <width>91</width>
+        <width>81</width>
         <height>20</height>
        </rect>
       </property>
@@ -207,11 +219,18 @@
      <widget class="QDateEdit" name="dateEntrada">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>330</x>
         <y>80</y>
-        <width>91</width>
+        <width>81</width>
         <height>22</height>
        </rect>
+      </property>
+      <property name="date">
+       <date>
+        <year>2015</year>
+        <month>1</month>
+        <day>8</day>
+       </date>
       </property>
       <property name="minimumDateTime">
        <datetime>
@@ -233,20 +252,13 @@
       <property name="calendarPopup">
        <bool>true</bool>
       </property>
-      <property name="date">
-       <date>
-        <year>2015</year>
-        <month>1</month>
-        <day>8</day>
-       </date>
-      </property>
      </widget>
-     <widget class="QLabel" name="lblEn">
+     <widget class="QLabel" name="lblDataEntrada">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>250</x>
         <y>80</y>
-        <width>91</width>
+        <width>81</width>
         <height>21</height>
        </rect>
       </property>
@@ -259,12 +271,88 @@
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>41</width>
+        <width>91</width>
         <height>21</height>
        </rect>
       </property>
       <property name="text">
-       <string>Id:</string>
+       <string>Id autoliquidació:</string>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="dateLiquidacio">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>20</y>
+        <width>81</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="date">
+       <date>
+        <year>2015</year>
+        <month>1</month>
+        <day>8</day>
+       </date>
+      </property>
+      <property name="minimumDateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2000</year>
+        <month>1</month>
+        <day>1</day>
+       </datetime>
+      </property>
+      <property name="maximumDate">
+       <date>
+        <year>2099</year>
+        <month>12</month>
+        <day>31</day>
+       </date>
+      </property>
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblDataLiquidacio">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>20</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Data Autoliquidació:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblEntrada">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Reg. entrada:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtEntrada">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>80</y>
+        <width>81</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="maxLength">
+       <number>5</number>
       </property>
      </widget>
     </widget>
@@ -842,6 +930,13 @@
         <day>1</day>
        </datetime>
       </property>
+      <property name="date">
+       <date>
+        <year>2014</year>
+        <month>1</month>
+        <day>1</day>
+       </date>
+      </property>
       <property name="minimumDateTime">
        <datetime>
         <hour>0</hour>
@@ -861,13 +956,6 @@
       </property>
       <property name="calendarPopup">
        <bool>true</bool>
-      </property>
-      <property name="date">
-       <date>
-        <year>2014</year>
-        <month>1</month>
-        <day>1</day>
-       </date>
       </property>
      </widget>
      <widget class="QComboBox" name="cboRedactor">
