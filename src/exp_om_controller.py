@@ -129,7 +129,8 @@ def initConfig():
     
     # Other default configuration
     boldGroupBoxes()
-    _dialog.findChild(QPushButton, "btnOpenDoc").setEnabled(False)         
+    _dialog.findChild(QPushButton, "btnOpenDoc").setEnabled(False) 
+    txtEntrada.setInputMask("999/99")
 
         
 # Set Group Boxes title font to bold    
@@ -161,6 +162,7 @@ def setSignals():
     
     # General and Tab 'Dades Expedient'
     #txtId.editingFinished.connect(idChanged)    
+    txtEntrada.editingFinished.connect(entradaChanged)    
     rbFisica.clicked.connect(getTipusSol)    
     rbJuridica.clicked.connect(getTipusSol)    
     cboSol.currentIndexChanged.connect(partial(solChanged, 'persona'))
@@ -299,11 +301,9 @@ def getLiquidacio():
     sql = "SELECT pressupost, placa, plu, res, ende, car, mov, fig, leg, par, pro"
     sql+= ", clav_uni, clav_plu, clav_mes, gar_res, gar_ser, liq_aj"
     sql+= " FROM data.press_om WHERE om_id = "+str(_expOmId)
-    print sql
     query = QSqlQuery(sql) 
        
-    if (query.next()):   
-        #print "A" 
+    if (query.next()):    
         setText("txtPress", getQueryValue(query, 0))     
         setChecked("chkPlaca", getQueryValue(query, 1))     
         setChecked("chkPlu", getQueryValue(query, 2))     
@@ -577,6 +577,15 @@ def idChanged():
         return
     numExp = expId[2:]+"/"+expId[:2]
     txtNumExp.setText(numExp)
+    
+    
+def entradaChanged():
+    
+    entrada = txtEntrada.text()
+    if len(entrada) <> 6:
+        showWarning(u"El registre d'entrada ha de tenir exactament 6 caràcters amb el format: <xxx>/<any>")
+        txtEntrada.setText("")        
+        return
     
     
 def solChanged(aux):

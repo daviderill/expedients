@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'exp_om.ui'
 #
-# Created: Mon Oct 05 18:09:19 2015
+# Created: Mon Oct 05 18:37:29 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -622,7 +622,7 @@ class Ui_Dialog(object):
         self.btnRefresh.setObjectName(_fromUtf8("btnRefresh"))
 
         self.retranslateUi(Dialog)
-        self.tabMain.setCurrentIndex(2)
+        self.tabMain.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         Dialog.setTabOrder(self.tabMain, self.txtId)
         Dialog.setTabOrder(self.txtId, self.txtNumExp)
