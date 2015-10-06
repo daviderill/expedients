@@ -2180,40 +2180,79 @@
   <widget class="QPushButton" name="btnSave">
    <property name="geometry">
     <rect>
-     <x>470</x>
+     <x>510</x>
      <y>470</y>
-     <width>75</width>
+     <width>61</width>
      <height>31</height>
     </rect>
    </property>
-   <property name="text">
+   <property name="toolTip">
     <string>Desar</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/save.png</normaloff>icons/save.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
    </property>
   </widget>
   <widget class="QPushButton" name="btnClose">
    <property name="geometry">
     <rect>
-     <x>550</x>
+     <x>580</x>
      <y>470</y>
-     <width>75</width>
+     <width>61</width>
      <height>31</height>
     </rect>
    </property>
-   <property name="text">
+   <property name="toolTip">
     <string>Sortir</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/exit.png</normaloff>icons/exit.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
    </property>
   </widget>
   <widget class="QPushButton" name="btnRefresh">
    <property name="geometry">
     <rect>
-     <x>390</x>
+     <x>440</x>
      <y>470</y>
-     <width>75</width>
+     <width>61</width>
      <height>31</height>
     </rect>
    </property>
-   <property name="text">
+   <property name="toolTip">
     <string>Actualitzar</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/refresh.png</normaloff>icons/refresh.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
    </property>
   </widget>
  </widget>

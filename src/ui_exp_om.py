@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'exp_om.ui'
 #
-# Created: Mon Oct 05 18:37:29 2015
+# Created: Tue Oct 06 18:28:19 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -612,13 +612,28 @@ class Ui_Dialog(object):
         self.lblInfo.setText(_fromUtf8(""))
         self.lblInfo.setObjectName(_fromUtf8("lblInfo"))
         self.btnSave = QtGui.QPushButton(Dialog)
-        self.btnSave.setGeometry(QtCore.QRect(470, 470, 75, 31))
+        self.btnSave.setGeometry(QtCore.QRect(510, 470, 61, 31))
+        self.btnSave.setText(_fromUtf8(""))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8("icons/save.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btnSave.setIcon(icon)
+        self.btnSave.setIconSize(QtCore.QSize(24, 24))
         self.btnSave.setObjectName(_fromUtf8("btnSave"))
         self.btnClose = QtGui.QPushButton(Dialog)
-        self.btnClose.setGeometry(QtCore.QRect(550, 470, 75, 31))
+        self.btnClose.setGeometry(QtCore.QRect(580, 470, 61, 31))
+        self.btnClose.setText(_fromUtf8(""))
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(_fromUtf8("icons/exit.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btnClose.setIcon(icon1)
+        self.btnClose.setIconSize(QtCore.QSize(24, 24))
         self.btnClose.setObjectName(_fromUtf8("btnClose"))
         self.btnRefresh = QtGui.QPushButton(Dialog)
-        self.btnRefresh.setGeometry(QtCore.QRect(390, 470, 75, 31))
+        self.btnRefresh.setGeometry(QtCore.QRect(440, 470, 61, 31))
+        self.btnRefresh.setText(_fromUtf8(""))
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(_fromUtf8("icons/refresh.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btnRefresh.setIcon(icon2)
+        self.btnRefresh.setIconSize(QtCore.QSize(24, 24))
         self.btnRefresh.setObjectName(_fromUtf8("btnRefresh"))
 
         self.retranslateUi(Dialog)
@@ -783,7 +798,4 @@ class Ui_Dialog(object):
         self.lblTot_4.setText(_translate("Dialog", "Pressupost:", None))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabLiquidacio), _translate("Dialog", "Liquidació", None))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabComunicacio), _translate("Dialog", "Comunicació i Esmenes", None))
-        self.btnSave.setText(_translate("Dialog", "Desar", None))
-        self.btnClose.setText(_translate("Dialog", "Sortir", None))
-        self.btnRefresh.setText(_translate("Dialog", "Actualitzar", None))
 

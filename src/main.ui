@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="toolTip">
+   <string>Afegir</string>
+  </property>
   <widget class="QGroupBox" name="gb1">
    <property name="geometry">
     <rect>
@@ -70,40 +73,76 @@
    <widget class="QPushButton" name="btnCreate">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>370</x>
       <y>220</y>
-      <width>70</width>
+      <width>31</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>Afegir</string>
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>icons/plus.png</normaloff>icons/plus.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>23</width>
+      <height>23</height>
+     </size>
     </property>
    </widget>
    <widget class="QPushButton" name="btnUpdate">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>410</x>
       <y>220</y>
-      <width>70</width>
+      <width>31</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>Editar</string>
+    </property>
     <property name="text">
-     <string>Modificar</string>
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>icons/edit.png</normaloff>icons/edit.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>23</width>
+      <height>23</height>
+     </size>
     </property>
    </widget>
    <widget class="QPushButton" name="btnDelete">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>450</x>
       <y>220</y>
-      <width>70</width>
+      <width>31</width>
       <height>31</height>
      </rect>
     </property>
-    <property name="text">
+    <property name="toolTip">
      <string>Eliminar</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>icons/minus.png</normaloff>icons/minus.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>23</width>
+      <height>23</height>
+     </size>
     </property>
    </widget>
    <widget class="QTableView" name="tblExp">
@@ -134,14 +173,27 @@
    <widget class="QPushButton" name="btnRefresh">
     <property name="geometry">
      <rect>
-      <x>450</x>
+      <x>490</x>
       <y>220</y>
-      <width>70</width>
+      <width>31</width>
       <height>31</height>
      </rect>
     </property>
-    <property name="text">
+    <property name="toolTip">
      <string>Actualitzar</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>icons/refresh.png</normaloff>icons/refresh.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>23</width>
+      <height>23</height>
+     </size>
     </property>
    </widget>
   </widget>
@@ -150,12 +202,25 @@
     <rect>
      <x>460</x>
      <y>410</y>
-     <width>70</width>
+     <width>71</width>
      <height>31</height>
     </rect>
    </property>
-   <property name="text">
+   <property name="toolTip">
     <string>Sortir</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/exit.png</normaloff>icons/exit.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
    </property>
   </widget>
   <widget class="QGroupBox" name="gb2">
