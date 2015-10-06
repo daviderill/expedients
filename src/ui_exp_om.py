@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'exp_om.ui'
 #
-# Created: Tue Oct 06 18:28:19 2015
+# Created: Tue Oct 06 18:33:36 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -798,4 +798,7 @@ class Ui_Dialog(object):
         self.lblTot_4.setText(_translate("Dialog", "Pressupost:", None))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabLiquidacio), _translate("Dialog", "Liquidació", None))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabComunicacio), _translate("Dialog", "Comunicació i Esmenes", None))
+        self.btnSave.setToolTip(_translate("Dialog", "Desar", None))
+        self.btnClose.setToolTip(_translate("Dialog", "Sortir", None))
+        self.btnRefresh.setToolTip(_translate("Dialog", "Actualitzar", None))
 
