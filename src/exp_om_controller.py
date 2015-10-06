@@ -361,23 +361,13 @@ def updateTabLiquidacio():
     clavChanged('chkClavUni')        
     clavChanged('chkClavPlu')        
     clavChanged('chkClavMes')        
-        
     
-def checkId():
-    
-#     if not txtNumExp.text():
-#         msgBox = QMessageBox()
-#         msgBox.setText(u"Cal especificar un identificador d'expedient")
-#         msgBox.exec_()
-#         return False 
-    return True
-
 
 # Save data from Tab 'Dades Expedient' and 'Projecte' into Database
 def saveDadesExpedient():
  
     # Check if we have set 'id'
-    if not checkId():
+    if not entradaChanged():
         return    
     
     # Get dates
@@ -582,10 +572,15 @@ def idChanged():
 def entradaChanged():
     
     entrada = txtEntrada.text()
+    if not entrada:
+        showWarning(u"Cal especificar codi del registre d'entrada amb el format: <num>/<any>. Per exemple: 256/15")
+        return False     
     if len(entrada) <> 6:
-        showWarning(u"El registre d'entrada ha de tenir exactament 6 caràcters amb el format: <xxx>/<any>")
-        txtEntrada.setText("")        
-        return
+        showWarning(u"El registre d'entrada ha de tenir exactament 6 caràcters amb el format: <num>/<any>. Per exemple: 256/15")
+        #txtEntrada.setText("")        
+        txtEntrada.selectAll()        
+        return False
+    return True
     
     
 def solChanged(aux):
