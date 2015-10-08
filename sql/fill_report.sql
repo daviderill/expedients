@@ -1,9 +1,9 @@
-CREATE OR REPLACE FUNCTION "data"."fill_report"(p_id int4) 
+CREATE OR REPLACE FUNCTION "report"."fill_report"(p_id int4) 
   RETURNS "pg_catalog"."bool" AS $BODY$
 
 DECLARE
-  r_exp record;
-  v_sql varchar;
+    r_exp record;
+    v_sql varchar;
 	v_sql_1 varchar;
 	v_sql_2 varchar;	
 	v_aux numeric(15,2);
@@ -31,7 +31,7 @@ DECLARE
 BEGIN
 
 	-- Set system parameter search_path
-	SET search_path TO carto, data, public;
+	SET search_path TO carto, data, report, public;
 
 	-- Borrem contingut previ de les taules de report
 	-- Delete previous content of report tables
@@ -160,4 +160,4 @@ END;
 $BODY$
   LANGUAGE 'plpgsql' VOLATILE COST 100;
 
-ALTER FUNCTION "data"."fill_report"(p_id int4) OWNER TO "gisadmin";
+ALTER FUNCTION "report"."fill_report"(p_id int4) OWNER TO "gisadmin";

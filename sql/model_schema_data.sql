@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS "data"."annex_om" 
-CREATE TABLE "data"."annex_om" (
+DROP TABLE IF EXISTS "data"."estat" 
+CREATE TABLE "data"."estat" (
 "id" varchar(200),
 PRIMARY KEY ("id") 
 );
@@ -33,6 +33,7 @@ CREATE TABLE "data"."exp_om" (
 "reg_exp" varchar(15),
 "data_liq" date,
 "documentacio" text,
+"estat_id" varchar(20),
 PRIMARY KEY ("id") 
 );
 
@@ -104,33 +105,6 @@ PRIMARY KEY ("om_id")
 COMMENT ON COLUMN "data"."press_om"."placa" IS 'OF.7 Taxa Placa';
 
 
-DROP TABLE IF EXISTS "data"."rpt_exp_parcela" 
-CREATE TABLE "data"."rpt_exp_parcela" (
-"om_id" int4,
-"num_exp" varchar(15),
-"parcela" varchar(14),
-"immoble" varchar(20),
-"pressupost" numeric(15,2),
-"taxa_icio" numeric(15,2),
-"taxa_placa" numeric(15,2),
-"taxa_llic" numeric(15,2),
-"taxa_clav" numeric(15,2),
-"tot_liq" numeric(15,2),
-"gar_res" numeric(15,2),
-"gar_ser" numeric(15,2),
-"total" numeric(15,2),
-PRIMARY KEY ("om_id") 
-);
-
-
-DROP TABLE IF EXISTS "data"."rpt_parcela_total" 
-CREATE TABLE "data"."rpt_parcela_total" (
-"parcela_id" varchar(14),
-"total" int4,
-PRIMARY KEY ("parcela_id") 
-);
-
-
 DROP TABLE IF EXISTS "data"."tecnic" 
 CREATE TABLE "data"."tecnic" (
 "id" varchar(25),
@@ -155,7 +129,7 @@ PRIMARY KEY ("id")
 
 ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_tipus_om" FOREIGN KEY ("tipus_id") REFERENCES "data"."tipus_om" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
-ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_annex_om" FOREIGN KEY ("annex_id") REFERENCES "data"."annex_om" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_estat" FOREIGN KEY ("estat_id") REFERENCES "data"."estat" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_persona_1" FOREIGN KEY ("solic_persona_id") REFERENCES "data"."persona" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
