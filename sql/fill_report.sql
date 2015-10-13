@@ -150,7 +150,7 @@ BEGIN
 		'||tot_liq||', '||v_gar_res||', '||v_gar_ser||', '||total;
 	
 	v_sql:= v_sql_1 || v_sql_2 || ');';
-	RAISE NOTICE 'sql = %', quote_literal(v_sql);
+	--RAISE NOTICE 'sql = %', quote_literal(v_sql);
 	EXECUTE v_sql;
 
   RETURN TRUE;

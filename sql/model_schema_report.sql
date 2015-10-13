@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS "report"."rpt_expedient" 
-CREATE TABLE "data"."rpt_expedient" (
+DROP TABLE IF EXISTS "report"."rpt_expedient";
+CREATE TABLE "report"."rpt_expedient" (
 "om_id" int4 NOT NULL,
 "num_exp" varchar(15),
 "parcela" varchar(14),
@@ -33,7 +33,7 @@ CONSTRAINT "rpt_expedient_pkey" PRIMARY KEY ("om_id")
 );
 
 
-DROP TABLE IF EXISTS "report"."rpt_parcela_total" 
+DROP TABLE IF EXISTS "report"."rpt_parcela_total";
 CREATE TABLE "report"."rpt_parcela_total" (
 "parcela_id" varchar(14),
 "total" int4,
