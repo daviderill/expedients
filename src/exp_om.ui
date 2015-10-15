@@ -41,7 +41,7 @@
        <x>10</x>
        <y>10</y>
        <width>601</width>
-       <height>111</height>
+       <height>141</height>
       </rect>
      </property>
      <property name="title">
@@ -50,9 +50,9 @@
      <widget class="QLabel" name="lblNumExp">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>430</x>
         <y>20</y>
-        <width>56</width>
+        <width>51</width>
         <height>20</height>
        </rect>
       </property>
@@ -60,7 +60,7 @@
        <string>Núm. Exp:</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
       </property>
      </widget>
      <widget class="QLineEdit" name="txtNumExp">
@@ -97,7 +97,7 @@
        <rect>
         <x>100</x>
         <y>50</y>
-        <width>311</width>
+        <width>301</width>
         <height>22</height>
        </rect>
       </property>
@@ -134,13 +134,13 @@
        <string>Habitatges:</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
       </property>
      </widget>
      <widget class="QLabel" name="lblDataLlicencia">
       <property name="geometry">
        <rect>
-        <x>420</x>
+        <x>430</x>
         <y>80</y>
         <width>76</width>
         <height>21</height>
@@ -150,7 +150,7 @@
        <string>Data Llicència:</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
       </property>
      </widget>
      <widget class="QDateEdit" name="dateLlicencia">
@@ -167,17 +167,10 @@
         <hour>0</hour>
         <minute>0</minute>
         <second>0</second>
-        <year>2014</year>
+        <year>2000</year>
         <month>1</month>
         <day>1</day>
        </datetime>
-      </property>
-      <property name="date">
-       <date>
-        <year>2014</year>
-        <month>1</month>
-        <day>1</day>
-       </date>
       </property>
       <property name="minimumDateTime">
        <datetime>
@@ -219,18 +212,11 @@
      <widget class="QDateEdit" name="dateEntrada">
       <property name="geometry">
        <rect>
-        <x>330</x>
+        <x>320</x>
         <y>80</y>
         <width>81</width>
         <height>22</height>
        </rect>
-      </property>
-      <property name="date">
-       <date>
-        <year>2015</year>
-        <month>1</month>
-        <day>8</day>
-       </date>
       </property>
       <property name="minimumDateTime">
        <datetime>
@@ -256,9 +242,9 @@
      <widget class="QLabel" name="lblDataEntrada">
       <property name="geometry">
        <rect>
-        <x>250</x>
+        <x>220</x>
         <y>80</y>
-        <width>81</width>
+        <width>101</width>
         <height>21</height>
        </rect>
       </property>
@@ -282,18 +268,11 @@
      <widget class="QDateEdit" name="dateLiquidacio">
       <property name="geometry">
        <rect>
-        <x>330</x>
+        <x>320</x>
         <y>20</y>
         <width>81</width>
         <height>22</height>
        </rect>
-      </property>
-      <property name="date">
-       <date>
-        <year>2015</year>
-        <month>1</month>
-        <day>8</day>
-       </date>
       </property>
       <property name="minimumDateTime">
        <datetime>
@@ -319,7 +298,7 @@
      <widget class="QLabel" name="lblDataLiquidacio">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>220</x>
         <y>20</y>
         <width>101</width>
         <height>21</height>
@@ -342,7 +321,7 @@
        <string>Reg. entrada:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtEntrada">
+     <widget class="QLineEdit" name="txtRegEnt">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -355,14 +334,36 @@
        <number>5</number>
       </property>
      </widget>
+     <widget class="QPushButton" name="btnGenExp">
+      <property name="geometry">
+       <rect>
+        <x>510</x>
+        <y>110</y>
+        <width>81</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Actualitzar</string>
+      </property>
+      <property name="text">
+       <string>Generar Exp.</string>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
+      </property>
+     </widget>
     </widget>
     <widget class="QGroupBox" name="gb2Interessat">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>130</y>
+       <y>160</y>
        <width>601</width>
-       <height>181</height>
+       <height>171</height>
       </rect>
      </property>
      <property name="title">
@@ -372,7 +373,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>60</y>
+        <y>50</y>
         <width>101</width>
         <height>21</height>
        </rect>
@@ -385,7 +386,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>90</y>
+        <y>80</y>
         <width>101</width>
         <height>21</height>
        </rect>
@@ -398,7 +399,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>120</y>
+        <y>110</y>
         <width>101</width>
         <height>21</height>
        </rect>
@@ -411,7 +412,7 @@
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>120</y>
+        <y>110</y>
         <width>351</width>
         <height>20</height>
        </rect>
@@ -427,7 +428,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>150</y>
+        <y>140</y>
         <width>91</width>
         <height>21</height>
        </rect>
@@ -440,7 +441,7 @@
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>150</y>
+        <y>140</y>
         <width>111</width>
         <height>20</height>
        </rect>
@@ -456,7 +457,7 @@
       <property name="geometry">
        <rect>
         <x>480</x>
-        <y>120</y>
+        <y>110</y>
         <width>111</width>
         <height>23</height>
        </rect>
@@ -469,7 +470,7 @@
       <property name="geometry">
        <rect>
         <x>480</x>
-        <y>150</y>
+        <y>140</y>
         <width>111</width>
         <height>23</height>
        </rect>
@@ -485,7 +486,7 @@
       <property name="geometry">
        <rect>
         <x>240</x>
-        <y>60</y>
+        <y>50</y>
         <width>351</width>
         <height>20</height>
        </rect>
@@ -501,7 +502,7 @@
       <property name="geometry">
        <rect>
         <x>240</x>
-        <y>90</y>
+        <y>80</y>
         <width>351</width>
         <height>20</height>
        </rect>
@@ -514,7 +515,7 @@
       <property name="geometry">
        <rect>
         <x>240</x>
-        <y>150</y>
+        <y>140</y>
         <width>221</width>
         <height>20</height>
        </rect>
@@ -530,7 +531,7 @@
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>60</y>
+        <y>50</y>
         <width>111</width>
         <height>22</height>
        </rect>
@@ -543,7 +544,7 @@
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>30</y>
+        <y>20</y>
         <width>61</width>
         <height>21</height>
        </rect>
@@ -559,7 +560,7 @@
       <property name="geometry">
        <rect>
         <x>190</x>
-        <y>30</y>
+        <y>20</y>
         <width>82</width>
         <height>21</height>
        </rect>
@@ -572,7 +573,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>30</y>
+        <y>20</y>
         <width>81</width>
         <height>21</height>
        </rect>
@@ -585,7 +586,7 @@
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>90</y>
+        <y>80</y>
         <width>111</width>
         <height>22</height>
        </rect>
@@ -598,7 +599,7 @@
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>60</y>
+        <y>50</y>
         <width>111</width>
         <height>22</height>
        </rect>
@@ -612,9 +613,9 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>320</y>
+       <y>340</y>
        <width>601</width>
-       <height>91</height>
+       <height>81</height>
       </rect>
      </property>
      <property name="title">
@@ -633,7 +634,7 @@
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>30</y>
+        <y>20</y>
         <width>141</width>
         <height>20</height>
        </rect>
@@ -646,7 +647,7 @@
       <property name="geometry">
        <rect>
         <x>280</x>
-        <y>30</y>
+        <y>20</y>
         <width>81</width>
         <height>21</height>
        </rect>
@@ -659,7 +660,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>60</y>
+        <y>50</y>
         <width>91</width>
         <height>21</height>
        </rect>
@@ -675,7 +676,7 @@
       <property name="geometry">
        <rect>
         <x>370</x>
-        <y>30</y>
+        <y>20</y>
         <width>141</width>
         <height>20</height>
        </rect>
@@ -688,7 +689,7 @@
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>60</y>
+        <y>50</y>
         <width>401</width>
         <height>22</height>
        </rect>
@@ -701,7 +702,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>30</y>
+        <y>20</y>
         <width>81</width>
         <height>21</height>
        </rect>
@@ -1257,38 +1258,6 @@
        <string>Total Llicències Urbanístiques:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtLlicTot_2">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>230</x>
-        <y>270</y>
-        <width>91</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="maxLength">
-       <number>15</number>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lblTot_5">
-      <property name="geometry">
-       <rect>
-        <x>70</x>
-        <y>270</y>
-        <width>151</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Total Autoliquidació:</string>
-      </property>
-     </widget>
     </widget>
     <widget class="QGroupBox" name="gbClav">
      <property name="geometry">
@@ -1553,11 +1522,11 @@
        <x>350</x>
        <y>250</y>
        <width>261</width>
-       <height>51</height>
+       <height>81</height>
       </rect>
      </property>
      <property name="title">
-      <string>Total a liquidar</string>
+      <string>Total Impost i Taxes</string>
      </property>
      <widget class="QLineEdit" name="nif_solic_79">
       <property name="geometry">
@@ -1665,6 +1634,38 @@
        <string>Impost i Taxes</string>
       </property>
      </widget>
+     <widget class="QLineEdit" name="txtLlicTot_2">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>50</y>
+        <width>91</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblTot_5">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>50</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Autoliquidació:</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QLineEdit" name="txtLiq">
      <property name="geometry">
@@ -1699,9 +1700,9 @@
      <property name="geometry">
       <rect>
        <x>350</x>
-       <y>310</y>
+       <y>340</y>
        <width>261</width>
-       <height>111</height>
+       <height>81</height>
       </rect>
      </property>
      <property name="title">
@@ -1714,7 +1715,7 @@
       <property name="geometry">
        <rect>
         <x>162</x>
-        <y>30</y>
+        <y>20</y>
         <width>91</width>
         <height>20</height>
        </rect>
@@ -1730,7 +1731,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>30</y>
+        <y>20</y>
         <width>81</width>
         <height>21</height>
        </rect>
@@ -1746,7 +1747,7 @@
       <property name="geometry">
        <rect>
         <x>162</x>
-        <y>60</y>
+        <y>50</y>
         <width>91</width>
         <height>20</height>
        </rect>
@@ -1762,7 +1763,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>60</y>
+        <y>50</y>
         <width>81</width>
         <height>21</height>
        </rect>

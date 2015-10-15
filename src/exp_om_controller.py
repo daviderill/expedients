@@ -41,8 +41,7 @@ def openExpOm(dialog, parcela, expOmId = None):
     # Check if we are in mode 'Create' or 'Update'
     if expOmId is None:
         
-        # Fill date widgets with current Date
-        dateLiquidacio.setDate(current_date)        
+        # Fill date widgets with current Date    
         dateEntrada.setDate(current_date)
         dateLlicencia.setDate(current_date)
         dateVisat.setDate(current_date)   
@@ -63,7 +62,7 @@ def openExpOm(dialog, parcela, expOmId = None):
 
 def widgetsToGlobal():
     
-    global refcat, lblInfo, txtId, txtNumExp, cboTipus, txtEntrada, dateLiquidacio, dateEntrada, dateLlicencia
+    global refcat, lblInfo, txtId, txtNumExp, cboTipus, txtRegEnt, dateLiquidacio, dateEntrada, dateLlicencia
     global rbFisica, rbJuridica, lblSol, cboSol, cboSolCif, cboRep, txtSolDades, txtAdresa, txtCp, txtPoblacio, txtRefcat20, cboEmp
     global cboRedactor, cboDirector, cboExecutor, txtRedactor, txtDirector, txtExecutor, dateVisat, txtDoc
     global txtPress, cboClavPlu
@@ -73,7 +72,7 @@ def widgetsToGlobal():
     lblInfo = _dialog.findChild(QLabel, "lblInfo")        
     txtId = _dialog.findChild(QLineEdit, "txtId")        
     txtNumExp = _dialog.findChild(QLineEdit, "txtNumExp")  
-    txtEntrada = _dialog.findChild(QLineEdit, "txtEntrada")            
+    txtRegEnt = _dialog.findChild(QLineEdit, "txtRegEnt")            
     cboTipus = _dialog.findChild(QComboBox, "cboTipus") 
     dateLiquidacio = _dialog.findChild(QDateEdit, "dateLiquidacio")      
     dateEntrada = _dialog.findChild(QDateEdit, "dateEntrada")  
@@ -130,7 +129,9 @@ def initConfig():
     # Other default configuration
     boldGroupBoxes()
     _dialog.findChild(QPushButton, "btnOpenDoc").setEnabled(False) 
-    txtEntrada.setInputMask("999/99")
+    txtRegEnt.setInputMask("999/99")
+    txtNumExp.setEnabled(False)
+    dateLiquidacio.setEnabled(False)
 
         
 # Set Group Boxes title font to bold    
@@ -159,10 +160,11 @@ def setSignals():
     _dialog.findChild(QPushButton, "btnRefresh").clicked.connect(refresh)    
     _dialog.findChild(QPushButton, "btnSave").clicked.connect(save)    
     _dialog.findChild(QPushButton, "btnClose").clicked.connect(close)
+    _dialog.findChild(QPushButton, "btnGenExp").clicked.connect(generateExpedient)
     
     # General and Tab 'Dades Expedient'
     #txtId.editingFinished.connect(idChanged)    
-    txtEntrada.editingFinished.connect(entradaChanged)    
+    txtRegEnt.editingFinished.connect(entradaChanged)    
     rbFisica.clicked.connect(getTipusSol)    
     rbJuridica.clicked.connect(getTipusSol)    
     cboSol.currentIndexChanged.connect(partial(solChanged, 'persona'))
@@ -255,9 +257,9 @@ def getDadesExpedient():
        
     if (query.next()):    
         setText("txtId", getQueryValue(query, 21))        
-        setText("txtEntrada", getQueryValue(query, 22))        
+        setText("txtRegEnt", getQueryValue(query, 22))        
         dateLiquidacio.setDate(query.value(23))
-        txtNumExp.setText(getQueryValue(query, 0))
+        setText("txtNumExp", getQueryValue(query, 0))            
         dateEntrada.setDate(query.value(1))
         dateLlicencia.setDate(query.value(2))
         setSelectedItem("cboTipus", getQueryValue(query, 3))
@@ -293,6 +295,11 @@ def getDadesExpedient():
                            
     else:
         showWarning(query.lastError().text(), 100)
+    
+    # Disable button if num_exp is already set    
+    if getQueryValue(query, 0) != "":
+        _dialog.findChild(QPushButton, "btnGenExp").setEnabled(False)      
+         
     
 
 # Get Dades Liquidacio
@@ -393,8 +400,8 @@ def saveDadesExpedient():
     # Bind values
     query = QSqlQuery()    
     query.prepare(sql)           
-    query.bindValue(":id", str(_expOmId))        
-    query.bindValue(0, getStringValue("txtNumExp")) 
+    query.bindValue(":id", str(_expOmId))    
+    query.bindValue(0, getStringValue("txtNumExp"))            
     query.bindValue(1, dEntrada["value"]) 
     query.bindValue(2, dLlicencia["value"]) 
     query.bindValue(3, getSelectedItem("cboTipus")) 
@@ -423,7 +430,7 @@ def saveDadesExpedient():
     query.bindValue(18, getStringValue("txtVisatNum"))
     query.bindValue(19, dVisat["value"])
     query.bindValue(20, getStringValue("txtObs"))  
-    query.bindValue(21, getStringValue("txtEntrada"))  
+    query.bindValue(21, getStringValue("txtRegEnt"))  
     query.bindValue(22, dLiquidacio["value"])  
     query.bindValue(23, getStringValue("txtDoc"))  
 
@@ -571,14 +578,14 @@ def idChanged():
     
 def entradaChanged():
     
-    entrada = txtEntrada.text()
+    entrada = txtRegEnt.text()
     if not entrada:
         showWarning(u"Cal especificar codi del registre d'entrada amb el format: <num>/<any>. Per exemple: 256/15")
         return False     
     if len(entrada) <> 6:
         showWarning(u"El registre d'entrada ha de tenir exactament 6 caràcters amb el format: <num>/<any>. Per exemple: 256/15")
-        #txtEntrada.setText("")        
-        txtEntrada.selectAll()        
+        #txtRegEnt.setText("")        
+        txtRegEnt.selectAll()        
         return False
     return True
     
@@ -784,6 +791,18 @@ def garChanged(widgetName):
             
             
 # Slots: Window buttons    
+def generateExpedient():
+    # Obtenir any a partir de número d'expedient
+    numExp = txtRegEnt.text()
+    anyo = str(numExp[-2:])
+    sql = "SELECT MAX(substr(num_exp, 0, 4)) FROM data.exp_om WHERE substr(reg_ent, 5) = '"+anyo+"'"
+    query = QSqlQuery(sql)    
+    if (query.next()): 
+        code = int(query.value(0)) + 1
+        value = str(code)+"/"+str(anyo)  
+        txtNumExp.setText(value)   
+        dateLiquidacio.setDate(current_date)          
+    
 def manageFisica():
     iface.showAttributeTable(layerFisica)
                     

@@ -8,7 +8,8 @@ from utils import *  # @UnusedWildImport
 from datetime import datetime
 import time
 from exp_om_dialog import ExpOmDialog
-from exp_om_controller import openExpOm
+import exp_om_controller
+#from exp_om_controller import openExpOm
 from main_dao import MainDao
 
 
@@ -79,12 +80,12 @@ def initConfig():
     # Refresh map
     _iface.mapCanvas().refresh()	
 
-    # TEST
-    #dlg = ExpOmDialog()   
-    #if not dlg:        
-        #showInfo("UI form not loaded")            
-        #return	
-    #openExpOm(dlg)	
+    # TODO TEST
+    dlg = ExpOmDialog()   
+    if not dlg:        
+        showInfo("UI form not loaded")            
+        return	
+    exp_om_controller.openExpOm(dlg, '7220201CF8672S', 105)	
     
     
 # Set Group Boxes title font to bold    
@@ -196,7 +197,7 @@ def create():
     if not dlg:        
         showWarning("No s'ha pogut carregar el formulari")            
         return	
-    openExpOm(dlg, refcat.text())	
+    exp_om_controller.openExpOm(dlg, refcat.text())	
          
          
 def update(modelIndex):
@@ -216,7 +217,7 @@ def update(modelIndex):
     expOmId = model.record(row).value("id")          # @ReservedAssignment
     
     # Open 'expOm' form
-    openExpOm(dlg, refcat.text(), expOmId)        
+    exp_om_controller.openExpOm(dlg, refcat.text(), expOmId)        
 
 
 def delete():
