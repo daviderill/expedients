@@ -1,18 +1,17 @@
-DROP TABLE IF EXISTS "data"."estat" 
+DROP TABLE IF EXISTS "data"."estat" CASCADE;
 CREATE TABLE "data"."estat" (
 "id" varchar(200),
 PRIMARY KEY ("id") 
 );
 
 
-DROP TABLE IF EXISTS "data"."exp_om" 
+DROP TABLE IF EXISTS "data"."exp_om" CASCADE;
 CREATE TABLE "data"."exp_om" (
 "id" serial4,
 "num_exp" varchar(15),
 "data_ent" date,
 "data_llic" date,
 "tipus_id" varchar(200),
-"annex_id" varchar(200),
 "tipus_solic_id" varchar(10),
 "solic_persona_id" varchar(9),
 "solic_juridica_id" varchar(9),
@@ -24,21 +23,39 @@ CREATE TABLE "data"."exp_om" (
 "visat_num" varchar(50),
 "visat_data" date,
 "parcela_id" varchar(14),
-"immoble_id" varchar(20),
+"immoble_id" varchar(30),
 "num_hab" int4,
 "notif_adreca" varchar(200),
 "notif_poblacio" varchar(100),
 "notif_cp" varchar(5),
 "observacions" text,
-"reg_exp" varchar(15),
+"reg_ent" varchar(25),
 "data_liq" date,
 "documentacio" text,
-"estat_id" varchar(20),
+"estat_id" varchar(200),
 PRIMARY KEY ("id") 
 );
 
 
-DROP TABLE IF EXISTS "data"."immoble" 
+DROP TABLE IF EXISTS "data"."ibi";
+CREATE TABLE "data"."ibi" (
+"id" int4 NOT NULL,
+"refcat14" varchar,
+"refcat20" varchar,
+"cod_via" int4,
+"sigles_t" varchar,
+"carrer_t" varchar,
+"numero_t" int4,
+"duplicat_t" varchar,
+"escala_t" varchar,
+"pis_t" varchar,
+"porta_t" varchar,
+"adreca_t" varchar,
+CONSTRAINT "ibi_pkey" PRIMARY KEY ("id")
+);
+
+
+DROP TABLE IF EXISTS "data"."immoble";
 CREATE TABLE "data"."immoble" (
 "id" varchar(20),
 "refcat" varchar(14),
@@ -47,7 +64,7 @@ PRIMARY KEY ("id")
 );
 
 
-DROP TABLE IF EXISTS "data"."juridica" 
+DROP TABLE IF EXISTS "data"."juridica";
 CREATE TABLE "data"."juridica" (
 "id" varchar(9),
 "rao_social" varchar(200),
@@ -64,7 +81,90 @@ PRIMARY KEY ("id")
 );
 
 
-DROP TABLE IF EXISTS "data"."persona" 
+DROP TABLE IF EXISTS "data"."llistat_carrerer_ibi"; 
+CREATE TABLE "data"."llistat_carrerer_ibi" (
+"id_0" SERIAL,
+"id" int4,
+"ORDRE" int4,
+"SECTOR O URBANITZACIO" varchar,
+"ILLA CADASTRAL" int4,
+"rc" varchar,
+"full *" varchar,
+"full" varchar,
+"refcat14" varchar,
+"n" int4,
+"i" varchar,
+"Referència cadastral" varchar,
+"Classe del bé immoble" varchar,
+"CODI VIA" int4,
+"Sigles T" varchar,
+"Carrer T" varchar,
+"Numero T" int4,
+"Duplicat T" varchar,
+"Escala T" varchar,
+"Pis T" varchar,
+"Porta T" varchar,
+"Adreça tributària" varchar,
+"Dni" varchar,
+"Nom" varchar,
+"Sigles F" varchar,
+"Carrer F" varchar,
+"Numero F" int4,
+"Duplicat F" varchar,
+"Escala F" varchar,
+"Pis F" varchar,
+"Porta F" varchar,
+"Adreça fiscal" varchar,
+"CP fiscal" int4,
+"Codi municipi fiscal" int4,
+"Nom municipi fiscal" varchar,
+"Superfície del sòl" int4,
+"Superfície de la construcció" int4,
+"Superfície construcció càrrec" int4,
+"Tipologia constructiva" varchar,
+"Any de construcció" varchar,
+"Valor cadastral Total" float8,
+"Valor del sòl" float8,
+"Valor de la construcció" float8,
+"Base liquidable" float8,
+"Tipus gravamen" float8,
+"Q. Íntegra" float8,
+"Valor Base" float8,
+"Ús" varchar,
+"Divisió Quotes" varchar,
+"Coeficient Divisió" varchar,
+"QI Divisió" float8,
+"Quota Líquida Inicial" float8,
+"Quota Líquida Max" int4,
+"Import Bonificació" float8,
+"Quota Líquida Rebut" float8,
+"NIF Cotitular" varchar,
+"B74.2 - Càrrec Anterior" int4,
+"B74.2 - Núm. Valor Anterior" varchar,
+"B74.2 - Import Bonificat" int4,
+"1-Codi Bonificació" varchar,
+"1-Descripció Bonificació" varchar,
+"1-Any Inici Bonificació" int4,
+"1-Any Fi Bonificació" int4,
+"1-Import Bonificació" float8,
+"2-Codi Bonificació" varchar,
+"2-Descripció Bonificació" varchar,
+"2-Any Inici Bonificació" int4,
+"2-Any Fi Bonificació" int4,
+"2-Import Bonificació" int4,
+"3-Codi Bonificació" varchar,
+"3-Descripció Bonificació" varchar,
+"3-Any Inici Bonificació" int4,
+"3-Any Fi Bonificació" int4,
+"3-Import Bonificació" int4,
+"VC Bonificat" int4,
+"Clau Bonif VC" varchar,
+"Import Bonif VC" int4,
+CONSTRAINT "llistat_carrerer_ibi_pkey" PRIMARY KEY ("id_0")
+);
+
+
+DROP TABLE IF EXISTS "data"."persona"; 
 CREATE TABLE "data"."persona" (
 "id" varchar(9),
 "nom" varchar(100),
@@ -80,7 +180,7 @@ PRIMARY KEY ("id")
 );
 
 
-DROP TABLE IF EXISTS "data"."press_om" 
+DROP TABLE IF EXISTS "data"."press_om"; 
 CREATE TABLE "data"."press_om" (
 "om_id" int4,
 "pressupost" numeric(15,2),
@@ -105,7 +205,7 @@ PRIMARY KEY ("om_id")
 COMMENT ON COLUMN "data"."press_om"."placa" IS 'OF.7 Taxa Placa';
 
 
-DROP TABLE IF EXISTS "data"."tecnic" 
+DROP TABLE IF EXISTS "data"."tecnic"; 
 CREATE TABLE "data"."tecnic" (
 "id" varchar(25),
 "dni" varchar(9),
@@ -118,7 +218,7 @@ PRIMARY KEY ("id")
 );
 
 
-DROP TABLE IF EXISTS "data"."tipus_om" 
+DROP TABLE IF EXISTS "data"."tipus_om"; 
 CREATE TABLE "data"."tipus_om" (
 "id" varchar(200),
 "obs" varchar(200),
