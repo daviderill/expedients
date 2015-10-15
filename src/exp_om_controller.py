@@ -65,7 +65,7 @@ def widgetsToGlobal():
     global refcat, lblInfo, txtId, txtNumExp, cboTipus, txtRegEnt, dateLiquidacio, dateEntrada, dateLlicencia
     global rbFisica, rbJuridica, lblSol, cboSol, cboSolCif, cboRep, txtSolDades, txtAdresa, txtCp, txtPoblacio, txtRefcat20, cboEmp
     global cboRedactor, cboDirector, cboExecutor, txtRedactor, txtDirector, txtExecutor, dateVisat, txtDoc
-    global txtPress, cboClavPlu
+    global txtPress, cboClavPlu, chkBonIcio, chkBonLlic
 
     # Tab 'Dades Expedient'  
     refcat = _dialog.findChild(QLineEdit, "refcat")        
@@ -104,6 +104,8 @@ def widgetsToGlobal():
     # Tab 'Liquidació'
     txtPress = _dialog.findChild(QLineEdit, "txtPress")    
     cboClavPlu = _dialog.findChild(QComboBox, "cboClavPlu") 
+    chkBonIcio = _dialog.findChild(QCheckBox, "chkBonIcio") 
+    chkBonLlic = _dialog.findChild(QCheckBox, "chkBonLlic") 
 
 
 def initConfig():    
@@ -201,6 +203,8 @@ def setSignals():
     _dialog.findChild(QLineEdit, "txtClavMesN").editingFinished.connect(partial(clavChanged, 'chkClavMes'))   
     _dialog.findChild(QCheckBox, "chkGarRes").clicked.connect(partial(garChanged, 'chkGarRes'))   
     _dialog.findChild(QCheckBox, "chkGarSer").clicked.connect(partial(garChanged, 'chkGarSer'))   
+    chkBonIcio.clicked.connect(partial(bonChanged, 'chkBonIcio'))   
+    chkBonLlic.clicked.connect(partial(bonChanged, 'chkBonLlic'))   
     
         
 # Load combos from domain tables (only first time)
@@ -524,6 +528,19 @@ def getPress():
     return float(press)
 
 
+def getTotalLlicUrb():
+    totalLlic = getFloat('txtPlu')+getFloat('txtRes')+getFloat('txtEnd')+getFloat('txtCar')+getFloat('txtMov')+getFloat('txtFig')+getFloat('txtLeg')+getFloat('txtPar')+getFloat('txtPro')
+    return totalLlic
+    
+    
+def updateTotalLlicUrb():
+    totalLlic = getFloat('txtPlu')+getFloat('txtRes')+getFloat('txtEnd')+getFloat('txtCar')+getFloat('txtMov')+getFloat('txtFig')+getFloat('txtLeg')+getFloat('txtPar')+getFloat('txtPro')
+    if chkBonLlic.isChecked():
+        totalLlic = totalLlic * 0.05
+    setText('txtLlicTot', totalLlic)
+    updateTotal()    
+        
+        
 def updateTotal():
     total = getFloat('txtIcio')+getFloat('txtPlaca')+getFloat('txtLlicTot')+getFloat('txtClavTot')
     setText('txtTotalLiq', total)  
@@ -668,64 +685,53 @@ def llicChanged(widgetName):
         if widget.isChecked():
             value = 12.9
         setText('txtPlaca', value)
-        
     elif widgetName == 'chkPlu':
         value = ''
         if widget.isChecked():
             value = max(38.15, getPress() * 0.0096)
         setText('txtPlu', value)
-        
     elif widgetName == 'chkRes':
         value = ''
         if widget.isChecked():
             value = max(38.15, getPress() * 0.0094)
         setText('txtRes', value)
-        
     elif widgetName == 'chkEnd':
         value = ''
         if widget.isChecked():
             value = max(0, getPress() * 0.0367)
         setText('txtEnd', value)
-        
     elif widgetName == 'chkCar':
         value = ''
         if widget.isChecked():
             value = getFloat('txtCarM') * 8.9
         setText('txtCar', value)
-        
     elif widgetName == 'chkMov':
         value = ''
         if widget.isChecked():
             value = getFloat('txtMovM') * 0.26
         setText('txtMov', value)
-        
     elif widgetName == 'chkFig':
         value = ''
         if widget.isChecked():
             value = max(725.4, getFloat('txtFigM') * 0.02)
         setText('txtFig', value)
-        
     elif widgetName == 'chkLeg':
         value = ''
         if widget.isChecked():
             value = getFloat('txtPlu') + getFloat('txtCar') + getFloat('txtEnd')
         setText('txtLeg', value)
-    
     elif widgetName == 'chkPar':
         value = ''
         if widget.isChecked():
             value = max(244, getFloat('txtParM') * 0.02)
         setText('txtPar', value)
-    
     elif widgetName == 'chkPro':
         value = ''
         if widget.isChecked():
             value = 22.2
         setText('txtPro', value)
-        
-    total = getFloat('txtPlu')+getFloat('txtRes')+getFloat('txtEnd')+getFloat('txtCar')+getFloat('txtMov')+getFloat('txtFig')+getFloat('txtLeg')+getFloat('txtPar')+getFloat('txtPro')
-    setText('txtLlicTot', total)
-    updateTotal()    
+    
+    updateTotalLlicUrb()    
     
     
 def clavChanged(widgetName):
@@ -771,23 +777,37 @@ def clavChanged(widgetName):
 def garChanged(widgetName):
     
     widget = _dialog.findChild(QCheckBox, widgetName)
-    
     if widgetName == 'chkGarRes':
         value = ''
         if widget.isChecked():
             value = max(1000, getPress() * 0.01)
         setText('txtGarRes', value)
-        
     elif widgetName == 'chkGarSer':
         value = ''
         if widget.isChecked():
             value = max(600, getPress() * 0.01)
         setText('txtGarSer', value)
         
-    updateTotal()        
-        
+    updateTotal()      
     #total = getFloat('txtGarRes')+getFloat('txtGarSer')
-    #setText('txtClavTot', total)        
+    #setText('txtClavTot', total)
+    
+
+def bonChanged(widgetName):
+    
+    widget = _dialog.findChild(QCheckBox, widgetName)
+    if widgetName == 'chkBonIcio':
+        press = getPress()        
+        icio = float(press) * 0.04
+        if widget.isChecked():
+            icio = icio * 0.05
+        setText("txtIcio", icio)            
+    elif widgetName == 'chkBonLlic':
+        totalLlic = getTotalLlicUrb()     
+        if widget.isChecked():
+            totalLlic = totalLlic * 0.05
+        setText("txtLlicTot", totalLlic)   
+    updateTotal()         
             
             
 # Slots: Window buttons    
