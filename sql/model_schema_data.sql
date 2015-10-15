@@ -213,6 +213,7 @@ CREATE TABLE "data"."tecnic" (
 "cognom_1" varchar(100),
 "cognom_2" varchar(100),
 "titulacio" varchar(100),
+"num_colegiat" varchar(100),
 "observacions" text,
 PRIMARY KEY ("id") 
 );

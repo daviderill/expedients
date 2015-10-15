@@ -15,6 +15,11 @@ ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_estat" FOREIGN KEY ("estat
 ALTER TABLE "data"."exp_om"
 DROP COLUMN "annex_id";
 
+-- 15/10/2015
+ALTER TABLE "data"."tecnic"
+DROP COLUMN "observacions",
+ADD COLUMN "num_colegiat" varchar(100),
+ADD COLUMN "observacions" text;
 
 
 

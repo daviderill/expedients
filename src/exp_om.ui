@@ -29,7 +29,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="tabDades">
     <attribute name="title">
@@ -1890,9 +1890,9 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>300</x>
+        <x>280</x>
         <y>30</y>
-        <width>261</width>
+        <width>291</width>
         <height>20</height>
        </rect>
       </property>
@@ -1900,7 +1900,7 @@
        <string/>
       </property>
       <property name="maxLength">
-       <number>15</number>
+       <number>250</number>
       </property>
      </widget>
      <widget class="QLabel" name="lblDir">
@@ -1948,9 +1948,9 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>300</x>
+        <x>280</x>
         <y>60</y>
-        <width>261</width>
+        <width>291</width>
         <height>20</height>
        </rect>
       </property>
@@ -1958,13 +1958,13 @@
        <string/>
       </property>
       <property name="maxLength">
-       <number>15</number>
+       <number>250</number>
       </property>
      </widget>
      <widget class="QPushButton" name="btnTecnic">
       <property name="geometry">
        <rect>
-        <x>450</x>
+        <x>460</x>
         <y>150</y>
         <width>111</width>
         <height>23</height>
@@ -1982,7 +1982,7 @@
        <rect>
         <x>140</x>
         <y>120</y>
-        <width>421</width>
+        <width>431</width>
         <height>20</height>
        </rect>
       </property>
@@ -1999,9 +1999,9 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>300</x>
+        <x>280</x>
         <y>90</y>
-        <width>261</width>
+        <width>291</width>
         <height>20</height>
        </rect>
       </property>
@@ -2009,7 +2009,7 @@
        <string/>
       </property>
       <property name="maxLength">
-       <number>15</number>
+       <number>250</number>
       </property>
      </widget>
      <widget class="QDateEdit" name="dateVisat">
@@ -2064,7 +2064,7 @@
        <rect>
         <x>140</x>
         <y>30</y>
-        <width>141</width>
+        <width>131</width>
         <height>22</height>
        </rect>
       </property>
@@ -2077,7 +2077,7 @@
        <rect>
         <x>140</x>
         <y>60</y>
-        <width>141</width>
+        <width>131</width>
         <height>22</height>
        </rect>
       </property>
@@ -2090,7 +2090,7 @@
        <rect>
         <x>140</x>
         <y>90</y>
-        <width>141</width>
+        <width>131</width>
         <height>22</height>
        </rect>
       </property>
@@ -2116,7 +2116,7 @@
        <rect>
         <x>140</x>
         <y>210</y>
-        <width>421</width>
+        <width>301</width>
         <height>71</height>
        </rect>
       </property>
@@ -2137,7 +2137,7 @@
      <widget class="QPushButton" name="btnDoc">
       <property name="geometry">
        <rect>
-        <x>450</x>
+        <x>460</x>
         <y>20</y>
         <width>111</width>
         <height>23</height>
@@ -2173,7 +2173,7 @@
      <widget class="QPushButton" name="btnOpenDoc">
       <property name="geometry">
        <rect>
-        <x>450</x>
+        <x>460</x>
         <y>50</y>
         <width>111</width>
         <height>23</height>
