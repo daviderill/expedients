@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'exp_om.ui'
 #
-# Created: Thu Oct 15 13:41:44 2015
+# Created: Thu Oct 15 16:19:37 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -188,9 +188,9 @@ class Ui_Dialog(object):
         self.refcat.setGeometry(QtCore.QRect(110, 20, 141, 20))
         self.refcat.setMaxLength(14)
         self.refcat.setObjectName(_fromUtf8("refcat"))
-        self.lblRef = QtGui.QLabel(self.gb3Emplasament)
-        self.lblRef.setGeometry(QtCore.QRect(280, 20, 81, 21))
-        self.lblRef.setObjectName(_fromUtf8("lblRef"))
+        self.lblRefcat20 = QtGui.QLabel(self.gb3Emplasament)
+        self.lblRefcat20.setGeometry(QtCore.QRect(280, 20, 81, 21))
+        self.lblRefcat20.setObjectName(_fromUtf8("lblRefcat20"))
         self.lblEmpl = QtGui.QLabel(self.gb3Emplasament)
         self.lblEmpl.setGeometry(QtCore.QRect(10, 50, 91, 21))
         self.lblEmpl.setObjectName(_fromUtf8("lblEmpl"))
@@ -644,7 +644,7 @@ class Ui_Dialog(object):
         self.btnRefresh.setObjectName(_fromUtf8("btnRefresh"))
 
         self.retranslateUi(Dialog)
-        self.tabMain.setCurrentIndex(2)
+        self.tabMain.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         Dialog.setTabOrder(self.tabMain, self.txtId)
         Dialog.setTabOrder(self.txtId, self.txtNumExp)
@@ -752,7 +752,7 @@ class Ui_Dialog(object):
         self.rbJuridica.setText(_translate("Dialog", "P. Jurídica", None))
         self.lblSol_2.setText(_translate("Dialog", "Tipus Sol·licitant:", None))
         self.gb3Emplasament.setTitle(_translate("Dialog", "Emplaçament", None))
-        self.lblRef.setText(_translate("Dialog", "Ref. Catastral:", None))
+        self.lblRefcat20.setText(_translate("Dialog", "Ref. Catastral:", None))
         self.lblEmpl.setText(_translate("Dialog", "Emplaçament:", None))
         self.lblRef_2.setText(_translate("Dialog", "Parcela:", None))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabDades), _translate("Dialog", "Dades Expedient", None))

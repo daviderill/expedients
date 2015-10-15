@@ -29,7 +29,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tabDades">
     <attribute name="title">
@@ -643,7 +643,7 @@
        <number>14</number>
       </property>
      </widget>
-     <widget class="QLabel" name="lblRef">
+     <widget class="QLabel" name="lblRefcat20">
       <property name="geometry">
        <rect>
         <x>280</x>

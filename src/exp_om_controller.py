@@ -134,6 +134,8 @@ def initConfig():
     txtRegEnt.setInputMask("999/99")
     txtNumExp.setEnabled(False)
     dateLiquidacio.setEnabled(False)
+    _dialog.findChild(QLabel, "lblRefcat20").setVisible(False)
+    txtRefcat20.setVisible(False)
 
         
 # Set Group Boxes title font to bold    
@@ -230,10 +232,10 @@ def loadData():
         
 def loadImmobles():
 
-    model = QSqlQueryModel();
-    sql = "SELECT adreca FROM data.immoble WHERE refcat = '"+refcat.text()+"' ORDER BY id"
-    model.setQuery(sql);
-    cboEmp.setModel(model)
+    global listImmobles
+    sql = "SELECT id || ' - ' || adreca FROM data.immoble WHERE refcat = '"+refcat.text()+"' ORDER BY id"    
+    listImmobles = queryToList(sql)
+    setComboModel(cboEmp, listImmobles)        
 
     
 def getLayers():
@@ -281,9 +283,15 @@ def getDadesExpedient():
         setSelectedItem("cboRep", getQueryValue(query, 7))   
         setText("refcat", query.value(8))
         
-        # TODO: Gestió immoble
+        # Gestió immoble
         setText("txtRefcat20", getQueryValue(query, 9))
-        
+        cboEmp.setCurrentIndex(0);            
+        i = 0
+        for elem in listImmobles:
+            if getQueryValue(query, 9) in elem:
+                cboEmp.setCurrentIndex(i);    
+            i=i+1
+
         setText("txtNumHab", getQueryValue(query, 10))
         setText("txtNotifAdreca", getQueryValue(query, 11))
         setText("txtNotifPoblacio", getQueryValue(query, 12))
@@ -304,7 +312,6 @@ def getDadesExpedient():
     if getQueryValue(query, 0) != "":
         _dialog.findChild(QPushButton, "btnGenExp").setEnabled(False)      
          
-    
 
 # Get Dades Liquidacio
 def getLiquidacio():
@@ -633,11 +640,11 @@ def solChanged(aux):
        
 def empChanged():
 
-    sql = "SELECT id FROM data.immoble WHERE adreca = "+getSelectedItem2("cboEmp")+" ORDER BY id"
-    query = QSqlQuery(sql)    
-    if (query.next()):        
-        txtRefcat20.setText(query.value(0))    
-   
+    refcat20 = getSelectedItem("cboEmp")
+    if refcat20 is not None:
+        refcat20 = refcat20[:20]
+    txtRefcat20.setText(refcat20)    
+    
         
 # Slots: Tab 'Projecte'        
 def redactorChanged():

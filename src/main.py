@@ -40,10 +40,15 @@ def formOpen(dialog,layerid,featureid):
 
     # Get dialog and his widgets
     _dialog = dialog	
+    setDialog(dialog)    
     widgetsToGlobal()
 
     # Get 'Expedients' from selected 'parcela' and filter conditions
-    getExpedients()
+    filter_ = "parcela_id = '"+refcat.text()+"'"
+    getExpedients(filter_)
+    
+    # Load 'immobles' from selected 'parcela'
+    loadImmobles()    
     
     # Initial configuration
     initConfig()
@@ -62,7 +67,6 @@ def connectDb():
 def widgetsToGlobal():
     
     global refcat, cboEmp, tblExp
-
     refcat = _dialog.findChild(QLineEdit, "refcat")             
     cboEmp = _dialog.findChild(QComboBox, "cboEmp")    
     tblExp = _dialog.findChild(QTableView, "tblExp")   
@@ -81,11 +85,11 @@ def initConfig():
     _iface.mapCanvas().refresh()	
 
     # TODO TEST
-    dlg = ExpOmDialog()   
-    if not dlg:        
-        showInfo("UI form not loaded")            
-        return	
-    exp_om_controller.openExpOm(dlg, '7220201CF8672S', 105)	
+#     dlg = ExpOmDialog()   
+#     if not dlg:        
+#         showInfo("UI form not loaded")            
+#         return	
+#     exp_om_controller.openExpOm(dlg, '7220201CF8672S', 105)	
     
     
 # Set Group Boxes title font to bold    
@@ -104,23 +108,22 @@ def setSignals():
     _dialog.findChild(QPushButton, "btnDelete").clicked.connect(delete)    
     _dialog.findChild(QPushButton, "btnRefresh").clicked.connect(refresh)    	
     _dialog.findChild(QPushButton, "btnClose").clicked.connect(close)
+    _dialog.findChild(QComboBox, "cboEmp").currentIndexChanged.connect(empChanged)
     #tblExp.doubleClicked.connect(update)	
     
         
 # Get 'Expedients' from selected 'parcela' and filter conditions
-def getExpedients():
+def getExpedients(filter_):
 
     global model
     
     # Define model
     model = QSqlTableModel();
     model.setTable("data.exp_om")		
-    model.setFilter("parcela_id = '"+refcat.text()+"'")	
+    model.setFilter(filter_)	
     model.setSort(0, Qt.AscendingOrder)	
-
     model.setEditStrategy(QSqlTableModel.OnRowChange)   # OnManualSubmit
     model.select()
-
     model.setHeaderData(0, Qt.Horizontal, "Id");
     model.setHeaderData(1, Qt.Horizontal, "Num. Exp");
     model.dataChanged.connect(dataChanged)
@@ -132,9 +135,6 @@ def getExpedients():
     verticalHeader.setResizeMode(QHeaderView.Fixed)
     verticalHeader.setDefaultSectionSize(20)
     tblExp.resizeColumnsToContents()
-
-    # Load 'immobles' from selected 'parcela'
-    loadImmobles()
        
    
 def hideColumns(tblExp):
@@ -151,15 +151,10 @@ def dataChanged():
 
 def loadImmobles():
 
-    sql = "SELECT adreca FROM data.immoble WHERE refcat = '"+refcat.text()+"' ORDER BY id"
-    #query = QSqlQuery(sql)	
-    #fieldNo = query.record().indexOf("adreca")
-    #while (query.next()):
-    #    country = query.value(fieldNo)
-    model = QSqlQueryModel();
-    model.setQuery(sql);
-    cboEmp.setModel(model)
- 
+    sql = "SELECT id || ' - ' || adreca FROM data.immoble WHERE refcat = '"+refcat.text()+"' ORDER BY id"
+    listImmobles = queryToList(sql)
+    setComboModel(cboEmp, listImmobles)   
+
 
 # Utility functions
 def showInfo(text, duration = None):
@@ -189,7 +184,18 @@ def askQuestion(text, infText = None):
     return msgBox.exec_()  
      
             
-# Slots: Window buttons  
+# Slots
+
+def empChanged():
+    
+    elem = getSelectedItem("cboEmp")
+    if elem is not None:
+        elem = elem[:20]
+        filter_ = "parcela_id = '"+refcat.text()+"' and immoble_id = '"+elem+"'"
+    else:
+        filter_ = "parcela_id = '"+refcat.text()+"'"
+    getExpedients(filter_)
+
   
 def create():
     
