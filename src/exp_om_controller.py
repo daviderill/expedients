@@ -65,7 +65,7 @@ def widgetsToGlobal():
     global refcat, lblInfo, txtId, txtNumExp, cboTipus, txtRegEnt, dateLiquidacio, dateEntrada, dateLlicencia
     global rbFisica, rbJuridica, lblSol, cboSol, cboSolCif, cboRep, txtSolDades, txtAdresa, txtCp, txtPoblacio, txtRefcat20, cboEmp
     global cboRedactor, cboDirector, cboExecutor, txtRedactor, txtDirector, txtExecutor, dateVisat, txtDoc
-    global txtPress, cboClavPlu, chkBonIcio, chkBonLlic
+    global txtPress, cboClavPlu, chkBonIcio, chkBonLlic, chkLiqAj, txtLiqAj
 
     # Tab 'Dades Expedient'  
     refcat = _dialog.findChild(QLineEdit, "refcat")        
@@ -106,6 +106,8 @@ def widgetsToGlobal():
     cboClavPlu = _dialog.findChild(QComboBox, "cboClavPlu") 
     chkBonIcio = _dialog.findChild(QCheckBox, "chkBonIcio") 
     chkBonLlic = _dialog.findChild(QCheckBox, "chkBonLlic") 
+    chkLiqAj = _dialog.findChild(QCheckBox, "chkLiqAj") 
+    txtLiqAj = _dialog.findChild(QLineEdit, "txtLiqAj")    
 
 
 def initConfig():    
@@ -182,21 +184,23 @@ def setSignals():
     cboExecutor.currentIndexChanged.connect(executorChanged)
     
     # Tab 'Liquidació'
-    txtPress.editingFinished.connect(pressChanged)    
-    _dialog.findChild(QCheckBox, "chkPlaca").clicked.connect(partial(llicChanged, 'chkPlaca'))    
-    _dialog.findChild(QCheckBox, "chkPlu").clicked.connect(partial(llicChanged, 'chkPlu'))    
-    _dialog.findChild(QCheckBox, "chkRes").clicked.connect(partial(llicChanged, 'chkRes'))    
-    _dialog.findChild(QCheckBox, "chkEnd").clicked.connect(partial(llicChanged, 'chkEnd'))   
-    _dialog.findChild(QCheckBox, "chkCar").clicked.connect(partial(llicChanged, 'chkCar'))   
-    _dialog.findChild(QCheckBox, "chkMov").clicked.connect(partial(llicChanged, 'chkMov'))   
-    _dialog.findChild(QCheckBox, "chkFig").clicked.connect(partial(llicChanged, 'chkFig'))   
-    _dialog.findChild(QCheckBox, "chkLeg").clicked.connect(partial(llicChanged, 'chkLeg'))   
-    _dialog.findChild(QCheckBox, "chkPar").clicked.connect(partial(llicChanged, 'chkPar'))   
-    _dialog.findChild(QCheckBox, "chkPro").clicked.connect(partial(llicChanged, 'chkPro'))   
-    _dialog.findChild(QLineEdit, "txtCarM").editingFinished.connect(partial(llicChanged, 'chkCar'))   
-    _dialog.findChild(QLineEdit, "txtMovM").editingFinished.connect(partial(llicChanged, 'chkMov'))   
-    _dialog.findChild(QLineEdit, "txtFigM").editingFinished.connect(partial(llicChanged, 'chkFig'))   
-    _dialog.findChild(QLineEdit, "txtParM").editingFinished.connect(partial(llicChanged, 'chkPar'))   
+    txtPress.editingFinished.connect(partial(importEdited, 'txtPress')) 
+    chkLiqAj.clicked.connect(liqAjSelected) 
+    txtLiqAj.editingFinished.connect(partial(importEdited, 'txtLiqAj')) 
+    _dialog.findChild(QCheckBox, "chkPlaca").clicked.connect(partial(llicChanged, 'chkPlaca', True))    
+    _dialog.findChild(QCheckBox, "chkPlu").clicked.connect(partial(llicChanged, 'chkPlu', True))    
+    _dialog.findChild(QCheckBox, "chkRes").clicked.connect(partial(llicChanged, 'chkRes', True))    
+    _dialog.findChild(QCheckBox, "chkEnd").clicked.connect(partial(llicChanged, 'chkEnd', True))   
+    _dialog.findChild(QCheckBox, "chkCar").clicked.connect(partial(llicChanged, 'chkCar', True))   
+    _dialog.findChild(QCheckBox, "chkMov").clicked.connect(partial(llicChanged, 'chkMov', True))   
+    _dialog.findChild(QCheckBox, "chkFig").clicked.connect(partial(llicChanged, 'chkFig', True))   
+    _dialog.findChild(QCheckBox, "chkLeg").clicked.connect(partial(llicChanged, 'chkLeg', True))   
+    _dialog.findChild(QCheckBox, "chkPar").clicked.connect(partial(llicChanged, 'chkPar', True))   
+    _dialog.findChild(QCheckBox, "chkPro").clicked.connect(partial(llicChanged, 'chkPro', True))   
+    _dialog.findChild(QLineEdit, "txtCarM").editingFinished.connect(partial(llicChanged, 'chkCar', True))   
+    _dialog.findChild(QLineEdit, "txtMovM").editingFinished.connect(partial(llicChanged, 'chkMov', True))   
+    _dialog.findChild(QLineEdit, "txtFigM").editingFinished.connect(partial(llicChanged, 'chkFig', True))   
+    _dialog.findChild(QLineEdit, "txtParM").editingFinished.connect(partial(llicChanged, 'chkPar', True))   
     _dialog.findChild(QCheckBox, "chkClavUni").clicked.connect(partial(clavChanged, 'chkClavUni'))   
     _dialog.findChild(QCheckBox, "chkClavPlu").clicked.connect(partial(clavChanged, 'chkClavPlu'))   
     _dialog.findChild(QCheckBox, "chkClavMes").clicked.connect(partial(clavChanged, 'chkClavMes'))   
@@ -343,11 +347,16 @@ def getLiquidacio():
             cboClavPlu.setCurrentIndex(3)     
         setText("txtClavMesN", getQueryValue(query, 13))     
         setChecked("chkGarRes", getQueryValue(query, 14))     
-        setChecked("chkGarSer", getQueryValue(query, 15))     
-        setText("txtLiq", getQueryValue(query, 16))     
+        setChecked("chkGarSer", getQueryValue(query, 15))  
         
+        setChecked("chkLiqAj", False) 
+        setText("txtLiqAj", '')             
+        value = getQueryValue(query, 16)
+        if value <> "":
+            setChecked("chkLiqAj", True)  
+            setText("txtLiqAj", value)     
         updateTabLiquidacio()
-        pressChanged()
+        importEdited(None)
 
 
 def updateTabLiquidacio():
@@ -371,6 +380,7 @@ def updateTabLiquidacio():
             setChecked("chkClavPlu", True)
     if getStringValue("txtClavMesN") is not None:
         setChecked("chkClavMes", True)
+        
     llicChanged('chkPlaca')        
     llicChanged('chkCar')        
     llicChanged('chkMov')        
@@ -379,6 +389,7 @@ def updateTabLiquidacio():
     clavChanged('chkClavUni')        
     clavChanged('chkClavPlu')        
     clavChanged('chkClavMes')        
+    updateTotalLlicUrb()
     
 
 # Save data from Tab 'Dades Expedient' and 'Projecte' into Database
@@ -514,8 +525,8 @@ def saveLiquidacio():
         query.bindValue(13, aux)         
     query.bindValue(14, isChecked("chkGarRes")) 
     query.bindValue(15, isChecked("chkGarSer")) 
-    if isChecked("chkLiq"):      
-        query.bindValue(16, getStringValue("txtLiq"))     
+    if isChecked("chkLiqAj"):      
+        query.bindValue(16, getStringValue("txtLiqAj"))     
     
     # Execute SQL
     result = query.exec_()
@@ -527,12 +538,20 @@ def saveLiquidacio():
 
 def getPress():
     
-    press = txtPress.text().replace(",", ".")
-    txtPress.setText(press)
-    if not isNumber(press):
-        showWarning(u"Format numèric incorrecte")
-        return 0.0
-    return float(press)
+    default = 0.0
+    if chkLiqAj.isChecked():
+        value = txtLiqAj.text().replace(",", ".")    
+        txtLiqAj.setText(value)        
+        if not isNumber(value):
+            #dshowWarning(u"Format numèric incorrecte")
+            return default        
+    else:
+        value = txtPress.text().replace(",", ".")
+        txtPress.setText(value)
+        if not isNumber(value):
+            #showWarning(u"Format numèric incorrecte")
+            return default
+    return float(value)
 
 
 def getTotalLlicUrb():
@@ -541,7 +560,7 @@ def getTotalLlicUrb():
     
     
 def updateTotalLlicUrb():
-    totalLlic = getFloat('txtPlu')+getFloat('txtRes')+getFloat('txtEnd')+getFloat('txtCar')+getFloat('txtMov')+getFloat('txtFig')+getFloat('txtLeg')+getFloat('txtPar')+getFloat('txtPro')
+    totalLlic = getTotalLlicUrb()
     if chkBonLlic.isChecked():
         totalLlic = totalLlic * 0.05
     setText('txtLlicTot', totalLlic)
@@ -549,10 +568,28 @@ def updateTotalLlicUrb():
         
         
 def updateTotal():
-    total = getFloat('txtIcio')+getFloat('txtPlaca')+getFloat('txtLlicTot')+getFloat('txtClavTot')
-    setText('txtTotalLiq', total)  
-      
     
+    total = getFloat('txtIcio')+getFloat('txtLlicTot')+getFloat('txtClavTot')+getFloat('txtPlaca')
+    
+    # TODO: Calcular ICIO, Llic amb Pressupost i Liquidació Aj.
+    press = getStringValue('txtPress')
+    liqAj = getStringValue('txtLiqAj')
+    
+    # Liquidació Aj. està seleccionat
+    if chkLiqAj.isChecked():
+#         totalIcio = calculateIcio(press)
+#         totalLlic = calculateLlic(press)
+#        total = totalIcio + totalLlic + getFloat('txtClavTot') + getFloat('txtPlaca')
+        setText('txtTotalLiq', '')          
+        setText('txtTotalLiq_2', total)  
+    else:
+#         totalIcio = calculateIcio(liqAj)
+#         totalLlic = calculateLlic(liqAj)        
+#        total = totalIcio + totalLlic + getFloat('txtClavTot') + getFloat('txtPlaca')
+        setText('txtTotalLiq', total)  
+        setText('txtTotalLiq_2', '')         
+         
+      
 def clearNotificacions():       
     txtSolDades.setText('')
     txtAdresa.setText('')
@@ -668,11 +705,20 @@ def tecnicChanged(cboName, txtWidget):
     
     
 # Slots: Tab 'Liquidació'
-def pressChanged():
+def liqAjSelected():
+
+    value = ''
+    if chkLiqAj.isChecked():
+        setText('txtLiqAj', getStringValue('txtPress'))
+    setText('txtLiqAj', value)
+    importEdited('txtLiqAj')
+            
     
-    press = getPress()
-    icio = float(press) * 0.04
-    setText("txtIcio", icio)
+def importEdited(widgetName):
+    
+    value = getPress()
+    icio = float(value) * 0.04
+    setText('txtIcio', icio)
     llicChanged('chkPlu')
     llicChanged('chkRes')
     llicChanged('chkEnd')
@@ -680,10 +726,11 @@ def pressChanged():
     llicChanged('chkPro')
     garChanged('chkGarRes')
     garChanged('chkGarSer')
+    updateTotalLlicUrb()
     updateTotal()
     
 
-def llicChanged(widgetName):
+def llicChanged(widgetName, update=False):
     
     widget = _dialog.findChild(QCheckBox, widgetName)
     
@@ -697,21 +744,27 @@ def llicChanged(widgetName):
         if widget.isChecked():
             value = max(38.15, getPress() * 0.0096)
         setText('txtPlu', value)
+        valueLeg = getFloat('txtPlu') + getFloat('txtCar') + getFloat('txtRes')
+        setText('txtLeg', valueLeg)           
     elif widgetName == 'chkRes':
         value = ''
         if widget.isChecked():
             value = max(38.15, getPress() * 0.0094)
         setText('txtRes', value)
+        valueLeg = getFloat('txtPlu') + getFloat('txtCar') + getFloat('txtRes')
+        setText('txtLeg', valueLeg)           
     elif widgetName == 'chkEnd':
         value = ''
         if widget.isChecked():
             value = max(0, getPress() * 0.0367)
-        setText('txtEnd', value)
+        setText('txtEnd', value) 
     elif widgetName == 'chkCar':
         value = ''
         if widget.isChecked():
             value = getFloat('txtCarM') * 8.9
         setText('txtCar', value)
+        valueLeg = getFloat('txtPlu') + getFloat('txtCar') + getFloat('txtRes')
+        setText('txtLeg', valueLeg)               
     elif widgetName == 'chkMov':
         value = ''
         if widget.isChecked():
@@ -725,7 +778,7 @@ def llicChanged(widgetName):
     elif widgetName == 'chkLeg':
         value = ''
         if widget.isChecked():
-            value = getFloat('txtPlu') + getFloat('txtCar') + getFloat('txtEnd')
+            value = getFloat('txtPlu') + getFloat('txtCar') + getFloat('txtRes')
         setText('txtLeg', value)
     elif widgetName == 'chkPar':
         value = ''
@@ -738,7 +791,8 @@ def llicChanged(widgetName):
             value = 22.2
         setText('txtPro', value)
     
-    updateTotalLlicUrb()    
+    if update:
+        updateTotalLlicUrb()    
     
     
 def clavChanged(widgetName):

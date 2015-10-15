@@ -29,7 +29,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tabDades">
     <attribute name="title">
@@ -1136,7 +1136,7 @@
        <string/>
       </property>
       <property name="maxLength">
-       <number>15</number>
+       <number>10</number>
       </property>
      </widget>
      <widget class="QLabel" name="lblNumExp_86">
@@ -1178,7 +1178,7 @@
        <string/>
       </property>
       <property name="maxLength">
-       <number>15</number>
+       <number>10</number>
       </property>
      </widget>
      <widget class="QLineEdit" name="txtFigM">
@@ -1194,7 +1194,7 @@
        <string/>
       </property>
       <property name="maxLength">
-       <number>15</number>
+       <number>10</number>
       </property>
      </widget>
      <widget class="QLabel" name="lblNumExp_98">
@@ -1236,7 +1236,7 @@
        <string/>
       </property>
       <property name="maxLength">
-       <number>15</number>
+       <number>10</number>
       </property>
      </widget>
      <widget class="QLineEdit" name="txtLlicTot">
@@ -1458,7 +1458,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Total Clavegueram</string>
+       <string>Total Clavegueram:</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="nif_solic_36">
@@ -1647,7 +1647,7 @@
        <number>15</number>
       </property>
      </widget>
-     <widget class="QLabel" name="lblTot">
+     <widget class="QLabel" name="lblTotLiq">
       <property name="geometry">
        <rect>
         <x>40</x>
@@ -1657,10 +1657,10 @@
        </rect>
       </property>
       <property name="text">
-       <string>Impost i Taxes</string>
+       <string>Autoliquidació:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtLlicTot_2">
+     <widget class="QLineEdit" name="txtTotalLiq_2">
       <property name="enabled">
        <bool>false</bool>
       </property>
@@ -1679,7 +1679,7 @@
        <number>15</number>
       </property>
      </widget>
-     <widget class="QLabel" name="lblTot_5">
+     <widget class="QLabel" name="lblTotLiq_2">
       <property name="geometry">
        <rect>
         <x>40</x>
@@ -1689,11 +1689,11 @@
        </rect>
       </property>
       <property name="text">
-       <string>Autoliquidació:</string>
+       <string>Liquidació:</string>
       </property>
      </widget>
     </widget>
-    <widget class="QLineEdit" name="txtLiq">
+    <widget class="QLineEdit" name="txtLiqAj">
      <property name="geometry">
       <rect>
        <x>110</x>
@@ -1709,7 +1709,7 @@
       <number>15</number>
      </property>
     </widget>
-    <widget class="QCheckBox" name="chkLiq">
+    <widget class="QCheckBox" name="chkLiqAj">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -2317,8 +2317,8 @@
   <tabstop>btnTecnic</tabstop>
   <tabstop>dateVisat</tabstop>
   <tabstop>txtPress</tabstop>
-  <tabstop>chkLiq</tabstop>
-  <tabstop>txtLiq</tabstop>
+  <tabstop>chkLiqAj</tabstop>
+  <tabstop>txtLiqAj</tabstop>
   <tabstop>txtIcio</tabstop>
   <tabstop>chkPlaca</tabstop>
   <tabstop>txtPlaca</tabstop>
