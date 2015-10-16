@@ -9,7 +9,6 @@ from datetime import datetime
 import time
 from exp_om_dialog import ExpOmDialog
 import exp_om_controller
-#from exp_om_controller import openExpOm
 from main_dao import MainDao
 
 
@@ -264,6 +263,6 @@ def refresh():
 
     
 def close():
-    mainDao.close()	
+    #mainDao.close()	
     _dialog.parent().setVisible(False) 
     

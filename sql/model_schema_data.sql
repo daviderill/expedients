@@ -251,3 +251,19 @@ ALTER TABLE "data"."press_om" ADD CONSTRAINT "fk_press_om_exp_om" FOREIGN KEY ("
 --ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_ur_parcela" FOREIGN KEY ("parcela_id") REFERENCES "carto"."ur_parcela" ("refcat");
 
 
+DROP VIEW IF EXISTS "data"."v_exp_per_parcela";
+CREATE VIEW "data"."v_exp_per_parcela" AS 
+ SELECT ur_parcela.id,
+    ur_parcela.geom,
+    ur_parcela.ninterno,
+    ur_parcela.parcela,
+    ur_parcela.refcat,
+        CASE
+            WHEN (( SELECT count(*) AS count
+               FROM data.exp_om
+              WHERE ((exp_om.parcela_id)::text = (ur_parcela.refcat)::text)) > 0) THEN ( SELECT count(*) AS count
+               FROM data.exp_om
+              WHERE ((exp_om.parcela_id)::text = (ur_parcela.refcat)::text))
+            ELSE NULL::bigint
+        END AS total
+   FROM ur_parcela;

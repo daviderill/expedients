@@ -879,8 +879,11 @@ def generateExpedient():
     sql = "SELECT MAX(substr(num_exp, 0, 4)) FROM data.exp_om WHERE substr(reg_ent, 5) = '"+anyo+"'"
     query = QSqlQuery(sql)    
     if (query.next()): 
-        code = int(query.value(0)) + 1
-        value = str(code)+"/"+str(anyo)  
+        if query.value(0) == '':
+            value = "001/"+str(anyo)  
+        else:
+            code = int(query.value(0)) + 1
+            value = str(code).zfill(3)+"/"+str(anyo)  
         txtNumExp.setText(value)   
         dateLiquidacio.setDate(current_date)          
     
