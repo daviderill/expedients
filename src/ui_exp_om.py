@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'exp_om.ui'
 #
-# Created: Fri Oct 16 13:14:34 2015
+# Created: Fri Oct 16 13:50:00 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -200,7 +200,7 @@ class Ui_Dialog(object):
         self.txtRefcat20.setMaxLength(25)
         self.txtRefcat20.setObjectName(_fromUtf8("txtRefcat20"))
         self.cboEmp = QtGui.QComboBox(self.gb3Emplasament)
-        self.cboEmp.setGeometry(QtCore.QRect(110, 50, 401, 22))
+        self.cboEmp.setGeometry(QtCore.QRect(110, 50, 481, 22))
         self.cboEmp.setEditable(True)
         self.cboEmp.setObjectName(_fromUtf8("cboEmp"))
         self.lblRef_2 = QtGui.QLabel(self.gb3Emplasament)

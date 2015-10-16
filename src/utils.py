@@ -110,6 +110,29 @@ def getFloat(widgetName):
     return value
 
 
+def setNumeric(widget, number):
+    
+    if not isNumber(number):
+        setText(widget, number)
+        return
+    
+    elem = _dialog.findChild(QLineEdit, widget)
+    number = float(number)
+    if elem:    
+        if number <> '':
+            value = format(number, '.2f')
+            elem.setText(str(value))
+        else:
+            elem.setText(None)
+    else:
+        elem = _dialog.findChild(QTextEdit, widget)    
+        if number <> '':
+            value = format(number, '.2f')
+            elem.setText(str(value))
+        else:
+            elem.setText(None)
+            
+
 def getStringValue(widget):
     
     elem = _dialog.findChild(QLineEdit, widget)

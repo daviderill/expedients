@@ -326,16 +326,16 @@ def getLiquidacio():
     query = QSqlQuery(sql) 
        
     if (query.next()):    
-        setText("txtPress", getQueryValue(query, 0))     
+        setNumeric("txtPress", getQueryValue(query, 0))     
         setChecked("chkPlaca", getQueryValue(query, 1))     
         setChecked("chkPlu", getQueryValue(query, 2))     
         setChecked("chkRes", getQueryValue(query, 3))     
         setChecked("chkEnd", getQueryValue(query, 4))     
-        setText("txtCarM", getQueryValue(query, 5))     
-        setText("txtMovM", getQueryValue(query, 6))     
-        setText("txtFigM", getQueryValue(query, 7))     
+        setNumeric("txtCarM", getQueryValue(query, 5))     
+        setNumeric("txtMovM", getQueryValue(query, 6))     
+        setNumeric("txtFigM", getQueryValue(query, 7))     
         setChecked("chkLeg", getQueryValue(query, 8))     
-        setText("txtParM", getQueryValue(query, 9))     
+        setNumeric("txtParM", getQueryValue(query, 9))     
         setChecked("chkPro", getQueryValue(query, 10))     
         setText("txtClavUniN", getQueryValue(query, 11))     
         aux = getQueryValue(query, 12)
@@ -552,14 +552,15 @@ def getPress():
     
     default = 0.0
     if chkLiqAj.isChecked():
-        value = txtLiqAj.text().replace(",", ".")    
-        txtLiqAj.setText(value)        
+        value = txtLiqAj.text().replace(",", ".")   
+        print value
+        setNumeric('txtLiqAj', value)     
         if not isNumber(value):
             #showWarning(u"Format numèric incorrecte")
             return default        
     else:
         value = txtPress.text().replace(",", ".")
-        txtPress.setText(value)
+        setNumeric('txtPress', value)
         if not isNumber(value):
             #showWarning(u"Format numèric incorrecte")
             return default
@@ -575,7 +576,7 @@ def updateTotalLlicUrb():
     totalLlic = getTotalLlicUrb()
     if chkBonLlic.isChecked():
         totalLlic = totalLlic * 0.05
-    setText('txtLlicTot', totalLlic)
+    setNumeric('txtLlicTot', totalLlic)
     updateTotal()    
         
         
@@ -584,9 +585,9 @@ def updateTotal():
     total = getFloat('txtIcio')+getFloat('txtLlicTot')+getFloat('txtClavTot')+getFloat('txtPlaca')    
     # If 'Liquidació Aj.' is selected
     if chkLiqAj.isChecked():  
-        setText('txtTotalLiq', total)  
+        setNumeric('txtTotalLiq', total)  
     else:
-        setText('txtTotalPress', total)  
+        setNumeric('txtTotalPress', total)  
 
       
 def clearNotificacions():       
@@ -709,7 +710,7 @@ def liqAjSelected():
     value = ''
     if chkLiqAj.isChecked():
         value = getStringValue('txtPress')
-    setText('txtLiqAj', value)
+    setNumeric('txtLiqAj', value)
     importEdited('txtLiqAj')
             
     
@@ -717,7 +718,7 @@ def importEdited(widgetName):
     
     value = getPress()
     icio = float(value) * 0.04
-    setText('txtIcio', icio)
+    setNumeric('txtIcio', icio)
     llicChanged('chkPlu')
     llicChanged('chkRes')
     llicChanged('chkEnd')
@@ -739,58 +740,58 @@ def llicChanged(widgetName, update=False):
         value = ''
         if widget.isChecked():
             value = 12.9
-        setText('txtPlaca', value)
+        setNumeric('txtPlaca', value)
     elif widgetName == 'chkPlu':
         value = ''
         if widget.isChecked():
             value = max(38.15, getPress() * 0.0096)
-        setText('txtPlu', value)
+        setNumeric('txtPlu', value)
         valueLeg = getFloat('txtPlu') + getFloat('txtCar') + getFloat('txtRes')
-        setText('txtLeg', valueLeg)           
+        setNumeric('txtLeg', valueLeg)           
     elif widgetName == 'chkRes':
         value = ''
         if widget.isChecked():
             value = max(38.15, getPress() * 0.0094)
-        setText('txtRes', value)
+        setNumeric('txtRes', value)
         valueLeg = getFloat('txtPlu') + getFloat('txtCar') + getFloat('txtRes')
-        setText('txtLeg', valueLeg)           
+        setNumeric('txtLeg', valueLeg)           
     elif widgetName == 'chkEnd':
         value = ''
         if widget.isChecked():
             value = max(0, getPress() * 0.0367)
-        setText('txtEnd', value) 
+        setNumeric('txtEnd', value) 
     elif widgetName == 'chkCar':
         value = ''
         if widget.isChecked():
             value = getFloat('txtCarM') * 8.9
-        setText('txtCar', value)
+        setNumeric('txtCar', value)
         valueLeg = getFloat('txtPlu') + getFloat('txtCar') + getFloat('txtRes')
-        setText('txtLeg', valueLeg)               
+        setNumeric('txtLeg', valueLeg)               
     elif widgetName == 'chkMov':
         value = ''
         if widget.isChecked():
             value = getFloat('txtMovM') * 0.26
-        setText('txtMov', value)
+        setNumeric('txtMov', value)
     elif widgetName == 'chkFig':
         value = ''
         if widget.isChecked():
             value = max(725.4, getFloat('txtFigM') * 0.02)
-        setText('txtFig', value)
+        setNumeric('txtFig', value)
     elif widgetName == 'chkLeg':
         value = ''
         if widget.isChecked():
             value = getFloat('txtPlu') + getFloat('txtCar') + getFloat('txtRes')
-        setText('txtLeg', value)
+        setNumeric('txtLeg', value)
     elif widgetName == 'chkPar':
         value = ''
         if widget.isChecked():
             value = max(244, getFloat('txtParM') * 0.02)
-        setText('txtPar', value)
+        setNumeric('txtPar', value)
     elif widgetName == 'chkPro':
         value = ''
         if widget.isChecked():
             value = 22.2
-        setText('txtPro', value)
+        setNumeric('txtPro', value)
     
     if update:
         updateTotalLlicUrb()    
@@ -807,7 +808,7 @@ def clavChanged(widgetName):
             if aux == 0:
                 aux = 1
             value = aux * 390.66
-        setText('txtClavUni', value)
+        setNumeric('txtClavUni', value)
         
     elif widgetName == 'chkClavMes':
         value = ''
@@ -817,7 +818,7 @@ def clavChanged(widgetName):
             value = 1170.96            
             if aux > 0:
                 value = value + (aux * 65.025)
-        setText('txtClavMes', value)
+        setNumeric('txtClavMes', value)
         
     elif widgetName == 'chkClavPlu':
         value = ''
@@ -829,10 +830,10 @@ def clavChanged(widgetName):
                 value = 910.86
             elif selIndex == 3:
                 value = 1170.96
-        setText('txtClavPlu', value)
+        setNumeric('txtClavPlu', value)
         
     total = getFloat('txtClavUni')+getFloat('txtClavPlu')+getFloat('txtClavMes')
-    setText('txtClavTot', total)   
+    setNumeric('txtClavTot', total)   
     updateTotal()    
     
          
@@ -843,12 +844,12 @@ def garChanged(widgetName):
         value = ''
         if widget.isChecked():
             value = max(1000, getPress() * 0.01)
-        setText('txtGarRes', value)
+        setNumeric('txtGarRes', value)
     elif widgetName == 'chkGarSer':
         value = ''
         if widget.isChecked():
             value = max(600, getPress() * 0.01)
-        setText('txtGarSer', value)
+        setNumeric('txtGarSer', value)
     updateTotal()      
 
     
@@ -860,12 +861,12 @@ def bonChanged(widgetName):
         icio = float(press) * 0.04
         if widget.isChecked():
             icio = icio * 0.05
-        setText("txtIcio", icio)            
+        setNumeric("txtIcio", icio)            
     elif widgetName == 'chkBonLlic':
         totalLlic = getTotalLlicUrb()     
         if widget.isChecked():
             totalLlic = totalLlic * 0.05
-        setText("txtLlicTot", totalLlic)   
+        setNumeric("txtLlicTot", totalLlic)   
     updateTotal()         
             
             
