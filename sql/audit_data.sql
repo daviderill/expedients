@@ -250,7 +250,45 @@ $BODY$
 LANGUAGE 'plpgsql';
 
 
+-- Function to disable/stop audit of selected schema
+CREATE OR REPLACE FUNCTION audit.audit_schema_stop(schema_name varchar) RETURNS void AS $BODY$
+DECLARE
+    aux text;
+    rec record;
+	
+BEGIN
+    FOR rec IN SELECT * FROM pg_tables WHERE schemaname = schema_name LOOP
+		aux:= schema_name||'.'||quote_ident(rec.tablename);
+		EXECUTE 'ALTER TABLE '||aux||' DISABLE trigger audit_trigger_row';
+        EXECUTE 'ALTER TABLE '||aux||' DISABLE trigger audit_trigger_stm';
+    END LOOP;
+END;
+$BODY$
+LANGUAGE 'plpgsql';
+
+
+-- Function to enable/start audit of selected schema
+CREATE OR REPLACE FUNCTION audit.audit_schema_start(schema_name varchar) RETURNS void AS $BODY$
+DECLARE
+	aux text;
+    rec record;
+	
+BEGIN
+    FOR rec IN SELECT * FROM pg_tables WHERE schemaname = schema_name LOOP
+		aux:= schema_name||'.'||quote_ident(rec.tablename);
+		EXECUTE 'ALTER TABLE '||aux||' ENABLE trigger audit_trigger_row';
+        EXECUTE 'ALTER TABLE '||aux||' ENABLE trigger audit_trigger_stm';
+    END LOOP;
+END;
+$BODY$
+LANGUAGE 'plpgsql';
+
+
 
 -- To audit all the tables of the schema, execute:
 SELECT audit.audit_schema('data');
+
+-- Start/Stop auditing
+SELECT audit.audit_schema_start('data');
+SELECT audit.audit_schema_stop('data');
 
