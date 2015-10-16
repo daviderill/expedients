@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'exp_om.ui'
 #
-# Created: Fri Oct 16 13:50:00 2015
+# Created: Fri Oct 16 16:30:21 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -701,6 +701,22 @@ class Ui_Dialog(object):
         self.btnRefresh.setIcon(icon2)
         self.btnRefresh.setIconSize(QtCore.QSize(24, 24))
         self.btnRefresh.setObjectName(_fromUtf8("btnRefresh"))
+        self.btnComposition = QtGui.QPushButton(Dialog)
+        self.btnComposition.setGeometry(QtCore.QRect(370, 500, 61, 31))
+        self.btnComposition.setText(_fromUtf8(""))
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap(_fromUtf8("icons/edit.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btnComposition.setIcon(icon3)
+        self.btnComposition.setIconSize(QtCore.QSize(24, 24))
+        self.btnComposition.setObjectName(_fromUtf8("btnComposition"))
+        self.btnPdf = QtGui.QPushButton(Dialog)
+        self.btnPdf.setGeometry(QtCore.QRect(300, 500, 61, 31))
+        self.btnPdf.setText(_fromUtf8(""))
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap(_fromUtf8("icons/pdf.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btnPdf.setIcon(icon4)
+        self.btnPdf.setIconSize(QtCore.QSize(24, 24))
+        self.btnPdf.setObjectName(_fromUtf8("btnPdf"))
 
         self.retranslateUi(Dialog)
         self.tabMain.setCurrentIndex(0)
@@ -886,4 +902,6 @@ class Ui_Dialog(object):
         self.btnSave.setToolTip(_translate("Dialog", "Desar", None))
         self.btnClose.setToolTip(_translate("Dialog", "Sortir", None))
         self.btnRefresh.setToolTip(_translate("Dialog", "Actualitzar", None))
+        self.btnComposition.setToolTip(_translate("Dialog", "Editar composició", None))
+        self.btnPdf.setToolTip(_translate("Dialog", "Obrir PDF", None))
 
