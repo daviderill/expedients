@@ -34,6 +34,10 @@ ALTER TABLE "data"."exp_om"
 DROP CONSTRAINT "fk_exp_om_immoble";
 
 UPDATE "data"."exp_om" SET immoble_id = null WHERE immoble_id = '';
+
+DELETE FROM ibi USING ibi AS aux
+WHERE ibi.refcat20 = aux.refcat20 AND ibi.id < aux.id;
+
 ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_immoble" FOREIGN KEY ("immoble_id") REFERENCES "data"."ibi" ("refcat20") ON DELETE SET NULL ON UPDATE CASCADE;
 
 UPDATE "data".ibi SET carrer_t = trim(carrer_t), adreca_t = trim(adreca_t);

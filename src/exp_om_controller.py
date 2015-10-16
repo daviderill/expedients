@@ -708,7 +708,7 @@ def liqAjSelected():
 
     value = ''
     if chkLiqAj.isChecked():
-        setText('txtLiqAj', getStringValue('txtPress'))
+        value = getStringValue('txtPress')
     setText('txtLiqAj', value)
     importEdited('txtLiqAj')
             

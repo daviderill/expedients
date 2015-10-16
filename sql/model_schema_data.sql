@@ -55,15 +55,6 @@ CONSTRAINT "ibi_pkey" PRIMARY KEY ("refcat20")
 );
 
 
-DROP TABLE IF EXISTS "data"."immoble";
-CREATE TABLE "data"."immoble" (
-"id" varchar(20),
-"refcat" varchar(14),
-"adreca" varchar(200),
-PRIMARY KEY ("id") 
-);
-
-
 DROP TABLE IF EXISTS "data"."juridica";
 CREATE TABLE "data"."juridica" (
 "id" varchar(9),
