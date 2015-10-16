@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'exp_om.ui'
 #
-# Created: Thu Oct 15 18:52:16 2015
+# Created: Fri Oct 16 10:34:41 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -197,7 +197,7 @@ class Ui_Dialog(object):
         self.txtRefcat20 = QtGui.QLineEdit(self.gb3Emplasament)
         self.txtRefcat20.setEnabled(False)
         self.txtRefcat20.setGeometry(QtCore.QRect(370, 20, 141, 20))
-        self.txtRefcat20.setMaxLength(20)
+        self.txtRefcat20.setMaxLength(25)
         self.txtRefcat20.setObjectName(_fromUtf8("txtRefcat20"))
         self.cboEmp = QtGui.QComboBox(self.gb3Emplasament)
         self.cboEmp.setGeometry(QtCore.QRect(110, 50, 401, 22))
@@ -644,7 +644,7 @@ class Ui_Dialog(object):
         self.btnRefresh.setObjectName(_fromUtf8("btnRefresh"))
 
         self.retranslateUi(Dialog)
-        self.tabMain.setCurrentIndex(1)
+        self.tabMain.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         Dialog.setTabOrder(self.tabMain, self.txtId)
         Dialog.setTabOrder(self.txtId, self.txtNumExp)

@@ -238,6 +238,7 @@ def loadImmobles():
 
     global listImmobles
     sql = "SELECT id || ' - ' || adreca FROM data.immoble WHERE refcat = '"+refcat.text()+"' ORDER BY id"    
+    sql = "SELECT refcat20 || ' - ' || adreca_t FROM data.ibi WHERE refcat14 = '"+refcat.text()+"' ORDER BY id"    
     listImmobles = queryToList(sql)
     setComboModel(cboEmp, listImmobles)        
 
@@ -679,7 +680,7 @@ def empChanged():
 
     refcat20 = getSelectedItem("cboEmp")
     if refcat20 is not None:
-        refcat20 = refcat20[:20]
+        refcat20 = refcat20[:23]
     txtRefcat20.setText(refcat20)    
     
         

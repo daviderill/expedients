@@ -51,7 +51,7 @@ CREATE TABLE "data"."ibi" (
 "pis_t" varchar,
 "porta_t" varchar,
 "adreca_t" varchar,
-CONSTRAINT "ibi_pkey" PRIMARY KEY ("id")
+CONSTRAINT "ibi_pkey" PRIMARY KEY ("refcat20")
 );
 
 
@@ -244,7 +244,7 @@ ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_tecnic_1" FOREIGN KEY ("di
 
 ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_tecnic_2" FOREIGN KEY ("executor_id") REFERENCES "data"."tecnic" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
-ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_immoble" FOREIGN KEY ("immoble_id") REFERENCES "data"."immoble" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_immoble" FOREIGN KEY ("immoble_id") REFERENCES "data"."ibi" ("refcat20") ON DELETE SET NULL ON UPDATE CASCADE;
 
 ALTER TABLE "data"."press_om" ADD CONSTRAINT "fk_press_om_exp_om" FOREIGN KEY ("om_id") REFERENCES "data"."exp_om" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 

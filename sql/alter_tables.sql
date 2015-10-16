@@ -22,4 +22,21 @@ ADD COLUMN "num_colegiat" varchar(100),
 ADD COLUMN "observacions" text;
 
 
+-- 16/10/2015
+DROP TABLE IF EXISTS "data"."immoble"; 
+
+ALTER TABLE "data"."ibi"
+DROP CONSTRAINT "ibi_pkey";
+ALTER TABLE "data"."ibi"
+ADD PRIMARY KEY ("refcat20");
+
+ALTER TABLE "data"."exp_om"
+DROP CONSTRAINT "fk_exp_om_immoble";
+
+UPDATE "data"."exp_om" SET immoble_id = null WHERE immoble_id = '';
+ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_immoble" FOREIGN KEY ("immoble_id") REFERENCES "data"."ibi" ("refcat20") ON DELETE SET NULL ON UPDATE CASCADE;
+
+UPDATE "data".ibi SET carrer_t = trim(carrer_t), adreca_t = trim(adreca_t);
+
+
 

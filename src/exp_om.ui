@@ -29,7 +29,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tabDades">
     <attribute name="title">
@@ -682,7 +682,7 @@
        </rect>
       </property>
       <property name="maxLength">
-       <number>20</number>
+       <number>25</number>
       </property>
      </widget>
      <widget class="QComboBox" name="cboEmp">

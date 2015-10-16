@@ -151,6 +151,7 @@ def dataChanged():
 def loadImmobles():
 
     sql = "SELECT id || ' - ' || adreca FROM data.immoble WHERE refcat = '"+refcat.text()+"' ORDER BY id"
+    sql = "SELECT refcat20 || ' - ' || adreca_t FROM data.ibi WHERE refcat14 = '"+refcat.text()+"' ORDER BY id"
     listImmobles = queryToList(sql)
     setComboModel(cboEmp, listImmobles)   
 
@@ -189,7 +190,7 @@ def empChanged():
     
     elem = getSelectedItem("cboEmp")
     if elem is not None:
-        elem = elem[:20]
+        elem = elem[:23]
         filter_ = "parcela_id = '"+refcat.text()+"' and immoble_id = '"+elem+"'"
     else:
         filter_ = "parcela_id = '"+refcat.text()+"'"
