@@ -147,7 +147,7 @@ def boldGroupBoxes():
     _dialog.findChild(QGroupBox, "gb2Interessat").setStyleSheet("QGroupBox { font-weight: bold; } ")
     _dialog.findChild(QGroupBox, "gb3Emplasament").setStyleSheet("QGroupBox { font-weight: bold; } ")
     _dialog.findChild(QGroupBox, "gbProjecte").setStyleSheet("QGroupBox { font-weight: bold; } ")
-    _dialog.findChild(QGroupBox, "gb5").setStyleSheet("QGroupBox { font-weight: bold; } ")
+    _dialog.findChild(QGroupBox, "gbIcio").setStyleSheet("QGroupBox { font-weight: bold; } ")
     _dialog.findChild(QGroupBox, "gbUrb").setStyleSheet("QGroupBox { font-weight: bold; } ")
     _dialog.findChild(QGroupBox, "gbClav").setStyleSheet("QGroupBox { font-weight: bold; } ")
     _dialog.findChild(QGroupBox, "gbTot").setStyleSheet("QGroupBox { font-weight: bold; } ")
@@ -237,7 +237,6 @@ def loadData():
 def loadImmobles():
 
     global listImmobles
-    sql = "SELECT id || ' - ' || adreca FROM data.immoble WHERE refcat = '"+refcat.text()+"' ORDER BY id"    
     sql = "SELECT refcat20 || ' - ' || adreca_t FROM data.ibi WHERE refcat14 = '"+refcat.text()+"' ORDER BY id"    
     listImmobles = queryToList(sql)
     setComboModel(cboEmp, listImmobles)        
@@ -322,7 +321,7 @@ def getDadesExpedient():
 def getLiquidacio():
 
     sql = "SELECT pressupost, placa, plu, res, ende, car, mov, fig, leg, par, pro"
-    sql+= ", clav_uni, clav_plu, clav_mes, gar_res, gar_ser, liq_aj"
+    sql+= ", clav_uni, clav_plu, clav_mes, gar_res, gar_ser, liq_aj, bon_icio, bon_llic, total_press, total_liq"
     sql+= " FROM data.press_om WHERE om_id = "+str(_expOmId)
     query = QSqlQuery(sql) 
        
@@ -349,21 +348,26 @@ def getLiquidacio():
         setText("txtClavMesN", getQueryValue(query, 13))     
         setChecked("chkGarRes", getQueryValue(query, 14))     
         setChecked("chkGarSer", getQueryValue(query, 15))  
+        setChecked("chkBonIcio", getQueryValue(query, 17))         
+        setChecked("chkBonLlic", getQueryValue(query, 18))         
         
         setChecked("chkLiqAj", False) 
         setText("txtLiqAj", '')             
         value = getQueryValue(query, 16)
+        # If 'Liquidació Aj.' is set
         if value <> "":
             setChecked("chkLiqAj", True)  
             setText("txtLiqAj", value)     
+            setText("txtTotalPress", getQueryValue(query, 19))     
+        else:
+            setText("txtTotalLiq", getQueryValue(query, 20))     
+            
         updateTabLiquidacio()
         importEdited(None)
 
 
 def updateTabLiquidacio():
     
-    if getStringValue("txtLiq") is not None:
-        setChecked("chkLiq", True)
     if getStringValue("txtCarM") is not None:
         setChecked("chkCar", True)
     if getStringValue("txtMovM") is not None:
@@ -389,7 +393,9 @@ def updateTabLiquidacio():
     llicChanged('chkPar')        
     clavChanged('chkClavUni')        
     clavChanged('chkClavPlu')        
-    clavChanged('chkClavMes')        
+    clavChanged('chkClavMes')   
+    bonChanged('chkBonIcio')    
+    bonChanged('chkBonLlic')    
     updateTotalLlicUrb()
     
 
@@ -484,14 +490,15 @@ def saveLiquidacio():
         query = QSqlQuery(sql)    
         if (query.next()):    
             expId = query.value(0)
-        sql= "INSERT INTO data.press_om (pressupost, placa, plu, res, ende, car, mov, fig, leg, par, pro, clav_uni, clav_plu, clav_mes, gar_res, gar_ser, liq_aj, om_id)"
-        sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"         
+        sql= "INSERT INTO data.press_om (pressupost, placa, plu, res, ende, car, mov, fig, leg, par, pro, clav_uni, clav_plu, clav_mes, gar_res, gar_ser"
+        sql+= ", liq_aj, om_id, bon_icio, bon_llic, total_press, total_liq)"
+        sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"         
         query.prepare(sql)   
-        query.bindValue(17, expId)         
+        query.bindValue(":om_id", expId)         
     else:   
         sql = "UPDATE data.press_om SET"
-        sql+= " pressupost=:0, placa=:1, plu=:2, res=:3, ende=:4, car=:5, mov=:6, fig=:7, leg=:8, par=:9"
-        sql+= ", pro=:10, clav_uni=:11, clav_plu=:12, clav_mes=:13, gar_res=:14, gar_ser=:15, liq_aj=:16"
+        sql+= " pressupost=:0, placa=:1, plu=:2, res=:3, ende=:4, car=:5, mov=:6, fig=:7, leg=:8, par=:9, pro=:10"
+        sql+= ", clav_uni=:11, clav_plu=:12, clav_mes=:13, gar_res=:14, gar_ser=:15, liq_aj=:16, bon_icio=:17, bon_llic=:18, total_press=:19, total_liq=:20"
         sql+= " WHERE om_id=:om_id"                
         query.prepare(sql)                
         query.bindValue(":om_id", _expOmId) 
@@ -527,7 +534,11 @@ def saveLiquidacio():
     query.bindValue(14, isChecked("chkGarRes")) 
     query.bindValue(15, isChecked("chkGarSer")) 
     if isChecked("chkLiqAj"):      
-        query.bindValue(16, getStringValue("txtLiqAj"))     
+        query.bindValue(16, getStringValue("txtLiqAj"))   
+    query.bindValue(17, isChecked("chkBonIcio")) 
+    query.bindValue(18, isChecked("chkBonLlic")) 
+    query.bindValue(19, getStringValue("txtTotalPress")) 
+    query.bindValue(20, getStringValue("txtTotalLiq")) 
     
     # Execute SQL
     result = query.exec_()
@@ -544,7 +555,7 @@ def getPress():
         value = txtLiqAj.text().replace(",", ".")    
         txtLiqAj.setText(value)        
         if not isNumber(value):
-            #dshowWarning(u"Format numèric incorrecte")
+            #showWarning(u"Format numèric incorrecte")
             return default        
     else:
         value = txtPress.text().replace(",", ".")
@@ -570,26 +581,13 @@ def updateTotalLlicUrb():
         
 def updateTotal():
     
-    total = getFloat('txtIcio')+getFloat('txtLlicTot')+getFloat('txtClavTot')+getFloat('txtPlaca')
-    
-    # TODO: Calcular ICIO, Llic amb Pressupost i Liquidació Aj.
-    press = getStringValue('txtPress')
-    liqAj = getStringValue('txtLiqAj')
-    
-    # Liquidació Aj. està seleccionat
-    if chkLiqAj.isChecked():
-#         totalIcio = calculateIcio(press)
-#         totalLlic = calculateLlic(press)
-#        total = totalIcio + totalLlic + getFloat('txtClavTot') + getFloat('txtPlaca')
-        setText('txtTotalLiq', '')          
-        setText('txtTotalLiq_2', total)  
-    else:
-#         totalIcio = calculateIcio(liqAj)
-#         totalLlic = calculateLlic(liqAj)        
-#        total = totalIcio + totalLlic + getFloat('txtClavTot') + getFloat('txtPlaca')
+    total = getFloat('txtIcio')+getFloat('txtLlicTot')+getFloat('txtClavTot')+getFloat('txtPlaca')    
+    # If 'Liquidació Aj.' is selected
+    if chkLiqAj.isChecked():  
         setText('txtTotalLiq', total)  
-        setText('txtTotalLiq_2', '')         
-         
+    else:
+        setText('txtTotalPress', total)  
+
       
 def clearNotificacions():       
     txtSolDades.setText('')
@@ -727,6 +725,8 @@ def importEdited(widgetName):
     llicChanged('chkPro')
     garChanged('chkGarRes')
     garChanged('chkGarSer')
+    bonChanged('chkBonIcio')
+    bonChanged('chkBonLlic')
     updateTotalLlicUrb()
     updateTotal()
     
@@ -849,12 +849,9 @@ def garChanged(widgetName):
         if widget.isChecked():
             value = max(600, getPress() * 0.01)
         setText('txtGarSer', value)
-        
     updateTotal()      
-    #total = getFloat('txtGarRes')+getFloat('txtGarSer')
-    #setText('txtClavTot', total)
-    
 
+    
 def bonChanged(widgetName):
     
     widget = _dialog.findChild(QCheckBox, widgetName)

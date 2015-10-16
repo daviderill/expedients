@@ -733,7 +733,7 @@
       <number>15</number>
      </property>
     </widget>
-    <widget class="QGroupBox" name="gb5">
+    <widget class="QGroupBox" name="gbIcio">
      <property name="geometry">
       <rect>
        <x>230</x>
@@ -1413,22 +1413,6 @@
        <string>Taxa de Clavegueram:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="nif_solic_24">
-      <property name="geometry">
-       <rect>
-        <x>-140</x>
-        <y>400</y>
-        <width>113</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="maxLength">
-       <number>15</number>
-      </property>
-     </widget>
      <widget class="QLineEdit" name="txtClavTot">
       <property name="enabled">
        <bool>false</bool>
@@ -1475,19 +1459,6 @@
       </property>
       <property name="maxLength">
        <number>15</number>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lblNumExp_82">
-      <property name="geometry">
-       <rect>
-        <x>220</x>
-        <y>240</y>
-        <width>111</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Total Clavegueram</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="txtClavPlu">
@@ -1554,81 +1525,7 @@
      <property name="title">
       <string>Total Impost i Taxes</string>
      </property>
-     <widget class="QLineEdit" name="nif_solic_79">
-      <property name="geometry">
-       <rect>
-        <x>270</x>
-        <y>20</y>
-        <width>51</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="maxLength">
-       <number>15</number>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lblNumExp_84">
-      <property name="geometry">
-       <rect>
-        <x>-250</x>
-        <y>400</y>
-        <width>111</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Taxa de Clavegueram:</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="nif_solic_25">
-      <property name="geometry">
-       <rect>
-        <x>-140</x>
-        <y>400</y>
-        <width>113</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="maxLength">
-       <number>15</number>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="nif_solic_39">
-      <property name="geometry">
-       <rect>
-        <x>320</x>
-        <y>240</y>
-        <width>113</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="maxLength">
-       <number>15</number>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lblNumExp_87">
-      <property name="geometry">
-       <rect>
-        <x>220</x>
-        <y>240</y>
-        <width>111</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Total Clavegueram</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="txtTotalLiq">
+     <widget class="QLineEdit" name="txtTotalPress">
       <property name="enabled">
        <bool>false</bool>
       </property>
@@ -1660,7 +1557,7 @@
        <string>Autoliquidació:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtTotalLiq_2">
+     <widget class="QLineEdit" name="txtTotalLiq">
       <property name="enabled">
        <bool>false</bool>
       </property>
@@ -1799,7 +1696,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QLabel" name="lblTot_4">
+    <widget class="QLabel" name="lblPress">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -2348,19 +2245,15 @@
   <tabstop>btnClose</tabstop>
   <tabstop>nif_solic_75</tabstop>
   <tabstop>txtClavTot</tabstop>
-  <tabstop>nif_solic_79</tabstop>
-  <tabstop>txtTotalLiq</tabstop>
+  <tabstop>txtTotalPress</tabstop>
   <tabstop>chkGarRes</tabstop>
   <tabstop>txtGarRes</tabstop>
   <tabstop>chkGarSer</tabstop>
   <tabstop>txtGarSer</tabstop>
-  <tabstop>nif_solic_24</tabstop>
   <tabstop>txtLlicTot</tabstop>
   <tabstop>txtPar</tabstop>
   <tabstop>txtPro</tabstop>
-  <tabstop>nif_solic_25</tabstop>
   <tabstop>nif_solic_36</tabstop>
-  <tabstop>nif_solic_39</tabstop>
   <tabstop>txtCar</tabstop>
   <tabstop>txtEnd</tabstop>
   <tabstop>txtFig</tabstop>

@@ -38,5 +38,12 @@ ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_immoble" FOREIGN KEY ("imm
 
 UPDATE "data".ibi SET carrer_t = trim(carrer_t), adreca_t = trim(adreca_t);
 
+ALTER TABLE "data"."press_om"
+ADD COLUMN "bon_icio" bool,
+ADD COLUMN "bon_llic" bool,
+ADD COLUMN "total_press" numeric(15,2),
+ADD COLUMN "total_liq" numeric(15,2);
+
+
 
 
