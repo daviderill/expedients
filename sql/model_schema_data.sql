@@ -33,6 +33,7 @@ CREATE TABLE "data"."exp_om" (
 "data_liq" date,
 "documentacio" text,
 "estat_id" varchar(200),
+"notif_persona" varchar(200),
 PRIMARY KEY ("id") 
 );
 

@@ -42,11 +42,11 @@ def openExpOm(dialog, parcela, expOmId = None):
     if expOmId is None:
         
         # Fill date widgets with current Date    
-        dateEntrada.setDate(current_date)
-        dateLlicencia.setDate(current_date)
-        dateVisat.setDate(current_date)   
+        dateLiquidacio.setDate(current_date)
+        #dateLlicencia.setDate(current_date)
+        #dateVisat.setDate(current_date)   
         
-        # Manage 'Tipus solicitatnt'
+        # Manage 'Tipus solicitant'
         getTipusSol() 
         
     else:
@@ -63,7 +63,7 @@ def openExpOm(dialog, parcela, expOmId = None):
 def widgetsToGlobal():
     
     global refcat, lblInfo, txtId, txtNumExp, cboTipus, txtRegEnt, dateLiquidacio, dateEntrada, dateLlicencia
-    global rbFisica, rbJuridica, lblSol, cboSol, cboSolCif, cboRep, txtSolDades, txtAdresa, txtCp, txtPoblacio, txtRefcat20, cboEmp
+    global rbFisica, rbJuridica, lblSol, cboSol, cboSolCif, cboRep, txtSolDades, txtNotifPersona, txtNotifAdresa, txtNotifCp, txtNotifPoblacio, txtRefcat20, cboEmp
     global cboRedactor, cboDirector, cboExecutor, txtRedactor, txtDirector, txtExecutor, dateVisat, txtDoc
     global txtPress, cboClavPlu, chkBonIcio, chkBonLlic, chkLiqAj, txtLiqAj
 
@@ -84,10 +84,11 @@ def widgetsToGlobal():
     cboSol = _dialog.findChild(QComboBox, "cboSol")   
     cboSolCif = _dialog.findChild(QComboBox, "cboSolCif")   
     cboRep = _dialog.findChild(QComboBox, "cboRep")   
-    txtSolDades = _dialog.findChild(QLineEdit, "txtSolDades")        
-    txtAdresa = _dialog.findChild(QLineEdit, "txtNotifAdreca")        
-    txtCp = _dialog.findChild(QLineEdit, "txtNotifCp")       
-    txtPoblacio = _dialog.findChild(QLineEdit, "txtNotifPoblacio")          
+    txtSolDades = _dialog.findChild(QLineEdit, "txtSolDades")       
+    txtNotifPersona = _dialog.findChild(QLineEdit, "txtNotifPersona")  
+    txtNotifAdresa = _dialog.findChild(QLineEdit, "txtNotifAdresa")        
+    txtNotifCp = _dialog.findChild(QLineEdit, "txtNotifCp")       
+    txtNotifPoblacio = _dialog.findChild(QLineEdit, "txtNotifPoblacio")          
     txtRefcat20 = _dialog.findChild(QLineEdit, "txtRefcat20")          
     cboEmp = _dialog.findChild(QComboBox, "cboEmp")   
     
@@ -133,9 +134,8 @@ def initConfig():
     # Other default configuration
     boldGroupBoxes()
     _dialog.findChild(QPushButton, "btnOpenDoc").setEnabled(False) 
-    txtRegEnt.setInputMask("999/99")
+    txtRegEnt.setInputMask("9999/99")
     txtNumExp.setEnabled(False)
-    dateLiquidacio.setEnabled(False)
     _dialog.findChild(QLabel, "lblRefcat20").setVisible(False)
     txtRefcat20.setVisible(False)
 
@@ -173,9 +173,9 @@ def setSignals():
     txtRegEnt.editingFinished.connect(entradaChanged)    
     rbFisica.clicked.connect(getTipusSol)    
     rbJuridica.clicked.connect(getTipusSol)    
-    cboSol.currentIndexChanged.connect(partial(solChanged, 'persona'))
-    cboSolCif.currentIndexChanged.connect(partial(solChanged, 'juridica'))
-    cboRep.currentIndexChanged.connect(partial(solChanged, 'representant'))
+    cboSol.activated.connect(partial(solChanged, 'persona'))
+    cboSolCif.activated.connect(partial(solChanged, 'juridica'))
+    cboRep.activated.connect(partial(solChanged, 'representant'))
     cboEmp.currentIndexChanged.connect(empChanged)
     
     # Tab 'Projecte'
@@ -297,7 +297,7 @@ def getDadesExpedient():
             i=i+1
 
         setText("txtNumHab", getQueryValue(query, 10))
-        setText("txtNotifAdreca", getQueryValue(query, 11))
+        setText("txtNotifAdresa", getQueryValue(query, 11))
         setText("txtNotifPoblacio", getQueryValue(query, 12))
         setText("txtNotifCp", getQueryValue(query, 13))
         setSelectedItem("cboRedactor", getQueryValue(query, 14))  
@@ -449,7 +449,7 @@ def saveDadesExpedient():
     query.bindValue(8, getStringValue("refcat")) 
     query.bindValue(9, getStringValue("txtRefcat20")) 
     query.bindValue(10, getStringValue("txtNumHab"))
-    query.bindValue(11, getStringValue("txtNotifAdreca"))
+    query.bindValue(11, getStringValue("txtNotifAdresa"))
     query.bindValue(12, getStringValue("txtNotifPoblacio"))
     query.bindValue(13, getStringValue("txtNotifCp"))
     query.bindValue(14, getSelectedItem("cboRedactor"))
@@ -552,7 +552,6 @@ def getPress():
     default = 0.0
     if chkLiqAj.isChecked():
         value = txtLiqAj.text().replace(",", ".")   
-        print value
         setNumeric('txtLiqAj', value)     
         if not isNumber(value):
             #showWarning(u"Format numèric incorrecte")
@@ -591,9 +590,10 @@ def updateTotal():
       
 def clearNotificacions():       
     txtSolDades.setText('')
-    txtAdresa.setText('')
-    txtCp.setText('')
-    txtPoblacio.setText('')
+    txtNotifPersona.setText('')    
+    txtNotifAdresa.setText('')
+    txtNotifCp.setText('')
+    txtNotifPoblacio.setText('')
            
 
 def showInfo(text, duration = None):
@@ -640,10 +640,10 @@ def entradaChanged():
     
     entrada = txtRegEnt.text()
     if not entrada:
-        showWarning(u"Cal especificar codi del registre d'entrada amb el format: <num>/<any>. Per exemple: 256/15")
+        showWarning(u"Cal especificar codi del registre d'entrada amb el format: <num>/<any>. Per exemple: 1234/15")
         return False     
-    if len(entrada) <> 6:
-        showWarning(u"El registre d'entrada ha de tenir exactament 6 caràcters amb el format: <num>/<any>. Per exemple: 256/15")
+    if len(entrada) <> 7:
+        showWarning(u"El registre d'entrada ha de tenir exactament 7 caràcters amb el format: <num>/<any>. Per exemple: 1234/15")
         #txtRegEnt.setText("")        
         txtRegEnt.selectAll()        
         return False
@@ -661,17 +661,30 @@ def solChanged(aux):
     else:
         table = 'juridica'
         solId = getSelectedItem2("cboSolCif")
+    repId = getSelectedItem2("cboRep")
         
-    sql = "SELECT COALESCE(nom, '') || ' ' || COALESCE(cognom_1, '') || ' ' || COALESCE(cognom_2, '') AS nom_complet, adreca, cp, poblacio "
+    sql = "SELECT COALESCE(nom, '') || ' ' || COALESCE(cognom_1, '') || ' ' || COALESCE(cognom_2, '') AS nom_complet, COALESCE(adreca, ''), COALESCE(cp, ''), COALESCE(poblacio, '') "
+    if aux == 'juridica':    
+        sql+= ", COALESCE(rao_social, '') "
     sql+= "FROM data."+table+" WHERE id = "+solId
     query = QSqlQuery(sql)    
-    if (query.next()):      
-        txtSolDades.setText(query.value(0))
-        txtAdresa.setText(query.value(1))
-        txtCp.setText(query.value(2))
-        txtPoblacio.setText(query.value(3))
+    if (query.next()):     
+        if aux == 'persona':
+            txtSolDades.setText(query.value(0))
+        elif aux == 'juridica': 
+            txtSolDades.setText(query.value(4))
+        txtNotifPersona.setText(query.value(0))        
+        txtNotifAdresa.setText(query.value(1))
+        txtNotifCp.setText(query.value(2))
+        txtNotifPoblacio.setText(query.value(3))
     else:
-        clearNotificacions()
+        if aux == 'representant' and repId == 'null':
+            if rbFisica.isChecked():
+                solChanged('persona')
+            elif rbJuridica.isChecked():
+                solChanged('juridica') 
+        else:
+            clearNotificacions()
         
        
 def empChanged():
@@ -872,9 +885,10 @@ def bonChanged(widgetName):
 # Slots: Window buttons    
 def generateExpedient():
     # Obtenir any a partir de número d'expedient
-    numExp = txtRegEnt.text()
-    anyo = str(numExp[-2:])
-    sql = "SELECT MAX(substr(num_exp, 0, 4)) FROM data.exp_om WHERE substr(reg_ent, 5) = '"+anyo+"'"
+    regEnt = txtRegEnt.text()
+    anyo = str(regEnt[-2:])
+    sql = "SELECT MAX(substr(num_exp, 0, 4)) FROM data.exp_om WHERE substr(reg_ent, 6) = '"+anyo+"'"
+    print sql
     query = QSqlQuery(sql)    
     if (query.next()): 
         if query.value(0) == '':
@@ -883,7 +897,7 @@ def generateExpedient():
             code = int(query.value(0)) + 1
             value = str(code).zfill(3)+"/"+str(anyo)  
         txtNumExp.setText(value)   
-        dateLiquidacio.setDate(current_date)          
+        dateEntrada.setDate(current_date)          
     
 def manageFisica():
     iface.showAttributeTable(layerFisica)
@@ -917,7 +931,12 @@ def checkDocument():
 def refresh():
     loadData()
     setComboModel(cboTipus, listTipus)
-    setComboModel(cboSol, listNif)       
+    setComboModel(cboSol, listNif)
+    setComboModel(cboSolCif, listCif)
+    setComboModel(cboRep, listNif)
+    setComboModel(cboRedactor, listTecnic)
+    setComboModel(cboDirector, listTecnic)
+    setComboModel(cboExecutor, listTecnic)
          
 def save():
     result = saveDadesExpedient()

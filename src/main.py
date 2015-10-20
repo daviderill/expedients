@@ -123,12 +123,15 @@ def getExpedients(filter_):
     model.setSort(0, Qt.AscendingOrder)	
     model.setEditStrategy(QSqlTableModel.OnRowChange)   # OnManualSubmit
     model.select()
-    model.setHeaderData(0, Qt.Horizontal, "Id");
-    model.setHeaderData(1, Qt.Horizontal, "Num. Exp");
+    model.setHeaderData(0, Qt.Horizontal, "Id AutoLiq.");
+    model.setHeaderData(1, Qt.Horizontal, "Num. Exp.");
+    model.setHeaderData(2, Qt.Horizontal, "Data Entrada");
+    model.setHeaderData(23, Qt.Horizontal, "Data AutoLiq.");    
     model.dataChanged.connect(dataChanged)
 
     # Set this model to the view
     tblExp.setModel(model)
+    tblExp.horizontalHeader().moveSection(23, 1)
     hideColumns(tblExp)
     verticalHeader = tblExp.verticalHeader()
     verticalHeader.setResizeMode(QHeaderView.Fixed)
@@ -137,9 +140,9 @@ def getExpedients(filter_):
        
    
 def hideColumns(tblExp):
-    for i in range (5, 16):	
+    for i in range (3, 23):	
         tblExp.hideColumn(i)	
-    for i in range (18, 23):	
+    for i in range (24, 27):	
         tblExp.hideColumn(i)			
 
 def dataChanged():

@@ -49,5 +49,8 @@ ADD COLUMN "total_press" numeric(15,2),
 ADD COLUMN "total_liq" numeric(15,2);
 
 
+-- 20/10/2015
+ALTER TABLE "data"."exp_om"
+ADD COLUMN "notif_persona" varchar(200);
 
 

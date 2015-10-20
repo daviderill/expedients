@@ -50,8 +50,8 @@
      <widget class="QLabel" name="lblNumExp">
       <property name="geometry">
        <rect>
-        <x>430</x>
-        <y>20</y>
+        <x>220</x>
+        <y>110</y>
         <width>51</width>
         <height>20</height>
        </rect>
@@ -69,8 +69,8 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>510</x>
-        <y>20</y>
+        <x>330</x>
+        <y>110</y>
         <width>81</width>
         <height>20</height>
        </rect>
@@ -262,7 +262,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Id autoliquidació:</string>
+       <string>Id Autoliquidació:</string>
       </property>
      </widget>
      <widget class="QDateEdit" name="dateLiquidacio">
@@ -337,7 +337,7 @@
      <widget class="QPushButton" name="btnGenExp">
       <property name="geometry">
        <rect>
-        <x>510</x>
+        <x>100</x>
         <y>110</y>
         <width>81</width>
         <height>23</height>
@@ -363,7 +363,7 @@
        <x>10</x>
        <y>160</y>
        <width>601</width>
-       <height>171</height>
+       <height>201</height>
       </rect>
      </property>
      <property name="title">
@@ -399,7 +399,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>110</y>
+        <y>140</y>
         <width>101</width>
         <height>21</height>
        </rect>
@@ -408,11 +408,11 @@
        <string>Adreça notificació:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtNotifAdreca">
+     <widget class="QLineEdit" name="txtNotifAdresa">
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>110</y>
+        <y>140</y>
         <width>351</width>
         <height>20</height>
        </rect>
@@ -421,14 +421,14 @@
        <string/>
       </property>
       <property name="maxLength">
-       <number>100</number>
+       <number>200</number>
       </property>
      </widget>
      <widget class="QLabel" name="lblCp">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>140</y>
+        <y>170</y>
         <width>91</width>
         <height>21</height>
        </rect>
@@ -441,7 +441,7 @@
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>140</y>
+        <y>170</y>
         <width>111</width>
         <height>20</height>
        </rect>
@@ -457,7 +457,7 @@
       <property name="geometry">
        <rect>
         <x>480</x>
-        <y>110</y>
+        <y>140</y>
         <width>111</width>
         <height>23</height>
        </rect>
@@ -470,7 +470,7 @@
       <property name="geometry">
        <rect>
         <x>480</x>
-        <y>140</y>
+        <y>170</y>
         <width>111</width>
         <height>23</height>
        </rect>
@@ -492,30 +492,14 @@
        </rect>
       </property>
       <property name="maxLength">
-       <number>15</number>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="txtRepDades">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>240</x>
-        <y>80</y>
-        <width>351</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="maxLength">
-       <number>15</number>
+       <number>200</number>
       </property>
      </widget>
      <widget class="QLineEdit" name="txtNotifPoblacio">
       <property name="geometry">
        <rect>
         <x>240</x>
-        <y>140</y>
+        <y>170</y>
         <width>221</width>
         <height>20</height>
        </rect>
@@ -608,12 +592,41 @@
        <bool>true</bool>
       </property>
      </widget>
+     <widget class="QLineEdit" name="txtNotifPersona">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>110</y>
+        <width>351</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>250</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblAdre_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>110</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Persona notificació:</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QGroupBox" name="gb3Emplasament">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>340</y>
+       <y>370</y>
        <width>601</width>
        <height>81</height>
       </rect>
@@ -2598,8 +2611,7 @@
   <tabstop>cboSolCif</tabstop>
   <tabstop>txtSolDades</tabstop>
   <tabstop>cboRep</tabstop>
-  <tabstop>txtRepDades</tabstop>
-  <tabstop>txtNotifAdreca</tabstop>
+  <tabstop>txtNotifAdresa</tabstop>
   <tabstop>btnJuridica</tabstop>
   <tabstop>txtNotifCp</tabstop>
   <tabstop>txtNotifPoblacio</tabstop>
