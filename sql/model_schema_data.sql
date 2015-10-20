@@ -257,4 +257,4 @@ CREATE VIEW "data"."v_exp_per_parcela" AS
               WHERE ((exp_om.parcela_id)::text = (ur_parcela.refcat)::text))
             ELSE NULL::bigint
         END AS total
-   FROM ur_parcela;
+   FROM carto.ur_parcela;

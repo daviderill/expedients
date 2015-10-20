@@ -243,8 +243,8 @@ def delete():
     for i in range(0, len(selectedList)):
         row = selectedList[i].row()               #QModelIndex
         id = model.record(row).value("id")		  # @ReservedAssignment
-        num_exp = model.record(row).value("num_exp")
-        msg = msg + num_exp + ", "		
+        reg_ent = model.record(row).value("reg_ent")
+        msg = msg + reg_ent + ", "		
         listId = listId + str(id) + ", "
     msg = msg[:-2]
     listId = listId[:-2]	

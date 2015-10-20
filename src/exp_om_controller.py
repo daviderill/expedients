@@ -466,8 +466,7 @@ def saveDadesExpedient():
     # Execute SQL
     result = query.exec_()
     if result is False:
-        showWarning(query.lastError().text(), 100)
-        showWarning(query.lastQuery(), 100)        
+        showWarning("Error en la consulta: "+query.lastQuery(), 30)          
     
     return result
 
@@ -491,10 +490,10 @@ def saveLiquidacio():
         if (query.next()):    
             expId = query.value(0)
         sql= "INSERT INTO data.press_om (pressupost, placa, plu, res, ende, car, mov, fig, leg, par, pro, clav_uni, clav_plu, clav_mes, gar_res, gar_ser"
-        sql+= ", liq_aj, om_id, bon_icio, bon_llic, total_press, total_liq)"
+        sql+= ", liq_aj, bon_icio, bon_llic, total_press, total_liq, om_id)"
         sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"         
-        query.prepare(sql)   
-        query.bindValue(":om_id", expId)         
+        query.prepare(sql)         
+        query.bindValue(21, expId)         
     else:   
         sql = "UPDATE data.press_om SET"
         sql+= " pressupost=:0, placa=:1, plu=:2, res=:3, ende=:4, car=:5, mov=:6, fig=:7, leg=:8, par=:9, pro=:10"
@@ -543,7 +542,7 @@ def saveLiquidacio():
     # Execute SQL
     result = query.exec_()
     if result is False:
-        showWarning(query.lastError().text(), 100)
+        showWarning("Error en la consulta: "+query.lastQuery(), 30)            
     else:
         showInfo("Expedient guardat correctament")
                   
