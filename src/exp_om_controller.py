@@ -21,7 +21,7 @@ def openExpOm(dialog, parcela, expOmId = None):
     current_date = datetime.strptime(date_aux, "%d/%m/%Y")
 
     # Save reference to the QGIS interface
-    MSG_DURATION = 5	
+    MSG_DURATION = 5
     _iface = iface
     getLayers()
 
@@ -29,43 +29,36 @@ def openExpOm(dialog, parcela, expOmId = None):
     loadData()
 
     # Get dialog and his widgets
-    _parcela = parcela		
-    _dialog = dialog	
-    _expOmId = None            
+    _parcela = parcela
+    _dialog = dialog
+    _expOmId = None
     setDialog(dialog)
-    widgetsToGlobal()	
+    widgetsToGlobal()
     
     # Initial configuration
     initConfig()
     
     # Check if we are in mode 'Create' or 'Update'
     if expOmId is None:
-        
-        # Fill date widgets with current Date    
-        dateLiquidacio.setDate(current_date)
-        #dateLlicencia.setDate(current_date)
-        #dateVisat.setDate(current_date)   
-        
+        # Fill 'Data AutoLiquidació' with current Date    
+        setDate("dateLiquidacio", current_date)
         # Manage 'Tipus solicitant'
-        getTipusSol() 
-        
+        getTipusSol()
     else:
         _expOmId = expOmId
         getDadesExpedient()
         getLiquidacio()
         checkDocument()           
     
-
     # Open form as modeless dialog
     _dialog.show()
     
 
 def widgetsToGlobal():
     
-    global refcat, lblInfo, txtId, txtNumExp, cboTipus, txtRegEnt, dateLiquidacio, dateEntrada, dateLlicencia
-    global rbFisica, rbJuridica, lblSol, cboSol, cboSolCif, cboRep, txtSolDades, txtNotifPersona, txtNotifAdresa, txtNotifCp, txtNotifPoblacio, txtRefcat20, cboEmp
-    global cboRedactor, cboDirector, cboExecutor, txtRedactor, txtDirector, txtExecutor, dateVisat, txtDoc
-    global txtPress, cboClavPlu, chkBonIcio, chkBonLlic, chkLiqAj, txtLiqAj
+    global refcat, lblInfo, txtId, txtNumExp, txtRegEnt
+    global rbFisica, rbJuridica, cboSol, cboSolCif
+    global cboClavPlu, chkBonIcio, chkBonLlic, chkLiqAj
 
     # Tab 'Dades Expedient'  
     refcat = _dialog.findChild(QLineEdit, "refcat")        
@@ -73,57 +66,32 @@ def widgetsToGlobal():
     txtId = _dialog.findChild(QLineEdit, "txtId")        
     txtNumExp = _dialog.findChild(QLineEdit, "txtNumExp")  
     txtRegEnt = _dialog.findChild(QLineEdit, "txtRegEnt")            
-    cboTipus = _dialog.findChild(QComboBox, "cboTipus") 
-    dateLiquidacio = _dialog.findChild(QDateEdit, "dateLiquidacio")      
-    dateEntrada = _dialog.findChild(QDateEdit, "dateEntrada")  
-    dateLlicencia = _dialog.findChild(QDateEdit, "dateLlicencia")  
     
     rbFisica = _dialog.findChild(QRadioButton, "rbFisica")  
     rbJuridica = _dialog.findChild(QRadioButton, "rbJuridica")  
-    lblSol = _dialog.findChild(QLabel, "lblSol")   
     cboSol = _dialog.findChild(QComboBox, "cboSol")   
-    cboSolCif = _dialog.findChild(QComboBox, "cboSolCif")   
-    cboRep = _dialog.findChild(QComboBox, "cboRep")   
-    txtSolDades = _dialog.findChild(QLineEdit, "txtSolDades")       
-    txtNotifPersona = _dialog.findChild(QLineEdit, "txtNotifPersona")  
-    txtNotifAdresa = _dialog.findChild(QLineEdit, "txtNotifAdresa")        
-    txtNotifCp = _dialog.findChild(QLineEdit, "txtNotifCp")       
-    txtNotifPoblacio = _dialog.findChild(QLineEdit, "txtNotifPoblacio")          
-    txtRefcat20 = _dialog.findChild(QLineEdit, "txtRefcat20")          
-    cboEmp = _dialog.findChild(QComboBox, "cboEmp")   
-    
-    # Tab 'Projecte'
-    cboRedactor = _dialog.findChild(QComboBox, "cboRedactor")   
-    cboDirector = _dialog.findChild(QComboBox, "cboDirector")   
-    cboExecutor = _dialog.findChild(QComboBox, "cboExecutor")   
-    txtRedactor = _dialog.findChild(QLineEdit, "txtRedactor")   
-    txtDirector = _dialog.findChild(QLineEdit, "txtDirector")   
-    txtExecutor = _dialog.findChild(QLineEdit, "txtExecutor")   
-    dateVisat = _dialog.findChild(QDateEdit, "dateVisat")  
-    txtDoc = _dialog.findChild(QTextEdit, "txtDoc")   
+    cboSolCif = _dialog.findChild(QComboBox, "cboSolCif")    
     
     # Tab 'Liquidació'
-    txtPress = _dialog.findChild(QLineEdit, "txtPress")    
     cboClavPlu = _dialog.findChild(QComboBox, "cboClavPlu") 
     chkBonIcio = _dialog.findChild(QCheckBox, "chkBonIcio") 
     chkBonLlic = _dialog.findChild(QCheckBox, "chkBonLlic") 
     chkLiqAj = _dialog.findChild(QCheckBox, "chkLiqAj") 
-    txtLiqAj = _dialog.findChild(QLineEdit, "txtLiqAj")    
 
 
 def initConfig():    
     
-    refcat.setText(str(_parcela))
+    setText("refcat", str(_parcela))
 
     # Fill combo boxes and completers with data stored in memory
-    setComboModel(cboTipus, listTipus)
-    setComboModel(cboSol, listNif)
-    setComboModel(cboSolCif, listCif)
-    setComboModel(cboRep, listNif)
-    setComboModel(cboRedactor, listTecnic)
-    setComboModel(cboDirector, listTecnic)
-    setComboModel(cboExecutor, listTecnic)
-    setComboModel(cboClavPlu, listClavPlu)
+    setComboModel("cboTipus", listTipus)
+    setComboModel("cboSol", listNif)
+    setComboModel("cboSolCif", listCif)
+    setComboModel("cboRep", listNif)
+    setComboModel("cboRedactor", listTecnic)
+    setComboModel("cboDirector", listTecnic)
+    setComboModel("cboExecutor", listTecnic)
+    setComboModel("cboClavPlu", listClavPlu)
            
     # Get 'immobles' from selected 'parcela'
     loadImmobles()
@@ -137,7 +105,7 @@ def initConfig():
     txtRegEnt.setInputMask("9999/99")
     txtNumExp.setEnabled(False)
     _dialog.findChild(QLabel, "lblRefcat20").setVisible(False)
-    txtRefcat20.setVisible(False)
+    setVisible("txtRefcat20", False)
 
         
 # Set Group Boxes title font to bold    
@@ -158,11 +126,11 @@ def boldGroupBoxes():
 def setSignals():
   
     # Buttons
-    _dialog.findChild(QPushButton, "btnFisica").clicked.connect(manageFisica)    
-    _dialog.findChild(QPushButton, "btnJuridica").clicked.connect(manageJuridica)    
-    _dialog.findChild(QPushButton, "btnTecnic").clicked.connect(manageTecnic)    
-    _dialog.findChild(QPushButton, "btnDoc").clicked.connect(selectDocument)    
-    _dialog.findChild(QPushButton, "btnOpenDoc").clicked.connect(openDocument)    
+    _dialog.findChild(QPushButton, "btnFisica").clicked.connect(manageFisica)
+    _dialog.findChild(QPushButton, "btnJuridica").clicked.connect(manageJuridica)
+    _dialog.findChild(QPushButton, "btnTecnic").clicked.connect(manageTecnic)
+    _dialog.findChild(QPushButton, "btnDoc").clicked.connect(selectDocument)
+    _dialog.findChild(QPushButton, "btnOpenDoc").clicked.connect(openDocument)
     _dialog.findChild(QPushButton, "btnRefresh").clicked.connect(refresh)    
     _dialog.findChild(QPushButton, "btnSave").clicked.connect(save)    
     _dialog.findChild(QPushButton, "btnClose").clicked.connect(close)
@@ -175,43 +143,43 @@ def setSignals():
     rbJuridica.clicked.connect(getTipusSol)    
     cboSol.activated.connect(partial(solChanged, 'persona'))
     cboSolCif.activated.connect(partial(solChanged, 'juridica'))
-    cboRep.activated.connect(partial(solChanged, 'representant'))
-    cboEmp.currentIndexChanged.connect(empChanged)
+    _dialog.findChild(QComboBox, "cboRep").activated.connect(partial(solChanged, 'representant'))
+    _dialog.findChild(QComboBox, "cboEmp").activated.connect(empChanged)
     
     # Tab 'Projecte'
-    cboRedactor.currentIndexChanged.connect(redactorChanged)
-    cboDirector.currentIndexChanged.connect(directorChanged)
-    cboExecutor.currentIndexChanged.connect(executorChanged)
+    _dialog.findChild(QComboBox, "cboRedactor").activated.connect(redactorChanged)
+    _dialog.findChild(QComboBox, "cboDirector").activated.connect(directorChanged)
+    _dialog.findChild(QComboBox, "cboExecutor").activated.connect(executorChanged)
     
     # Tab 'Liquidació'
-    txtPress.editingFinished.connect(partial(importEdited, 'txtPress')) 
-    chkLiqAj.clicked.connect(liqAjSelected) 
-    txtLiqAj.editingFinished.connect(partial(importEdited, 'txtLiqAj')) 
-    _dialog.findChild(QCheckBox, "chkPlaca").clicked.connect(partial(llicChanged, 'chkPlaca', True))    
-    _dialog.findChild(QCheckBox, "chkPlu").clicked.connect(partial(llicChanged, 'chkPlu', True))    
-    _dialog.findChild(QCheckBox, "chkRes").clicked.connect(partial(llicChanged, 'chkRes', True))    
-    _dialog.findChild(QCheckBox, "chkEnd").clicked.connect(partial(llicChanged, 'chkEnd', True))   
-    _dialog.findChild(QCheckBox, "chkCar").clicked.connect(partial(llicChanged, 'chkCar', True))   
-    _dialog.findChild(QCheckBox, "chkMov").clicked.connect(partial(llicChanged, 'chkMov', True))   
-    _dialog.findChild(QCheckBox, "chkFig").clicked.connect(partial(llicChanged, 'chkFig', True))   
-    _dialog.findChild(QCheckBox, "chkLeg").clicked.connect(partial(llicChanged, 'chkLeg', True))   
-    _dialog.findChild(QCheckBox, "chkPar").clicked.connect(partial(llicChanged, 'chkPar', True))   
-    _dialog.findChild(QCheckBox, "chkPro").clicked.connect(partial(llicChanged, 'chkPro', True))   
-    _dialog.findChild(QLineEdit, "txtCarM").editingFinished.connect(partial(llicChanged, 'chkCar', True))   
-    _dialog.findChild(QLineEdit, "txtMovM").editingFinished.connect(partial(llicChanged, 'chkMov', True))   
-    _dialog.findChild(QLineEdit, "txtFigM").editingFinished.connect(partial(llicChanged, 'chkFig', True))   
-    _dialog.findChild(QLineEdit, "txtParM").editingFinished.connect(partial(llicChanged, 'chkPar', True))   
-    _dialog.findChild(QCheckBox, "chkClavUni").clicked.connect(partial(clavChanged, 'chkClavUni'))   
-    _dialog.findChild(QCheckBox, "chkClavPlu").clicked.connect(partial(clavChanged, 'chkClavPlu'))   
-    _dialog.findChild(QCheckBox, "chkClavMes").clicked.connect(partial(clavChanged, 'chkClavMes'))   
-    _dialog.findChild(QLineEdit, "txtClavUniN").editingFinished.connect(partial(clavChanged, 'chkClavUni'))   
-    cboClavPlu.currentIndexChanged.connect(partial(clavChanged, 'chkClavPlu'))   
-    _dialog.findChild(QLineEdit, "txtClavMesN").editingFinished.connect(partial(clavChanged, 'chkClavMes'))   
-    _dialog.findChild(QCheckBox, "chkGarRes").clicked.connect(partial(garChanged, 'chkGarRes'))   
-    _dialog.findChild(QCheckBox, "chkGarSer").clicked.connect(partial(garChanged, 'chkGarSer'))   
-    chkBonIcio.clicked.connect(partial(bonChanged, 'chkBonIcio'))   
-    chkBonLlic.clicked.connect(partial(bonChanged, 'chkBonLlic'))   
-    
+    _dialog.findChild(QLineEdit, "txtPress").editingFinished.connect(partial(importEdited, 'txtPress'))
+    chkLiqAj.clicked.connect(liqAjSelected)
+    _dialog.findChild(QLineEdit, "txtLiqAj").editingFinished.connect(partial(importEdited, 'txtLiqAj'))
+    _dialog.findChild(QCheckBox, "chkPlaca").clicked.connect(partial(llicChanged, 'chkPlaca', True))
+    _dialog.findChild(QCheckBox, "chkPlu").clicked.connect(partial(llicChanged, 'chkPlu', True))
+    _dialog.findChild(QCheckBox, "chkRes").clicked.connect(partial(llicChanged, 'chkRes', True))
+    _dialog.findChild(QCheckBox, "chkEnd").clicked.connect(partial(llicChanged, 'chkEnd', True))
+    _dialog.findChild(QCheckBox, "chkCar").clicked.connect(partial(llicChanged, 'chkCar', True))
+    _dialog.findChild(QCheckBox, "chkMov").clicked.connect(partial(llicChanged, 'chkMov', True))
+    _dialog.findChild(QCheckBox, "chkFig").clicked.connect(partial(llicChanged, 'chkFig', True))
+    _dialog.findChild(QCheckBox, "chkLeg").clicked.connect(partial(llicChanged, 'chkLeg', True))
+    _dialog.findChild(QCheckBox, "chkPar").clicked.connect(partial(llicChanged, 'chkPar', True))
+    _dialog.findChild(QCheckBox, "chkPro").clicked.connect(partial(llicChanged, 'chkPro', True))
+    _dialog.findChild(QLineEdit, "txtCarM").editingFinished.connect(partial(llicChanged, 'chkCar', True))
+    _dialog.findChild(QLineEdit, "txtMovM").editingFinished.connect(partial(llicChanged, 'chkMov', True))
+    _dialog.findChild(QLineEdit, "txtFigM").editingFinished.connect(partial(llicChanged, 'chkFig', True))
+    _dialog.findChild(QLineEdit, "txtParM").editingFinished.connect(partial(llicChanged, 'chkPar', True))
+    _dialog.findChild(QCheckBox, "chkClavUni").clicked.connect(partial(clavChanged, 'chkClavUni'))
+    _dialog.findChild(QCheckBox, "chkClavPlu").clicked.connect(partial(clavChanged, 'chkClavPlu'))
+    _dialog.findChild(QCheckBox, "chkClavMes").clicked.connect(partial(clavChanged, 'chkClavMes'))
+    _dialog.findChild(QLineEdit, "txtClavUniN").editingFinished.connect(partial(clavChanged, 'chkClavUni'))
+    cboClavPlu.activated.connect(partial(clavChanged, 'chkClavPlu'))
+    _dialog.findChild(QLineEdit, "txtClavMesN").editingFinished.connect(partial(clavChanged, 'chkClavMes'))
+    _dialog.findChild(QCheckBox, "chkGarRes").clicked.connect(partial(garChanged, 'chkGarRes'))
+    _dialog.findChild(QCheckBox, "chkGarSer").clicked.connect(partial(garChanged, 'chkGarSer'))
+    chkBonIcio.clicked.connect(partial(bonChanged, 'chkBonIcio'))
+    chkBonLlic.clicked.connect(partial(bonChanged, 'chkBonLlic'))
+   
         
 # Load combos from domain tables (only first time)
 def loadData():
@@ -241,7 +209,7 @@ def loadImmobles():
     listImmobles = queryToList(sql)
     # Append one to manage 'Comunitat de veins' o 'parceles sense immoble'
     listImmobles.append('9999')
-    setComboModel(cboEmp, listImmobles)        
+    setComboModel("cboEmp", listImmobles)        
 
     
 def getLayers():
@@ -249,7 +217,7 @@ def getLayers():
     global layers, layerFisica, layerJuridica, layerTecnic
        
     # Iterate over all layers
-    layers = _iface.legendInterface().layers()	
+    layers = _iface.legendInterface().layers()
     for layer in layers:
         if layer.name() == 'persona':
             layerFisica = layer
@@ -263,17 +231,17 @@ def getDadesExpedient():
 
     sql = "SELECT num_exp, data_ent, data_llic, tipus_id, tipus_solic_id, solic_persona_id, solic_juridica_id, repre_id"
     sql+= ", parcela_id, immoble_id, num_hab, notif_adreca, notif_poblacio, notif_cp"
-    sql+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions, id, reg_ent, data_liq, documentacio"
+    sql+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions, id, reg_ent, data_liq, documentacio, notif_persona"
     sql+= " FROM data.exp_om WHERE id = "+str(_expOmId)
     query = QSqlQuery(sql) 
        
     if (query.next()):    
-        setText("txtId", getQueryValue(query, 21))        
-        setText("txtRegEnt", getQueryValue(query, 22))        
-        dateLiquidacio.setDate(query.value(23))
-        setText("txtNumExp", getQueryValue(query, 0))            
-        dateEntrada.setDate(query.value(1))
-        dateLlicencia.setDate(query.value(2))
+        setText("txtId", getQueryValue(query, 21))
+        setText("txtRegEnt", getQueryValue(query, 22))
+        setDate("dateLiquidacio", query.value(23))
+        setText("txtNumExp", getQueryValue(query, 0))
+        setDate("dateEntrada", query.value(1))
+        setDate("dateLlicencia", query.value(2))
         setSelectedItem("cboTipus", getQueryValue(query, 3))
         if (query.value(4) == 'persona'):
             rbFisica.setChecked(True)
@@ -284,39 +252,40 @@ def getDadesExpedient():
         else:
             rbJuridica.setChecked(True)
             setSelectedItem("cboSol", None)
-            setSelectedItem("cboSolCif", getQueryValue(query, 6))  
+            setSelectedItem("cboSolCif", getQueryValue(query, 6))
              
-        setSelectedItem("cboRep", getQueryValue(query, 7))   
+        setSelectedItem("cboRep", getQueryValue(query, 7))
         setText("refcat", query.value(8))
         
         # Gestió immoble
         setText("txtRefcat20", getQueryValue(query, 9))
-        cboEmp.setCurrentIndex(0);            
+        _dialog.findChild(QComboBox, "cboEmp").setCurrentIndex(0);
         i = 0
         for elem in listImmobles:
             if getQueryValue(query, 9) in elem:
-                cboEmp.setCurrentIndex(i);    
+                _dialog.findChild(QComboBox, "cboEmp").setCurrentIndex(i);
             i=i+1
 
         setText("txtNumHab", getQueryValue(query, 10))
         setText("txtNotifAdresa", getQueryValue(query, 11))
         setText("txtNotifPoblacio", getQueryValue(query, 12))
         setText("txtNotifCp", getQueryValue(query, 13))
-        setSelectedItem("cboRedactor", getQueryValue(query, 14))  
-        setSelectedItem("cboDirector", getQueryValue(query, 15))  
-        setSelectedItem("cboExecutor", getQueryValue(query, 16))  
+        setSelectedItem("cboRedactor", getQueryValue(query, 14))
+        setSelectedItem("cboDirector", getQueryValue(query, 15))
+        setSelectedItem("cboExecutor", getQueryValue(query, 16))
         setText("txtConstructor", getQueryValue(query, 17))
         setText("txtVisatNum", getQueryValue(query, 18))
-        dateVisat.setDate(query.value(19))
-        setText("txtObs", getQueryValue(query, 20)) 
-        setText("txtDoc", getQueryValue(query, 24)) 
+        setDate("dateVisat", query.value(19))
+        setText("txtObs", getQueryValue(query, 20))
+        setText("txtDoc", getQueryValue(query, 24))
+        setText("txtNotifPersona", getQueryValue(query, 25))
                            
     else:
         showWarning(query.lastError().text(), 100)
     
-    # Disable button if num_exp is already set    
+    # Disable button if num_exp is already set
     if getQueryValue(query, 0) != "":
-        _dialog.findChild(QPushButton, "btnGenExp").setEnabled(False)      
+        _dialog.findChild(QPushButton, "btnGenExp").setEnabled(False)
          
 
 # Get Dades Liquidacio
@@ -325,44 +294,44 @@ def getLiquidacio():
     sql = "SELECT pressupost, placa, plu, res, ende, car, mov, fig, leg, par, pro"
     sql+= ", clav_uni, clav_plu, clav_mes, gar_res, gar_ser, liq_aj, bon_icio, bon_llic, total_press, total_liq"
     sql+= " FROM data.press_om WHERE om_id = "+str(_expOmId)
-    query = QSqlQuery(sql) 
+    query = QSqlQuery(sql)
        
-    if (query.next()):    
-        setNumeric("txtPress", getQueryValue(query, 0))     
-        setChecked("chkPlaca", getQueryValue(query, 1))     
-        setChecked("chkPlu", getQueryValue(query, 2))     
-        setChecked("chkRes", getQueryValue(query, 3))     
-        setChecked("chkEnd", getQueryValue(query, 4))     
-        setNumeric("txtCarM", getQueryValue(query, 5))     
-        setNumeric("txtMovM", getQueryValue(query, 6))     
-        setNumeric("txtFigM", getQueryValue(query, 7))     
-        setChecked("chkLeg", getQueryValue(query, 8))     
-        setNumeric("txtParM", getQueryValue(query, 9))     
-        setChecked("chkPro", getQueryValue(query, 10))     
-        setText("txtClavUniN", getQueryValue(query, 11))     
+    if (query.next()):
+        setNumeric("txtPress", getQueryValue(query, 0))
+        setChecked("chkPlaca", getQueryValue(query, 1))
+        setChecked("chkPlu", getQueryValue(query, 2))
+        setChecked("chkRes", getQueryValue(query, 3))
+        setChecked("chkEnd", getQueryValue(query, 4))
+        setNumeric("txtCarM", getQueryValue(query, 5))
+        setNumeric("txtMovM", getQueryValue(query, 6))
+        setNumeric("txtFigM", getQueryValue(query, 7))
+        setChecked("chkLeg", getQueryValue(query, 8))
+        setNumeric("txtParM", getQueryValue(query, 9))
+        setChecked("chkPro", getQueryValue(query, 10))
+        setText("txtClavUniN", getQueryValue(query, 11))
         aux = getQueryValue(query, 12)
         if aux == 2:
-            cboClavPlu.setCurrentIndex(1)     
+            cboClavPlu.setCurrentIndex(1)
         elif aux == 6:
-            cboClavPlu.setCurrentIndex(2)     
+            cboClavPlu.setCurrentIndex(2)
         elif aux == 10:
-            cboClavPlu.setCurrentIndex(3)     
-        setText("txtClavMesN", getQueryValue(query, 13))     
-        setChecked("chkGarRes", getQueryValue(query, 14))     
-        setChecked("chkGarSer", getQueryValue(query, 15))  
-        setChecked("chkBonIcio", getQueryValue(query, 17))         
-        setChecked("chkBonLlic", getQueryValue(query, 18))         
+            cboClavPlu.setCurrentIndex(3)
+        setText("txtClavMesN", getQueryValue(query, 13))
+        setChecked("chkGarRes", getQueryValue(query, 14))
+        setChecked("chkGarSer", getQueryValue(query, 15))
+        setChecked("chkBonIcio", getQueryValue(query, 17))
+        setChecked("chkBonLlic", getQueryValue(query, 18))
         
-        setChecked("chkLiqAj", False) 
-        setText("txtLiqAj", '')             
+        setChecked("chkLiqAj", False)
+        setText("txtLiqAj", '')
         value = getQueryValue(query, 16)
         # If 'Liquidació Aj.' is set
         if value <> "":
-            setChecked("chkLiqAj", True)  
-            setText("txtLiqAj", value)     
-            setText("txtTotalPress", getQueryValue(query, 19))     
+            setChecked("chkLiqAj", True)
+            setText("txtLiqAj", value)
+            setText("txtTotalPress", getQueryValue(query, 19))
         else:
-            setText("txtTotalLiq", getQueryValue(query, 20))     
+            setText("txtTotalLiq", getQueryValue(query, 20))
             
         updateTabLiquidacio()
         importEdited(None)
@@ -388,16 +357,16 @@ def updateTabLiquidacio():
     if getStringValue("txtClavMesN") is not None:
         setChecked("chkClavMes", True)
         
-    llicChanged('chkPlaca')        
-    llicChanged('chkCar')        
-    llicChanged('chkMov')        
-    llicChanged('chkFig')        
-    llicChanged('chkPar')        
-    clavChanged('chkClavUni')        
-    clavChanged('chkClavPlu')        
-    clavChanged('chkClavMes')   
-    bonChanged('chkBonIcio')    
-    bonChanged('chkBonLlic')    
+    llicChanged('chkPlaca')
+    llicChanged('chkCar')
+    llicChanged('chkMov')
+    llicChanged('chkFig')
+    llicChanged('chkPar')
+    clavChanged('chkClavUni')
+    clavChanged('chkClavPlu')
+    clavChanged('chkClavMes')
+    bonChanged('chkBonIcio')
+    bonChanged('chkBonLlic')
     updateTotalLlicUrb()
     
 
@@ -418,24 +387,24 @@ def saveDadesExpedient():
     if _expOmId is None:
         sql = "INSERT INTO data.exp_om (num_exp, data_ent, data_llic, tipus_id, tipus_solic_id, solic_persona_id, solic_juridica_id, repre_id"
         sql+= ", parcela_id, immoble_id, num_hab, notif_adreca, notif_poblacio, notif_cp"
-        sql+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions, reg_ent, data_liq, documentacio)"
-        sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"           
+        sql+= ", redactor_id, director_id, executor_id, constructor, visat_num, visat_data, observacions, reg_ent, data_liq, documentacio, notif_persona)"
+        sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
     else:
         sql = "UPDATE data.exp_om SET"
         sql+= " num_exp=:0, data_ent=:1, data_llic=:2, tipus_id=:3, tipus_solic_id=:4, solic_persona_id=:5, solic_juridica_id=:6, repre_id=:7"
         sql+= ", parcela_id=:8, immoble_id=:9, num_hab=:10, notif_adreca=:11, notif_poblacio=:12, notif_cp=:13"     
         sql+= ", redactor_id=:14, director_id=:15, executor_id=:16, constructor=:17, visat_num=:18, visat_data=:19, observacions=:20"
-        sql+= ", reg_ent=:21, data_liq=:22, documentacio=:23"
-        sql+= " WHERE id=:id"       
+        sql+= ", reg_ent=:21, data_liq=:22, documentacio=:23, notif_persona=:24"
+        sql+= " WHERE id=:id"
     
     # Bind values
-    query = QSqlQuery()    
-    query.prepare(sql)           
-    query.bindValue(":id", str(_expOmId))    
-    query.bindValue(0, getStringValue("txtNumExp"))            
+    query = QSqlQuery()
+    query.prepare(sql)
+    query.bindValue(":id", str(_expOmId))
+    query.bindValue(0, getStringValue("txtNumExp"))
     query.bindValue(1, dEntrada["value"]) 
     query.bindValue(2, dLlicencia["value"]) 
-    query.bindValue(3, getSelectedItem("cboTipus")) 
+    query.bindValue(3, getSelectedItem("cboTipus"))
 
     # NIF or CIF?
     if rbFisica.isChecked():
@@ -447,9 +416,9 @@ def saveDadesExpedient():
         query.bindValue(5, None)
         query.bindValue(6, getSelectedItem("cboSolCif")) 
     
-    query.bindValue(7, getSelectedItem("cboRep")) 
-    query.bindValue(8, getStringValue("refcat")) 
-    query.bindValue(9, getStringValue("txtRefcat20")) 
+    query.bindValue(7, getSelectedItem("cboRep"))
+    query.bindValue(8, getStringValue("refcat"))
+    query.bindValue(9, getStringValue("txtRefcat20"))
     query.bindValue(10, getStringValue("txtNumHab"))
     query.bindValue(11, getStringValue("txtNotifAdresa"))
     query.bindValue(12, getStringValue("txtNotifPoblacio"))
@@ -463,7 +432,8 @@ def saveDadesExpedient():
     query.bindValue(20, getStringValue("txtObs"))  
     query.bindValue(21, getStringValue("txtRegEnt"))  
     query.bindValue(22, dLiquidacio["value"])  
-    query.bindValue(23, getStringValue("txtDoc"))  
+    query.bindValue(23, getStringValue("txtDoc"))
+    query.bindValue(24, getStringValue("txtNotifPersona"))
 
     # Execute SQL
     result = query.exec_()
@@ -554,13 +524,13 @@ def getPress():
     default = 0.0
     if chkLiqAj.isChecked():
         value = txtLiqAj.text().replace(",", ".")   
-        setNumeric('txtLiqAj', value)     
+        setNumeric("txtLiqAj", value)     
         if not isNumber(value):
             #showWarning(u"Format numèric incorrecte")
             return default        
     else:
-        value = txtPress.text().replace(",", ".")
-        setNumeric('txtPress', value)
+        value = getStringValue("txtPress").replace(",", ".")
+        setNumeric("txtPress", value)
         if not isNumber(value):
             #showWarning(u"Format numèric incorrecte")
             return default
@@ -591,11 +561,11 @@ def updateTotal():
 
       
 def clearNotificacions():       
-    txtSolDades.setText('')
-    txtNotifPersona.setText('')    
-    txtNotifAdresa.setText('')
-    txtNotifCp.setText('')
-    txtNotifPoblacio.setText('')
+    setText("txtSolDades", '')
+    setText("txtNotifPersona", '')    
+    setText("txtNotifAdresa", '')
+    setText("txtNotifCp", '')
+    setText("txtNotifPoblacio", '')
            
 
 def showInfo(text, duration = None):
@@ -619,11 +589,11 @@ def getTipusSol():
     if rbFisica.isChecked():
         cboSol.setVisible(True)
         cboSolCif.setVisible(False)
-        lblSol.setText(u"NIF sol·licitant")
+        setText("lblSol", u"NIF sol·licitant")
     else:
         cboSolCif.setVisible(True)
         cboSol.setVisible(False)
-        lblSol.setText(u"CIF sol·licitant")
+        setText("lblSol", u"CIF sol·licitant")
     clearNotificacions()
  
  
@@ -632,10 +602,10 @@ def idChanged():
     expId = txtId.text()
     if len(expId) <> 5:
         showInfo(u"El id ha de tenir exactament 5 caràcters amb el format: <any><xxx>")
-        txtNumExp.setText("")        
+        setText("txtNumExp", '')
         return
     numExp = expId[2:]+"/"+expId[:2]
-    txtNumExp.setText(numExp)
+    setText("txtNumExp", numExp)
     
     
 def entradaChanged():
@@ -643,11 +613,10 @@ def entradaChanged():
     entrada = txtRegEnt.text()
     if not entrada:
         showWarning(u"Cal especificar codi del registre d'entrada amb el format: <num>/<any>. Per exemple: 1234/15")
-        return False     
+        return False
     if len(entrada) <> 7:
         showWarning(u"El registre d'entrada ha de tenir exactament 7 caràcters amb el format: <num>/<any>. Per exemple: 1234/15")
-        #txtRegEnt.setText("")        
-        txtRegEnt.selectAll()        
+        txtRegEnt.selectAll()
         return False
     return True
     
@@ -672,13 +641,13 @@ def solChanged(aux):
     query = QSqlQuery(sql)    
     if (query.next()):     
         if aux == 'persona':
-            txtSolDades.setText(query.value(0))
+            setText("txtSolDades", getQueryValue(query, 0))
         elif aux == 'juridica': 
-            txtSolDades.setText(query.value(4))
-        txtNotifPersona.setText(query.value(0))        
-        txtNotifAdresa.setText(query.value(1))
-        txtNotifCp.setText(query.value(2))
-        txtNotifPoblacio.setText(query.value(3))
+            setText("txtSolDades", getQueryValue(query, 4))  
+        setText("txtNotifPersona", getQueryValue(query, 0))
+        setText("txtNotifAdresa", getQueryValue(query, 1))
+        setText("txtNotifCp", getQueryValue(query, 2))
+        setText("txtNotifPoblacio", getQueryValue(query, 3))
     else:
         if aux == 'representant' and repId == 'null':
             if rbFisica.isChecked():
@@ -694,28 +663,28 @@ def empChanged():
     refcat20 = getSelectedItem("cboEmp")
     if refcat20 is not None:
         refcat20 = refcat20[:23]
-    txtRefcat20.setText(refcat20)    
+    setText("txtRefcat20", refcat20)    
     
         
 # Slots: Tab 'Projecte'        
 def redactorChanged():
-    tecnicChanged('cboRedactor', txtRedactor)
+    tecnicChanged("cboRedactor", "txtRedactor")
         
 def directorChanged():
-    tecnicChanged('cboDirector', txtDirector)
+    tecnicChanged("cboDirector", "txtDirector")
         
 def executorChanged():
-    tecnicChanged('cboExecutor', txtExecutor)
+    tecnicChanged("cboExecutor", "txtExecutor")
         
-def tecnicChanged(cboName, txtWidget):
+def tecnicChanged(cboName, widgetName):
     
     sql = "SELECT COALESCE(nom, '') || ' ' || COALESCE(cognom_1, '') || ' ' || COALESCE(cognom_2, '') || '. Núm colegiat: ' || COALESCE(num_colegiat, '') AS tecnic "
     sql+= "FROM data.tecnic WHERE id = "+getSelectedItem2(cboName)
     query = QSqlQuery(sql)    
     if (query.next()):      
-        txtWidget.setText(query.value(0))
+        setText(widgetName, query.value(0))
     else:
-        txtWidget.setText('')
+        setText(widgetName, '')
     
     
 # Slots: Tab 'Liquidació'
@@ -723,9 +692,9 @@ def liqAjSelected():
 
     value = ''
     if chkLiqAj.isChecked():
-        value = getStringValue('txtPress')
-    setNumeric('txtLiqAj', value)
-    importEdited('txtLiqAj')
+        value = getStringValue("txtPress")
+    setNumeric("txtLiqAj", value)
+    importEdited("txtLiqAj")
             
     
 def importEdited(widgetName):
@@ -894,15 +863,15 @@ def generateExpedient():
     anyo = str(regEnt[-2:])
     sql = "SELECT MAX(substr(num_exp, 0, 4)) FROM data.exp_om WHERE substr(reg_ent, 6) = '"+anyo+"'"
     print sql
-    query = QSqlQuery(sql)    
+    query = QSqlQuery(sql)
     if (query.next()): 
         if query.value(0) == '':
-            value = "001/"+str(anyo)  
+            value = "001/"+str(anyo)
         else:
             code = int(query.value(0)) + 1
-            value = str(code).zfill(3)+"/"+str(anyo)  
-        txtNumExp.setText(value)   
-        dateEntrada.setDate(current_date)          
+            value = str(code).zfill(3)+"/"+str(anyo)
+        setText("txtNumExp", value) 
+        setDate("dateEntrada", current_date)
     
 def manageFisica():
     iface.showAttributeTable(layerFisica)
@@ -918,7 +887,7 @@ def selectDocument():
     fileDialog = QFileDialog()
     fileDialog.setFileMode(QFileDialog.ExistingFile);
     filePath = fileDialog.getOpenFileName(None, "Select doc file")
-    txtDoc.setText(filePath)
+    setText("txtDoc", filePath)
     checkDocument()
     
 def openDocument():
@@ -935,13 +904,13 @@ def checkDocument():
     
 def refresh():
     loadData()
-    setComboModel(cboTipus, listTipus)
-    setComboModel(cboSol, listNif)
-    setComboModel(cboSolCif, listCif)
-    setComboModel(cboRep, listNif)
-    setComboModel(cboRedactor, listTecnic)
-    setComboModel(cboDirector, listTecnic)
-    setComboModel(cboExecutor, listTecnic)
+    setComboModel("cboTipus", listTipus)
+    setComboModel("cboSol", listNif)
+    setComboModel("cboSolCif", listCif)
+    setComboModel("cboRep", listNif)
+    setComboModel("cboRedactor", listTecnic)
+    setComboModel("cboDirector", listTecnic)
+    setComboModel("cboExecutor", listTecnic)
          
 def save():
     result = saveDadesExpedient()

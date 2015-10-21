@@ -5,8 +5,8 @@ import logging
 import os.path
 
 
-#	
-# Utility funcions	
+#
+# Utility funcions
 #
 def isFirstTime():
     
@@ -17,24 +17,25 @@ def isFirstTime():
         first = False
     return first
 
-    
+
 def setDialog(p_dialog):
     
     global _dialog
     _dialog = p_dialog
  
-        
-def setComboModel(widget, vector):
-    
+
+def setComboModel(widgetName, vector):
+
+    elem = _dialog.findChild(QComboBox, widgetName)
     completer = QCompleter()
     completer.setCompletionColumn(0)
     completer.setMaxVisibleItems(10)
     completer.setCaseSensitivity(Qt.CaseInsensitive)
     model = QStringListModel()
-    model.setStringList(vector)         
+    model.setStringList(vector)
     completer.setModel(model)
-    widget.setModel(model)   
-    widget.setCompleter(completer)        
+    elem.setModel(model)
+    elem.setCompleter(completer)
 
 
 def queryToList(sql):
@@ -46,8 +47,8 @@ def queryToList(sql):
         value = query.value(0)   
         vector.append(unicode(value))          
     return vector 
-        
-            
+
+
 def getQueryValue(query, index):
 
     value = ""
@@ -56,47 +57,47 @@ def getQueryValue(query, index):
     return value
 
 
-def setSelectedItem(widget, text):
+def setSelectedItem(widgetName, text):
 
-    elem = _dialog.findChild(QComboBox, widget)
+    elem = _dialog.findChild(QComboBox, widgetName)
     if elem:
         if text is not None:
             index = elem.findText(text)
-            elem.setCurrentIndex(index);	
+            elem.setCurrentIndex(index);
         else:
-            elem.setCurrentIndex(0);     
-            
+            elem.setCurrentIndex(0);
 
-def getSelectedItem(widget):
+
+def getSelectedItem(widgetName):
     
-    elem = _dialog.findChild(QComboBox, widget)
+    elem = _dialog.findChild(QComboBox, widgetName)
     if not elem.currentText():
         elem_text = None
     else:
-        elem_text = elem.currentText()	
-    return elem_text	
+        elem_text = elem.currentText()
+    return elem_text
 
 
-def getSelectedItem2(widget):
+def getSelectedItem2(widgetName):
     
-    elem = _dialog.findChild(QComboBox, widget)
+    elem = _dialog.findChild(QComboBox, widgetName)
     if not elem.currentText():
         elem_text = "null"
     else:
-        elem_text = "'"+elem.currentText().replace("'", "''")+"'"	
-    return elem_text	
+        elem_text = "'"+elem.currentText().replace("'", "''")+"'"
+    return elem_text
 
 
-def getValue(widget):
+def getValue(widgetName):
     
-    elem = _dialog.findChild(QLineEdit, widget)
-    if elem:	
+    elem = _dialog.findChild(QLineEdit, widgetName)
+    if elem:
         if elem.text():
-            elem_text = widget + " = "+elem.text().replace(",", ".")		      
+            elem_text = widgetName + " = "+elem.text().replace(",", ".")
         else:
-            elem_text = widget + " = null"
+            elem_text = widgetName + " = null"
     else:
-        elem_text = widget + " = null"
+        elem_text = widgetName + " = null"
     return elem_text
 
 
@@ -104,19 +105,19 @@ def getFloat(widgetName):
     
     widget = _dialog.findChild(QLineEdit, widgetName)
     value = 0.0
-    if widget:	
+    if widget:
         if widget.text():
-            value = float(widget.text().replace(",", "."))	      
+            value = float(widget.text().replace(",", "."))
     return value
 
 
-def setNumeric(widget, number):
+def setNumeric(widgetName, number):
     
     if not isNumber(number):
-        setText(widget, number)
+        setText(widgetName, number)
         return
     
-    elem = _dialog.findChild(QLineEdit, widget)
+    elem = _dialog.findChild(QLineEdit, widgetName)
     number = float(number)
     if elem:    
         if number <> '':
@@ -125,7 +126,7 @@ def setNumeric(widget, number):
         else:
             elem.setText(None)
     else:
-        elem = _dialog.findChild(QTextEdit, widget)    
+        elem = _dialog.findChild(QTextEdit, widgetName)    
         if number <> '':
             value = format(number, '.2f')
             elem.setText(str(value))
@@ -133,50 +134,50 @@ def setNumeric(widget, number):
             elem.setText(None)
             
 
-def getStringValue(widget):
+def getStringValue(widgetName):
     
-    elem = _dialog.findChild(QLineEdit, widget)
-    if elem:	
+    elem = _dialog.findChild(QLineEdit, widgetName)
+    if elem:
         if (not elem.text() or elem.text().lower() == "null"):
-            elem_text = None    
+            elem_text = None
         else:
             elem_text = elem.text()
     else:
-        elem = _dialog.findChild(QTextEdit, widget)	
-        if elem:	
-            if (not elem.toPlainText() or elem.toPlainText().lower() == "null"):  
+        elem = _dialog.findChild(QTextEdit, widgetName)
+        if elem:
+            if (not elem.toPlainText() or elem.toPlainText().lower() == "null"):
                 elem_text = None  
             else:
                 elem_text = elem.toPlainText()
-        else:				
+        else:
             elem_text = None
     return elem_text
 
 
-def getStringValue2(widget):
+def getStringValue2(widgetName):
     
-    elem = _dialog.findChild(QLineEdit, widget)
-    if elem:	
+    elem = _dialog.findChild(QLineEdit, widgetName)
+    if elem:
         if (not elem.text() or elem.text().lower() == "null"):
             elem_text = "null"
         else:
             elem_text = "'"+elem.text().replace("'", "''")+"'"
     else:
-        elem = _dialog.findChild(QTextEdit, widget)	
-        if elem:	
-            if (not elem.toPlainText() or elem.toPlainText().lower() == "null"):                
+        elem = _dialog.findChild(QTextEdit, widgetName)
+        if elem:
+            if (not elem.toPlainText() or elem.toPlainText().lower() == "null"):
                 elem_text = "null"    
             else:
                 elem_text = "'"+elem.toPlainText().replace("'", "''")+"'"
-        else:				
+        else:
             elem_text = "null"
-    return elem_text	
+    return elem_text
 
 
-def getDate(widget, fieldName):
+def getDate(widgetName, fieldName):
 
     try:    
-        date_widget = _dialog.findChild(QDateEdit, widget)
+        date_widget = _dialog.findChild(QDateEdit, widgetName)
         if not date_widget:
             return
         
@@ -187,7 +188,7 @@ def getDate(widget, fieldName):
             text = fieldName+"='"+value+"'"  
         else:
             value = "null"
-            text = fieldName+"=null"              
+            text = fieldName+"=null"
     except ValueError:
         value = "null"
         text = "" 
@@ -195,14 +196,14 @@ def getDate(widget, fieldName):
     return dict(value = value, text = text)
 
 
-def isNull(widget):
+def isNull(widgetName):
     
-    elem = _dialog.findChild(QLineEdit, widget)
-    empty = True	
-    if elem:	
+    elem = _dialog.findChild(QLineEdit, widgetName)
+    empty = True
+    if elem:
         if elem.text():
             empty = False
-    return empty	
+    return empty
 
 
 def isNumber(elem):
@@ -223,22 +224,44 @@ def isChecked(widgetName):
     return value
 
 
-def setChecked(widget, value):
+def setChecked(widgetName, value):
     
-    elem = _dialog.findChild(QCheckBox, widget)
+    elem = _dialog.findChild(QCheckBox, widgetName)
     if elem:    
         elem.setChecked(value)
             
 
-def setText(widget, text):
+def setText(widgetName, text):
     
-    elem = _dialog.findChild(QLineEdit, widget)
+    elem = _dialog.findChild(QLineEdit, widgetName)
     if elem:    
         elem.setText(str(text))
     else:
-        elem = _dialog.findChild(QTextEdit, widget)    
+        elem = _dialog.findChild(QTextEdit, widgetName)    
         if elem:    
-            elem.setText(str(text))  
+            elem.setText(str(text))
+        else:
+            elem = _dialog.findChild(QLabel, widgetName)    
+            if elem:    
+                elem.setText(str(text))            
+          
+          
+def setDate(widgetName, value):
+    
+    elem = _dialog.findChild(QDateEdit, widgetName)
+    if elem:    
+        elem.setDate(value)
+    else:
+        elem = _dialog.findChild(QDateTimeEdit, widgetName)    
+        if elem:    
+            elem.setDate(value)
+
+            
+def setVisible(widgetName, isVisible):
+
+    elem = _dialog.findChild(QWidget, widgetName)
+    if elem:    
+        elem.setVisible(isVisible)
         
 
 def setLogger(name, folder, filename):

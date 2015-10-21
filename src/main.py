@@ -18,15 +18,15 @@ def formOpen(dialog,layerid,featureid):
     global MSG_DURATION
        
     # Check if it is the first time we execute this module
-    #if True:		
+    #if True:
     if isFirstTime():
           
-        # Get current path and save reference to the QGIS interface		  
+        # Get current path and save reference to the QGIS interface
         current_path = os.path.dirname(os.path.abspath(__file__))
         date_aux = time.strftime("%d/%m/%Y")
         current_date = datetime.strptime(date_aux, "%d/%m/%Y")
         _iface = iface
-        MSG_DURATION = 5		
+        MSG_DURATION = 5
 
         # Connect to Database (only once, when loading map)
         showInfo("Attempting to connect to DB")
@@ -35,11 +35,11 @@ def formOpen(dialog,layerid,featureid):
     # If not, close previous dialog	if already opened
     else:
         if _dialog.isVisible():
-            _dialog.parent().setVisible(False)			
+            _dialog.parent().setVisible(False)
 
     # Get dialog and his widgets
-    _dialog = dialog	
-    setDialog(dialog)    
+    _dialog = dialog
+    setDialog(dialog)
     widgetsToGlobal()
 
     # Get 'Expedients' from selected 'parcela' and filter conditions
@@ -65,13 +65,12 @@ def connectDb():
 
 def widgetsToGlobal():
     
-    global refcat, cboEmp, tblExp
-    refcat = _dialog.findChild(QLineEdit, "refcat")             
-    cboEmp = _dialog.findChild(QComboBox, "cboEmp")    
-    tblExp = _dialog.findChild(QTableView, "tblExp")   
+    global refcat, tblExp
+    refcat = _dialog.findChild(QLineEdit, "refcat")
+    tblExp = _dialog.findChild(QTableView, "tblExp")
 
     
-def initConfig():    
+def initConfig():
     
     # Wire up our own signals
     setSignals()    
@@ -81,14 +80,14 @@ def initConfig():
     _dialog.hideButtonBox()    
 
     # Refresh map
-    _iface.mapCanvas().refresh()	
+    _iface.mapCanvas().refresh()
 
     # TODO TEST
-#     dlg = ExpOmDialog()   
-#     if not dlg:        
-#         showInfo("UI form not loaded")            
-#         return	
-#     exp_om_controller.openExpOm(dlg, '7220201CF8672S', 105)	
+#     dlg = ExpOmDialog()
+#     if not dlg:
+#         showInfo("UI form not loaded")
+#         return
+#     exp_om_controller.openExpOm(dlg, '7220201CF8672S', 105)
     
     
 # Set Group Boxes title font to bold    
@@ -102,13 +101,13 @@ def boldGroupBoxes():
 # Wire up our own signals    
 def setSignals():
    
-    _dialog.findChild(QPushButton, "btnCreate").clicked.connect(create)    
-    _dialog.findChild(QPushButton, "btnUpdate").clicked.connect(update)    
-    _dialog.findChild(QPushButton, "btnDelete").clicked.connect(delete)    
-    _dialog.findChild(QPushButton, "btnRefresh").clicked.connect(refresh)    	
+    _dialog.findChild(QPushButton, "btnCreate").clicked.connect(create)
+    _dialog.findChild(QPushButton, "btnUpdate").clicked.connect(update)
+    _dialog.findChild(QPushButton, "btnDelete").clicked.connect(delete)
+    _dialog.findChild(QPushButton, "btnRefresh").clicked.connect(refresh)
     _dialog.findChild(QPushButton, "btnClose").clicked.connect(close)
     _dialog.findChild(QComboBox, "cboEmp").currentIndexChanged.connect(empChanged)
-    #tblExp.doubleClicked.connect(update)	
+    #tblExp.doubleClicked.connect(update)
     
         
 # Get 'Expedients' from selected 'parcela' and filter conditions
@@ -118,9 +117,9 @@ def getExpedients(filter_):
     
     # Define model
     model = QSqlTableModel();
-    model.setTable("data.exp_om")		
-    model.setFilter(filter_)	
-    model.setSort(0, Qt.AscendingOrder)	
+    model.setTable("data.exp_om")
+    model.setFilter(filter_)
+    model.setSort(0, Qt.AscendingOrder)
     model.setEditStrategy(QSqlTableModel.OnRowChange)
     model.select()
     model.setHeaderData(0, Qt.Horizontal, "Id")
@@ -140,12 +139,12 @@ def getExpedients(filter_):
        
    
 def hideColumns(tblExp):
-    for i in range (3, 16):	
-        tblExp.hideColumn(i)	
-    for i in range (17, 23):	
-        tblExp.hideColumn(i)	
-    for i in range (24, 27):	
-        tblExp.hideColumn(i)			
+    for i in range (3, 16):
+        tblExp.hideColumn(i)
+    for i in range (17, 23):
+        tblExp.hideColumn(i)
+    for i in range (24, 27):
+        tblExp.hideColumn(i)
 
 def dataChanged():
     ok = model.submitAll()
@@ -157,9 +156,9 @@ def loadImmobles():
 
     sql = "SELECT refcat20 || ' - ' || adreca_t FROM data.ibi WHERE refcat14 = '"+refcat.text()+"' ORDER BY id"
     listImmobles = queryToList(sql)
-    # Append one to manage 'Comunitat de veins' o 'parceles sense immoble'    
+    # Append one to manage 'Comunitat de veins' o 'parceles sense immoble'
     listImmobles.append('9999')
-    setComboModel(cboEmp, listImmobles)   
+    setComboModel("cboEmp", listImmobles)
 
 
 # Utility functions
@@ -188,8 +187,8 @@ def askQuestion(text, infText = None):
     msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
     msgBox.setDefaultButton(QMessageBox.No)
     return msgBox.exec_()  
-     
-            
+
+
 # Slots
 
 def empChanged():
@@ -244,32 +243,32 @@ def delete():
         showWarning("No ha seleccionat cap registre per eliminar")
         return
     
-    msg = "Ha seleccionat els expedients:\n"	
+    msg = "Ha seleccionat els expedients:\n"
     listId = ''
     for i in range(0, len(selectedList)):
         row = selectedList[i].row()
         id = model.record(row).value("id")
         #reg_ent = model.record(row).value("reg_ent")
-        msg+= str(id)+", "		
+        msg+= str(id)+", "
         listId = listId + str(id) + ", "
     msg = msg[:-2]
-    listId = listId[:-2]	
+    listId = listId[:-2]
     infMsg = u"Està segur que desitja eliminar-los?"
-    ret = askQuestion(msg, infMsg)	
+    ret = askQuestion(msg, infMsg)
     if (ret == QMessageBox.Yes):
         sql = "DELETE FROM data.exp_om WHERE id IN ("+listId+")"
-        query = QSqlQuery()	
+        query = QSqlQuery()
         query.exec_(sql)
-        refresh()		
+        refresh()
     
 
 def refresh():
     # Refresh table and map
     tblExp.model().select()
-    _iface.mapCanvas().refresh()		
+    _iface.mapCanvas().refresh()
 
     
 def close():
-    #mainDao.close()	
+    #mainDao.close()
     _dialog.parent().setVisible(False) 
     
