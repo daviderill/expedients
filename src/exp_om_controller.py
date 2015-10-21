@@ -239,6 +239,8 @@ def loadImmobles():
     global listImmobles
     sql = "SELECT refcat20 || ' - ' || adreca_t FROM data.ibi WHERE refcat14 = '"+refcat.text()+"' ORDER BY id"    
     listImmobles = queryToList(sql)
+    # Append one to manage 'Comunitat de veins' o 'parceles sense immoble'
+    listImmobles.append('9999')
     setComboModel(cboEmp, listImmobles)        
 
     
@@ -758,15 +760,17 @@ def llicChanged(widgetName, update=False):
         if widget.isChecked():
             value = max(38.15, getPress() * 0.0096)
         setNumeric('txtPlu', value)
-        valueLeg = getFloat('txtPlu') + getFloat('txtCar') + getFloat('txtRes')
-        setNumeric('txtLeg', valueLeg)           
+        if _dialog.findChild(QCheckBox, 'chkLeg').isChecked():        
+            valueLeg = getFloat('txtPlu') + getFloat('txtCar') + getFloat('txtRes')
+            setNumeric('txtLeg', valueLeg)                  
     elif widgetName == 'chkRes':
         value = ''
         if widget.isChecked():
             value = max(38.15, getPress() * 0.0094)
         setNumeric('txtRes', value)
-        valueLeg = getFloat('txtPlu') + getFloat('txtCar') + getFloat('txtRes')
-        setNumeric('txtLeg', valueLeg)           
+        if _dialog.findChild(QCheckBox, 'chkLeg').isChecked():            
+            valueLeg = getFloat('txtPlu') + getFloat('txtCar') + getFloat('txtRes')
+            setNumeric('txtLeg', valueLeg)           
     elif widgetName == 'chkEnd':
         value = ''
         if widget.isChecked():
@@ -777,8 +781,9 @@ def llicChanged(widgetName, update=False):
         if widget.isChecked():
             value = getFloat('txtCarM') * 8.9
         setNumeric('txtCar', value)
-        valueLeg = getFloat('txtPlu') + getFloat('txtCar') + getFloat('txtRes')
-        setNumeric('txtLeg', valueLeg)               
+        if _dialog.findChild(QCheckBox, 'chkLeg').isChecked():            
+            valueLeg = getFloat('txtPlu') + getFloat('txtCar') + getFloat('txtRes')
+            setNumeric('txtLeg', valueLeg)               
     elif widgetName == 'chkMov':
         value = ''
         if widget.isChecked():

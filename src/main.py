@@ -121,12 +121,13 @@ def getExpedients(filter_):
     model.setTable("data.exp_om")		
     model.setFilter(filter_)	
     model.setSort(0, Qt.AscendingOrder)	
-    model.setEditStrategy(QSqlTableModel.OnRowChange)   # OnManualSubmit
+    model.setEditStrategy(QSqlTableModel.OnRowChange)
     model.select()
-    model.setHeaderData(0, Qt.Horizontal, "Id AutoLiq.");
-    model.setHeaderData(1, Qt.Horizontal, "Num. Exp.");
-    model.setHeaderData(2, Qt.Horizontal, "Data Entrada");
-    model.setHeaderData(23, Qt.Horizontal, "Data AutoLiq.");    
+    model.setHeaderData(0, Qt.Horizontal, "Id")
+    model.setHeaderData(1, Qt.Horizontal, "Num. Exp.")
+    model.setHeaderData(2, Qt.Horizontal, "D. Entrada")
+    model.setHeaderData(23, Qt.Horizontal, "D. AutoLiq.")
+    model.setHeaderData(16, Qt.Horizontal, "Immoble")
     model.dataChanged.connect(dataChanged)
 
     # Set this model to the view
@@ -134,13 +135,14 @@ def getExpedients(filter_):
     tblExp.horizontalHeader().moveSection(23, 1)
     hideColumns(tblExp)
     verticalHeader = tblExp.verticalHeader()
-    verticalHeader.setResizeMode(QHeaderView.Fixed)
-    verticalHeader.setDefaultSectionSize(20)
+    verticalHeader.setResizeMode(QHeaderView.ResizeToContents)
     tblExp.resizeColumnsToContents()
        
    
 def hideColumns(tblExp):
-    for i in range (3, 23):	
+    for i in range (3, 16):	
+        tblExp.hideColumn(i)	
+    for i in range (17, 23):	
         tblExp.hideColumn(i)	
     for i in range (24, 27):	
         tblExp.hideColumn(i)			
@@ -153,9 +155,10 @@ def dataChanged():
 
 def loadImmobles():
 
-    sql = "SELECT id || ' - ' || adreca FROM data.immoble WHERE refcat = '"+refcat.text()+"' ORDER BY id"
     sql = "SELECT refcat20 || ' - ' || adreca_t FROM data.ibi WHERE refcat14 = '"+refcat.text()+"' ORDER BY id"
     listImmobles = queryToList(sql)
+    # Append one to manage 'Comunitat de veins' o 'parceles sense immoble'    
+    listImmobles.append('9999')
     setComboModel(cboEmp, listImmobles)   
 
 
@@ -222,8 +225,8 @@ def update(modelIndex):
     if len(selectedList) == 0:
         showWarning("No ha seleccionat cap registre per modificar")
         return
-    row = selectedList[0].row()               #QModelIndex
-    expOmId = model.record(row).value("id")          # @ReservedAssignment
+    row = selectedList[0].row()               
+    expOmId = model.record(row).value("id")
     
     # Open 'expOm' form
     exp_om_controller.openExpOm(dlg, refcat.text(), expOmId)        
@@ -244,10 +247,10 @@ def delete():
     msg = "Ha seleccionat els expedients:\n"	
     listId = ''
     for i in range(0, len(selectedList)):
-        row = selectedList[i].row()               #QModelIndex
-        id = model.record(row).value("id")		  # @ReservedAssignment
-        reg_ent = model.record(row).value("reg_ent")
-        msg = msg + reg_ent + ", "		
+        row = selectedList[i].row()
+        id = model.record(row).value("id")
+        #reg_ent = model.record(row).value("reg_ent")
+        msg+= str(id)+", "		
         listId = listId + str(id) + ", "
     msg = msg[:-2]
     listId = listId[:-2]	
