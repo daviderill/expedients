@@ -13,12 +13,13 @@ from utils import *  # @UnusedWildImport
 
 def openExpOm(dialog, parcela, expOmId = None):
 
-    global _dialog, _iface, _parcela, _expOmId, current_path, current_date
+    global _dialog, _iface, _parcela, _expOmId, current_path, current_date, report_folder
     global MSG_DURATION
    
     current_path = os.path.dirname(os.path.abspath(__file__))
     date_aux = time.strftime("%d/%m/%Y")
     current_date = datetime.strptime(date_aux, "%d/%m/%Y")
+    report_folder = current_path+"/reports/"    
 
     # Save reference to the QGIS interface
     MSG_DURATION = 5
@@ -55,28 +56,26 @@ def openExpOm(dialog, parcela, expOmId = None):
     
 
 def widgetsToGlobal():
-    
-    global refcat, lblInfo, txtId, txtNumExp, txtRegEnt
+
+    global refcat, txtNumExp, txtRegEnt
     global rbFisica, rbJuridica, cboSol, cboSolCif
     global cboClavPlu, chkBonIcio, chkBonLlic, chkLiqAj
 
     # Tab 'Dades Expedient'  
-    refcat = _dialog.findChild(QLineEdit, "refcat")        
-    lblInfo = _dialog.findChild(QLabel, "lblInfo")        
-    txtId = _dialog.findChild(QLineEdit, "txtId")        
-    txtNumExp = _dialog.findChild(QLineEdit, "txtNumExp")  
-    txtRegEnt = _dialog.findChild(QLineEdit, "txtRegEnt")            
-    
-    rbFisica = _dialog.findChild(QRadioButton, "rbFisica")  
-    rbJuridica = _dialog.findChild(QRadioButton, "rbJuridica")  
-    cboSol = _dialog.findChild(QComboBox, "cboSol")   
-    cboSolCif = _dialog.findChild(QComboBox, "cboSolCif")    
-    
+    refcat = _dialog.findChild(QLineEdit, "refcat")
+    txtNumExp = _dialog.findChild(QLineEdit, "txtNumExp")
+    txtRegEnt = _dialog.findChild(QLineEdit, "txtRegEnt")
+
+    rbFisica = _dialog.findChild(QRadioButton, "rbFisica")
+    rbJuridica = _dialog.findChild(QRadioButton, "rbJuridica")
+    cboSol = _dialog.findChild(QComboBox, "cboSol")
+    cboSolCif = _dialog.findChild(QComboBox, "cboSolCif")
+
     # Tab 'Liquidació'
-    cboClavPlu = _dialog.findChild(QComboBox, "cboClavPlu") 
-    chkBonIcio = _dialog.findChild(QCheckBox, "chkBonIcio") 
-    chkBonLlic = _dialog.findChild(QCheckBox, "chkBonLlic") 
-    chkLiqAj = _dialog.findChild(QCheckBox, "chkLiqAj") 
+    cboClavPlu = _dialog.findChild(QComboBox, "cboClavPlu")
+    chkBonIcio = _dialog.findChild(QCheckBox, "chkBonIcio")
+    chkBonLlic = _dialog.findChild(QCheckBox, "chkBonLlic")
+    chkLiqAj = _dialog.findChild(QCheckBox, "chkLiqAj")
 
 
 def initConfig():    
@@ -131,13 +130,13 @@ def setSignals():
     _dialog.findChild(QPushButton, "btnTecnic").clicked.connect(manageTecnic)
     _dialog.findChild(QPushButton, "btnDoc").clicked.connect(selectDocument)
     _dialog.findChild(QPushButton, "btnOpenDoc").clicked.connect(openDocument)
+    #_dialog.findChild(QPushButton, "btnPdfLiq").clicked.connect(openPdfLiquidacio)    
     _dialog.findChild(QPushButton, "btnRefresh").clicked.connect(refresh)    
     _dialog.findChild(QPushButton, "btnSave").clicked.connect(save)    
     _dialog.findChild(QPushButton, "btnClose").clicked.connect(close)
     _dialog.findChild(QPushButton, "btnGenExp").clicked.connect(generateExpedient)
     
-    # General and Tab 'Dades Expedient'
-    #txtId.editingFinished.connect(idChanged)    
+    # General and Tab 'Dades Expedient'   
     txtRegEnt.editingFinished.connect(entradaChanged)    
     rbFisica.clicked.connect(getTipusSol)    
     rbJuridica.clicked.connect(getTipusSol)    
@@ -339,22 +338,22 @@ def getLiquidacio():
 
 def updateTabLiquidacio():
     
-    if getStringValue("txtCarM") is not None:
+    if getText("txtCarM") is not None:
         setChecked("chkCar", True)
-    if getStringValue("txtMovM") is not None:
+    if getText("txtMovM") is not None:
         setChecked("chkMov", True)
-    if getStringValue("txtFigM") is not None:
+    if getText("txtFigM") is not None:
         setChecked("chkFig", True)
-    if getStringValue("txtParM") is not None:
+    if getText("txtParM") is not None:
         setChecked("chkPar", True)
-    if getStringValue("txtClavUniN") is not None:
+    if getText("txtClavUniN") is not None:
         setChecked("chkClavUni", True)
     selItem = getSelectedItem('cboClavPlu')
     if selItem is not None:
         clavPlu = selItem[:2]
         if isNumber(clavPlu):    
             setChecked("chkClavPlu", True)
-    if getStringValue("txtClavMesN") is not None:
+    if getText("txtClavMesN") is not None:
         setChecked("chkClavMes", True)
         
     llicChanged('chkPlaca')
@@ -401,7 +400,7 @@ def saveDadesExpedient():
     query = QSqlQuery()
     query.prepare(sql)
     query.bindValue(":id", str(_expOmId))
-    query.bindValue(0, getStringValue("txtNumExp"))
+    query.bindValue(0, getText("txtNumExp"))
     query.bindValue(1, dEntrada["value"]) 
     query.bindValue(2, dLlicencia["value"]) 
     query.bindValue(3, getSelectedItem("cboTipus"))
@@ -417,23 +416,23 @@ def saveDadesExpedient():
         query.bindValue(6, getSelectedItem("cboSolCif")) 
     
     query.bindValue(7, getSelectedItem("cboRep"))
-    query.bindValue(8, getStringValue("refcat"))
-    query.bindValue(9, getStringValue("txtRefcat20"))
-    query.bindValue(10, getStringValue("txtNumHab"))
-    query.bindValue(11, getStringValue("txtNotifAdresa"))
-    query.bindValue(12, getStringValue("txtNotifPoblacio"))
-    query.bindValue(13, getStringValue("txtNotifCp"))
+    query.bindValue(8, getText("refcat"))
+    query.bindValue(9, getText("txtRefcat20"))
+    query.bindValue(10, getText("txtNumHab"))
+    query.bindValue(11, getText("txtNotifAdresa"))
+    query.bindValue(12, getText("txtNotifPoblacio"))
+    query.bindValue(13, getText("txtNotifCp"))
     query.bindValue(14, getSelectedItem("cboRedactor"))
     query.bindValue(15, getSelectedItem("cboDirector"))
     query.bindValue(16, getSelectedItem("cboExecutor"))
-    query.bindValue(17, getStringValue("txtConstructor"))
-    query.bindValue(18, getStringValue("txtVisatNum"))
+    query.bindValue(17, getText("txtConstructor"))
+    query.bindValue(18, getText("txtVisatNum"))
     query.bindValue(19, dVisat["value"])
-    query.bindValue(20, getStringValue("txtObs"))  
-    query.bindValue(21, getStringValue("txtRegEnt"))  
+    query.bindValue(20, getText("txtObs"))  
+    query.bindValue(21, getText("txtRegEnt"))  
     query.bindValue(22, dLiquidacio["value"])  
-    query.bindValue(23, getStringValue("txtDoc"))
-    query.bindValue(24, getStringValue("txtNotifPersona"))
+    query.bindValue(23, getText("txtDoc"))
+    query.bindValue(24, getText("txtNotifPersona"))
 
     # Execute SQL
     result = query.exec_()
@@ -475,41 +474,41 @@ def saveLiquidacio():
         query.bindValue(":om_id", _expOmId) 
     
     # Bind values
-    query.bindValue(0, getStringValue("txtPress")) 
+    query.bindValue(0, getText("txtPress")) 
     query.bindValue(1, isChecked("chkPlaca")) 
     query.bindValue(2, isChecked("chkPlu")) 
     query.bindValue(3, isChecked("chkRes")) 
     query.bindValue(4, isChecked("chkEnd")) 
     if isChecked("chkCar"):    
-        query.bindValue(5, getStringValue("txtCarM")) 
+        query.bindValue(5, getText("txtCarM")) 
     if isChecked("chkMov"):            
-        query.bindValue(6, getStringValue("txtMovM")) 
+        query.bindValue(6, getText("txtMovM")) 
     if isChecked("chkFig"):                    
-        query.bindValue(7, getStringValue("txtFigM")) 
+        query.bindValue(7, getText("txtFigM")) 
     query.bindValue(8, isChecked("chkLeg")) 
     if isChecked("chkPar"):            
-        query.bindValue(9, getStringValue("txtParM")) 
+        query.bindValue(9, getText("txtParM")) 
     query.bindValue(10, isChecked("chkPro")) 
     if isChecked("chkClavUni"):
-        aux = getStringValue("txtClavUniN")
+        aux = getText("txtClavUniN")
         if aux is None:
             aux = 1
         query.bindValue(11, aux) 
     if isChecked("chkClavPlu"):          
         query.bindValue(12, clavPlu) 
     if isChecked("chkClavMes"):    
-        aux = getStringValue("txtClavMesN")
+        aux = getText("txtClavMesN")
         if aux is None:
             aux = 13
         query.bindValue(13, aux)         
     query.bindValue(14, isChecked("chkGarRes")) 
     query.bindValue(15, isChecked("chkGarSer")) 
     if isChecked("chkLiqAj"):      
-        query.bindValue(16, getStringValue("txtLiqAj"))   
+        query.bindValue(16, getText("txtLiqAj"))   
     query.bindValue(17, isChecked("chkBonIcio")) 
     query.bindValue(18, isChecked("chkBonLlic")) 
-    query.bindValue(19, getStringValue("txtTotalPress")) 
-    query.bindValue(20, getStringValue("txtTotalLiq")) 
+    query.bindValue(19, getText("txtTotalPress")) 
+    query.bindValue(20, getText("txtTotalLiq")) 
     
     # Execute SQL
     result = query.exec_()
@@ -529,7 +528,7 @@ def getPress():
             #showWarning(u"Format numèric incorrecte")
             return default        
     else:
-        value = getStringValue("txtPress").replace(",", ".")
+        value = getText("txtPress").replace(",", ".")
         setNumeric("txtPress", value)
         if not isNumber(value):
             #showWarning(u"Format numèric incorrecte")
@@ -559,14 +558,14 @@ def updateTotal():
     else:
         setNumeric('txtTotalPress', total)  
 
-      
+        
 def clearNotificacions():       
     setText("txtSolDades", '')
     setText("txtNotifPersona", '')    
     setText("txtNotifAdresa", '')
     setText("txtNotifCp", '')
     setText("txtNotifPoblacio", '')
-           
+
 
 def showInfo(text, duration = None):
     if duration is None:
@@ -580,7 +579,7 @@ def showWarning(text, duration = None):
         _iface.messageBar().pushMessage("", text, QgsMessageBar.WARNING, MSG_DURATION)  
     else:
         _iface.messageBar().pushMessage("", text, QgsMessageBar.WARNING, duration)               
-        
+
 
 
 # Slots: Tab 'Dades expedient'
@@ -595,19 +594,8 @@ def getTipusSol():
         cboSol.setVisible(False)
         setText("lblSol", u"CIF sol·licitant")
     clearNotificacions()
- 
- 
-def idChanged():
-    
-    expId = txtId.text()
-    if len(expId) <> 5:
-        showInfo(u"El id ha de tenir exactament 5 caràcters amb el format: <any><xxx>")
-        setText("txtNumExp", '')
-        return
-    numExp = expId[2:]+"/"+expId[:2]
-    setText("txtNumExp", numExp)
-    
-    
+
+
 def entradaChanged():
     
     entrada = txtRegEnt.text()
@@ -619,8 +607,8 @@ def entradaChanged():
         txtRegEnt.selectAll()
         return False
     return True
-    
-    
+
+
 def solChanged(aux):
 
     if aux == 'persona':
@@ -633,7 +621,7 @@ def solChanged(aux):
         table = 'juridica'
         solId = getSelectedItem2("cboSolCif")
     repId = getSelectedItem2("cboRep")
-        
+
     sql = "SELECT COALESCE(nom, '') || ' ' || COALESCE(cognom_1, '') || ' ' || COALESCE(cognom_2, '') AS nom_complet, COALESCE(adreca, ''), COALESCE(cp, ''), COALESCE(poblacio, '') "
     if aux == 'juridica':    
         sql+= ", COALESCE(rao_social, '') "
@@ -656,47 +644,47 @@ def solChanged(aux):
                 solChanged('juridica') 
         else:
             clearNotificacions()
-        
-       
+
+            
 def empChanged():
 
     refcat20 = getSelectedItem("cboEmp")
     if refcat20 is not None:
         refcat20 = refcat20[:23]
     setText("txtRefcat20", refcat20)    
-    
-        
+
+
 # Slots: Tab 'Projecte'        
 def redactorChanged():
     tecnicChanged("cboRedactor", "txtRedactor")
-        
+
 def directorChanged():
     tecnicChanged("cboDirector", "txtDirector")
-        
+
 def executorChanged():
     tecnicChanged("cboExecutor", "txtExecutor")
-        
+
 def tecnicChanged(cboName, widgetName):
     
     sql = "SELECT COALESCE(nom, '') || ' ' || COALESCE(cognom_1, '') || ' ' || COALESCE(cognom_2, '') || '. Núm colegiat: ' || COALESCE(num_colegiat, '') AS tecnic "
     sql+= "FROM data.tecnic WHERE id = "+getSelectedItem2(cboName)
-    query = QSqlQuery(sql)    
-    if (query.next()):      
+    query = QSqlQuery(sql)
+    if (query.next()):
         setText(widgetName, query.value(0))
     else:
         setText(widgetName, '')
-    
-    
+
+
 # Slots: Tab 'Liquidació'
 def liqAjSelected():
 
     value = ''
     if chkLiqAj.isChecked():
-        value = getStringValue("txtPress")
+        value = getText("txtPress")
     setNumeric("txtLiqAj", value)
     importEdited("txtLiqAj")
-            
-    
+
+
 def importEdited(widgetName):
     
     value = getPress()
@@ -713,7 +701,7 @@ def importEdited(widgetName):
     bonChanged('chkBonLlic')
     updateTotalLlicUrb()
     updateTotal()
-    
+
 
 def llicChanged(widgetName, update=False):
     
@@ -780,13 +768,13 @@ def llicChanged(widgetName, update=False):
         setNumeric('txtPro', value)
     
     if update:
-        updateTotalLlicUrb()    
-    
-    
+        updateTotalLlicUrb()
+
+
 def clavChanged(widgetName):
     
     widget = _dialog.findChild(QCheckBox, widgetName)
-    
+
     if widgetName == 'chkClavUni':
         value = ''
         if widget.isChecked():
@@ -795,7 +783,7 @@ def clavChanged(widgetName):
                 aux = 1
             value = aux * 390.66
         setNumeric('txtClavUni', value)
-        
+
     elif widgetName == 'chkClavMes':
         value = ''
         if widget.isChecked():
@@ -805,7 +793,7 @@ def clavChanged(widgetName):
             if aux > 0:
                 value = value + (aux * 65.025)
         setNumeric('txtClavMes', value)
-        
+
     elif widgetName == 'chkClavPlu':
         value = ''
         if widget.isChecked():
@@ -817,7 +805,7 @@ def clavChanged(widgetName):
             elif selIndex == 3:
                 value = 1170.96
         setNumeric('txtClavPlu', value)
-        
+
     total = getFloat('txtClavUni')+getFloat('txtClavPlu')+getFloat('txtClavMes')
     setNumeric('txtClavTot', total)   
     updateTotal()    
@@ -836,27 +824,29 @@ def garChanged(widgetName):
         if widget.isChecked():
             value = max(600, getPress() * 0.01)
         setNumeric('txtGarSer', value)
-    updateTotal()      
+    updateTotal()
 
-    
+
 def bonChanged(widgetName):
     
     widget = _dialog.findChild(QCheckBox, widgetName)
     if widgetName == 'chkBonIcio':
-        press = getPress()        
+        press = getPress()
         icio = float(press) * 0.04
         if widget.isChecked():
             icio = icio * 0.05
-        setNumeric("txtIcio", icio)            
+        setNumeric("txtIcio", icio)
     elif widgetName == 'chkBonLlic':
-        totalLlic = getTotalLlicUrb()     
+        totalLlic = getTotalLlicUrb()
         if widget.isChecked():
             totalLlic = totalLlic * 0.05
-        setNumeric("txtLlicTot", totalLlic)   
-    updateTotal()         
-            
-            
-# Slots: Window buttons    
+        setNumeric("txtLlicTot", totalLlic)
+    updateTotal()
+
+    
+    
+# Slots: Window buttons
+
 def generateExpedient():
     # Obtenir any a partir de número d'expedient
     regEnt = txtRegEnt.text()
@@ -872,6 +862,21 @@ def generateExpedient():
             value = str(code).zfill(3)+"/"+str(anyo)
         setText("txtNumExp", value) 
         setDate("dateEntrada", current_date)
+        
+        
+def openPdfLiquidacio():
+
+    myComp = _iface.activeComposers()[0].composition()
+    if myComp is not None:
+        myComp.setAtlasMode(QgsComposition.PreviewAtlas)
+        filePath = report_folder+getText("txtId")+"_liquidacio.pdf"
+        result = myComp.exportAsPDF(filePath)
+        if result:
+            showInfo("Document PDF generat a: "+filePath)
+            os.startfile(filePath)
+        else:
+            showWarning("Document PDF no ha pogut ser generat a: "+filePath)        
+    
     
 def manageFisica():
     iface.showAttributeTable(layerFisica)
@@ -889,19 +894,19 @@ def selectDocument():
     filePath = fileDialog.getOpenFileName(None, "Select doc file")
     setText("txtDoc", filePath)
     checkDocument()
-    
+
 def openDocument():
-    filePath = getStringValue("txtDoc")
+    filePath = getText("txtDoc")
     if filePath is not None:    
         if os.path.isfile(filePath):
             os.startfile(filePath)
-        
+
 def checkDocument():
-    filePath = getStringValue("txtDoc")
+    filePath = getText("txtDoc")
     if filePath is not None:
         if os.path.isfile(filePath):
             _dialog.findChild(QPushButton, "btnOpenDoc").setEnabled(True)         
-    
+
 def refresh():
     loadData()
     setComboModel("cboTipus", listTipus)
@@ -911,13 +916,13 @@ def refresh():
     setComboModel("cboRedactor", listTecnic)
     setComboModel("cboDirector", listTecnic)
     setComboModel("cboExecutor", listTecnic)
-         
+
 def save():
     result = saveDadesExpedient()
     if result:
         saveLiquidacio()
         _dialog.accept()   
-    
+
 def close():
     _dialog.close()   
     

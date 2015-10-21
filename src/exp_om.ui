@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>649</width>
-    <height>543</height>
+    <height>560</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>10</x>
      <y>10</y>
      <width>631</width>
-     <height>481</height>
+     <height>491</height>
     </rect>
    </property>
    <property name="tabPosition">
@@ -2074,6 +2074,45 @@
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
+    <widget class="QPushButton" name="btnPdfLiq">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>430</y>
+       <width>61</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Veure fitxa de liquidació</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>icons/pdf.png</normaloff>icons/pdf.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>24</width>
+       <height>24</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblTot_4">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>435</y>
+       <width>131</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Veure fitxa de liquidació</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="tabProjecte">
     <attribute name="title">
@@ -2453,24 +2492,11 @@
     </attribute>
    </widget>
   </widget>
-  <widget class="QLabel" name="lblInfo">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>480</y>
-     <width>281</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
   <widget class="QPushButton" name="btnSave">
    <property name="geometry">
     <rect>
      <x>510</x>
-     <y>500</y>
+     <y>510</y>
      <width>61</width>
      <height>31</height>
     </rect>
@@ -2496,7 +2522,7 @@
    <property name="geometry">
     <rect>
      <x>580</x>
-     <y>500</y>
+     <y>510</y>
      <width>61</width>
      <height>31</height>
     </rect>
@@ -2522,7 +2548,7 @@
    <property name="geometry">
     <rect>
      <x>440</x>
-     <y>500</y>
+     <y>510</y>
      <width>61</width>
      <height>31</height>
     </rect>
@@ -2548,7 +2574,7 @@
    <property name="geometry">
     <rect>
      <x>370</x>
-     <y>500</y>
+     <y>510</y>
      <width>61</width>
      <height>31</height>
     </rect>
@@ -2562,32 +2588,6 @@
    <property name="icon">
     <iconset>
      <normaloff>icons/edit.png</normaloff>icons/edit.png</iconset>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>24</width>
-     <height>24</height>
-    </size>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnPdf">
-   <property name="geometry">
-    <rect>
-     <x>300</x>
-     <y>500</y>
-     <width>61</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="toolTip">
-    <string>Obrir PDF</string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>icons/pdf.png</normaloff>icons/pdf.png</iconset>
    </property>
    <property name="iconSize">
     <size>

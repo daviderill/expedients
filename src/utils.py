@@ -88,19 +88,6 @@ def getSelectedItem2(widgetName):
     return elem_text
 
 
-def getValue(widgetName):
-    
-    elem = _dialog.findChild(QLineEdit, widgetName)
-    if elem:
-        if elem.text():
-            elem_text = widgetName + " = "+elem.text().replace(",", ".")
-        else:
-            elem_text = widgetName + " = null"
-    else:
-        elem_text = widgetName + " = null"
-    return elem_text
-
-
 def getFloat(widgetName):
     
     widget = _dialog.findChild(QLineEdit, widgetName)
@@ -134,7 +121,7 @@ def setNumeric(widgetName, number):
             elem.setText(None)
             
 
-def getStringValue(widgetName):
+def getText(widgetName):
     
     elem = _dialog.findChild(QLineEdit, widgetName)
     if elem:
@@ -151,26 +138,6 @@ def getStringValue(widgetName):
                 elem_text = elem.toPlainText()
         else:
             elem_text = None
-    return elem_text
-
-
-def getStringValue2(widgetName):
-    
-    elem = _dialog.findChild(QLineEdit, widgetName)
-    if elem:
-        if (not elem.text() or elem.text().lower() == "null"):
-            elem_text = "null"
-        else:
-            elem_text = "'"+elem.text().replace("'", "''")+"'"
-    else:
-        elem = _dialog.findChild(QTextEdit, widgetName)
-        if elem:
-            if (not elem.toPlainText() or elem.toPlainText().lower() == "null"):
-                elem_text = "null"    
-            else:
-                elem_text = "'"+elem.toPlainText().replace("'", "''")+"'"
-        else:
-            elem_text = "null"
     return elem_text
 
 
