@@ -284,6 +284,12 @@ $BODY$
 LANGUAGE 'plpgsql';
 
 
+-- Define view
+CREATE OR REPLACE VIEW audit.v_audit AS 
+SELECT action_tstamp_tx, table_name, action, query, row_data, changed_fields
+FROM audit.logged_actions
+ORDER BY action_tstamp_tx DESC;
+
 
 -- To audit all the tables of the schema, execute:
 SELECT audit.audit_schema('data');

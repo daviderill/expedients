@@ -158,7 +158,7 @@ def getDate(widgetName, fieldName):
         else:
             value = "null"
             text = fieldName+"=null"
-    except ValueError:
+    except (TypeError, ValueError):
         value = "null"
         text = "" 
         
@@ -180,7 +180,7 @@ def isNumber(elem):
     try:
         float(elem)
         return True
-    except ValueError:
+    except (TypeError, ValueError):
         return False
 
 
