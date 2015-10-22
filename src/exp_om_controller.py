@@ -204,10 +204,8 @@ def loadData():
 def loadImmobles():
 
     global listImmobles
-    sql = "SELECT refcat20 || ' - ' || adreca_t FROM data.ibi WHERE refcat14 = '"+refcat.text()+"' ORDER BY id"
+    sql = "SELECT refcat20 || ' - ' || COALESCE(adreca_t, '') FROM data.ibi WHERE refcat14 = '"+refcat.text()+"' ORDER BY adreca_t"
     listImmobles = queryToList(sql)
-    # Append one to manage 'Comunitat de veins' o 'parceles sense immoble'
-    listImmobles.append('9999')
     setComboModel("cboEmp", listImmobles)        
 
     
@@ -446,15 +444,15 @@ def saveLiquidacio():
     if selItem is not None:
         clavPlu = selItem[:2]
         if not isNumber(clavPlu):
-            clavPlu = None        
+            clavPlu = None
    
     # Create SQL
     query = QSqlQuery()   
     if _expOmId is None:    
         # Get last id
         sql = "SELECT last_value FROM data.exp_om_id_seq"
-        query = QSqlQuery(sql)    
-        if (query.next()):    
+        query = QSqlQuery(sql)
+        if (query.next()):
             expId = query.value(0)
         sql= "INSERT INTO data.press_om (pressupost, placa, plu, res, ende, car, mov, fig, leg, par, pro, clav_uni, clav_plu, clav_mes, gar_res, gar_ser"
         sql+= ", liq_aj, bon_icio, bon_llic, total_press, total_liq, om_id)"
@@ -470,20 +468,20 @@ def saveLiquidacio():
         query.bindValue(":om_id", _expOmId) 
     
     # Bind values
-    query.bindValue(0, getText("txtPress")) 
-    query.bindValue(1, isChecked("chkPlaca")) 
-    query.bindValue(2, isChecked("chkPlu")) 
-    query.bindValue(3, isChecked("chkRes")) 
-    query.bindValue(4, isChecked("chkEnd")) 
-    if isChecked("chkCar"):    
+    query.bindValue(0, getText("txtPress"))
+    query.bindValue(1, isChecked("chkPlaca"))
+    query.bindValue(2, isChecked("chkPlu"))
+    query.bindValue(3, isChecked("chkRes"))
+    query.bindValue(4, isChecked("chkEnd"))
+    if isChecked("chkCar"):
         query.bindValue(5, getText("txtCarM")) 
-    if isChecked("chkMov"):            
+    if isChecked("chkMov"):
         query.bindValue(6, getText("txtMovM")) 
-    if isChecked("chkFig"):                    
-        query.bindValue(7, getText("txtFigM")) 
-    query.bindValue(8, isChecked("chkLeg")) 
+    if isChecked("chkFig"):
+        query.bindValue(7, getText("txtFigM"))
+    query.bindValue(8, isChecked("chkLeg"))
     if isChecked("chkPar"):            
-        query.bindValue(9, getText("txtParM")) 
+        query.bindValue(9, getText("txtParM"))
     query.bindValue(10, isChecked("chkPro")) 
     if isChecked("chkClavUni"):
         aux = getText("txtClavUniN")
@@ -496,15 +494,15 @@ def saveLiquidacio():
         aux = getText("txtClavMesN")
         if aux is None:
             aux = 13
-        query.bindValue(13, aux)         
-    query.bindValue(14, isChecked("chkGarRes")) 
-    query.bindValue(15, isChecked("chkGarSer")) 
+        query.bindValue(13, aux)
+    query.bindValue(14, isChecked("chkGarRes"))
+    query.bindValue(15, isChecked("chkGarSer"))
     if isChecked("chkLiqAj"):      
-        query.bindValue(16, getText("txtLiqAj"))   
-    query.bindValue(17, isChecked("chkBonIcio")) 
-    query.bindValue(18, isChecked("chkBonLlic")) 
-    query.bindValue(19, getText("txtTotalPress")) 
-    query.bindValue(20, getText("txtTotalLiq")) 
+        query.bindValue(16, getText("txtLiqAj"))
+    query.bindValue(17, isChecked("chkBonIcio"))
+    query.bindValue(18, isChecked("chkBonLlic"))
+    query.bindValue(19, getText("txtTotalPress"))
+    query.bindValue(20, getText("txtTotalLiq"))
     
     # Execute SQL
     result = query.exec_()
@@ -632,8 +630,8 @@ def empChanged():
 
     refcat20 = getSelectedItem("cboEmp")
     if refcat20 is not None:
-        refcat20 = refcat20[:23]
-    setText("txtRefcat20", refcat20)    
+        refcat20 = refcat20[:23].strip()
+    setText("txtRefcat20", refcat20)
 
 
 # Slots: Tab 'Projecte'        

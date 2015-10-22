@@ -154,10 +154,8 @@ def dataChanged():
 
 def loadImmobles():
 
-    sql = "SELECT refcat20 || ' - ' || adreca_t FROM data.ibi WHERE refcat14 = '"+refcat.text()+"' ORDER BY id"
+    sql = "SELECT refcat20 || ' - ' || COALESCE(adreca_t, '') FROM data.ibi WHERE refcat14 = '"+refcat.text()+"' ORDER BY adreca_t"
     listImmobles = queryToList(sql)
-    # Append one to manage 'Comunitat de veins' o 'parceles sense immoble'
-    listImmobles.append('9999')
     setComboModel("cboEmp", listImmobles)
     
 
