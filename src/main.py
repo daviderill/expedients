@@ -166,7 +166,7 @@ def empChanged():
     
     elem = getSelectedItem("cboEmp")
     if elem is not None:
-        elem = elem[:23]
+        elem = elem[:23].strip()
         filter_ = "parcela_id = '"+refcat.text()+"' and immoble_id = '"+elem+"'"
     else:
         filter_ = "parcela_id = '"+refcat.text()+"'"

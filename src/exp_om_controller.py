@@ -130,7 +130,7 @@ def setSignals():
     _dialog.findChild(QPushButton, "btnTecnic").clicked.connect(manageTecnic)
     _dialog.findChild(QPushButton, "btnDoc").clicked.connect(selectDocument)
     _dialog.findChild(QPushButton, "btnOpenDoc").clicked.connect(openDocument)
-    #_dialog.findChild(QPushButton, "btnPdfLiq").clicked.connect(openPdfLiquidacio)    
+    _dialog.findChild(QPushButton, "btnPdfLiq").clicked.connect(openPdfLiquidacio)    
     _dialog.findChild(QPushButton, "btnRefresh").clicked.connect(refresh)    
     _dialog.findChild(QPushButton, "btnSave").clicked.connect(save)    
     _dialog.findChild(QPushButton, "btnClose").clicked.connect(close)
@@ -516,17 +516,21 @@ def getPress():
     
     default = 0.0
     if chkLiqAj.isChecked():
-        value = txtLiqAj.text().replace(",", ".")   
-        setNumeric("txtLiqAj", value)     
+        value = getText("txtLiqAj")
+        if value is not None:
+            value = value.replace(",", ".")
+            setNumeric("txtLiqAj", value)
         if not isNumber(value):
             #showWarning(u"Format numèric incorrecte")
             return default        
     else:
-        value = getText("txtPress").replace(",", ".")
-        setNumeric("txtPress", value)
-        if not isNumber(value):
-            #showWarning(u"Format numèric incorrecte")
-            return default
+        value = getText("txtPress")
+        if value is not None:
+            value = value.replace(",", ".")
+            setNumeric("txtPress", value)
+            if not isNumber(value):
+                #showWarning(u"Format numèric incorrecte")
+                return default
     return float(value)
 
 
@@ -847,6 +851,16 @@ def generateExpedient():
         
 def openPdfLiquidacio():
 
+    # Executem funció que omple la taula de report
+    sql = "SELECT report.fill_report("+getText("txtId")+");"
+    query = QSqlQuery()
+    query.prepare(sql)
+    result = query.exec_()
+    if result is False:
+        showWarning("Error en la consulta: "+query.lastQuery(), 30)
+        return
+    
+    # Obrim la composició
     myComp = _iface.activeComposers()[0].composition()
     if myComp is not None:
         myComp.setAtlasMode(QgsComposition.PreviewAtlas)

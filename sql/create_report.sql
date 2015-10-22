@@ -6,9 +6,9 @@ BEGIN
 DROP TABLE IF EXISTS "report"."rpt_expedient";
 CREATE TABLE "report"."rpt_expedient" (
 "om_id" int4 NOT NULL,
-"num_exp" varchar(15),
-"parcela" varchar(14),
-"immoble" varchar(20),
+"num_exp" varchar,
+"parcela" varchar,
+"immoble" varchar,
 "pressupost" numeric(15,2),
 "liq_aj" numeric(15,2),
 "taxa_icio" numeric(15,2),
@@ -36,8 +36,6 @@ CREATE TABLE "report"."rpt_expedient" (
 "total" numeric(15,2),
 CONSTRAINT "rpt_expedient_pkey" PRIMARY KEY ("om_id")
 );
-
-ALTER TABLE "report"."rpt_expedient" OWNER TO "gisadmin";
 
 END;
  

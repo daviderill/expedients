@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION "report"."fill_report"(p_id int4) 
+CREATE OR REPLACE FUNCTION "report"."fill_report"(p_id int4)
   RETURNS "pg_catalog"."bool" AS $BODY$
 
 DECLARE
@@ -144,9 +144,9 @@ BEGIN
 		tot_liq, gar_res, gar_ser, total
 		) VALUES (';
 	v_sql_2:= r_exp.id||', '||quote_nullable(r_exp.num_exp)||', '||quote_nullable(r_exp.parcela_id)||', '||quote_nullable(r_exp.immoble_id)||', 
-		'||r_exp.pressupost||', '||r_exp.liq_aj||', '||taxa_icio||', '||taxa_placa||', 
+		'||quote_nullable(r_exp.pressupost)||', '||quote_nullable(r_exp.liq_aj)||', '||taxa_icio||', '||taxa_placa||', 
 		'||v_plu||', '||v_res||', '||v_ende||', '||v_car||', '||v_mov||', '||v_fig||', '||v_leg||', '||v_par||', '||v_pro||', '||taxa_llic||',
-		'||quote_nullable(r_exp.clav_uni)||', '||v_clav_uni||', '||r_exp.clav_plu||', '||v_clav_plu||', '||r_exp.clav_mes||', '||v_clav_mes||', '||taxa_clav||', 
+		'||quote_nullable(r_exp.clav_uni)||', '||v_clav_uni||', '||quote_nullable(r_exp.clav_plu)||', '||v_clav_plu||', '||quote_nullable(r_exp.clav_mes)||', '||v_clav_mes||', '||taxa_clav||', 
 		'||tot_liq||', '||v_gar_res||', '||v_gar_ser||', '||total;
 	
 	v_sql:= v_sql_1 || v_sql_2 || ');';
