@@ -1,8 +1,7 @@
-﻿from PyQt4.QtCore import * #@UnusedWildImport
-from PyQt4.QtGui import * #@UnusedWildImport
-from PyQt4.QtSql import *  # @UnusedWildImport
+﻿from PyQt4.QtCore import *    # @UnusedWildImport
+from PyQt4.QtGui import *     # @UnusedWildImport
+from PyQt4.QtSql import *     # @UnusedWildImport
 from qgis.core import *
-from qgis.gui import QgsMessageBar  # @UnresolvedImport
 from qgis.utils import iface  # @UnresolvedImport
 from functools import partial
 from datetime import datetime
@@ -80,6 +79,7 @@ def widgetsToGlobal():
 
 def initConfig():    
     
+    _dialog.setWindowTitle(u"Gestor d'expedients d'obres")
     setText("refcat", str(_parcela))
 
     # Fill combo boxes and completers with data stored in memory
@@ -137,7 +137,7 @@ def setSignals():
     _dialog.findChild(QPushButton, "btnGenExp").clicked.connect(generateExpedient)
     
     # General and Tab 'Dades Expedient'   
-    txtRegEnt.editingFinished.connect(entradaChanged)    
+    #txtRegEnt.editingFinished.connect(validateRegEnt)    
     rbFisica.clicked.connect(getTipusSol)    
     rbJuridica.clicked.connect(getTipusSol)    
     cboSol.activated.connect(partial(solChanged, 'persona'))
@@ -204,7 +204,7 @@ def loadData():
 def loadImmobles():
 
     global listImmobles
-    sql = "SELECT refcat20 || ' - ' || adreca_t FROM data.ibi WHERE refcat14 = '"+refcat.text()+"' ORDER BY id"    
+    sql = "SELECT refcat20 || ' - ' || adreca_t FROM data.ibi WHERE refcat14 = '"+refcat.text()+"' ORDER BY id"
     listImmobles = queryToList(sql)
     # Append one to manage 'Comunitat de veins' o 'parceles sense immoble'
     listImmobles.append('9999')
@@ -371,10 +371,6 @@ def updateTabLiquidacio():
 
 # Save data from Tab 'Dades Expedient' and 'Projecte' into Database
 def saveDadesExpedient():
- 
-    # Check if we have set 'id'
-    if not entradaChanged():
-        return    
     
     # Get dates
     dLiquidacio = getDate("dateLiquidacio", "data_liq")       
@@ -513,7 +509,7 @@ def saveLiquidacio():
     # Execute SQL
     result = query.exec_()
     if result is False:
-        showWarning("Error en la consulta: "+query.lastQuery(), 30)            
+        showWarning("Error en la consulta: "+query.lastQuery(), 30)
     else:
         showInfo("Expedient guardat correctament")
                   
@@ -567,45 +563,31 @@ def clearNotificacions():
     setText("txtNotifPoblacio", '')
 
 
-def showInfo(text, duration = None):
-    if duration is None:
-        _iface.messageBar().pushMessage("", text, QgsMessageBar.INFO, MSG_DURATION)  
-    else:
-        _iface.messageBar().pushMessage("", text, QgsMessageBar.INFO, duration)              
-    
-      
-def showWarning(text, duration = None):
-    if duration is None:
-        _iface.messageBar().pushMessage("", text, QgsMessageBar.WARNING, MSG_DURATION)  
-    else:
-        _iface.messageBar().pushMessage("", text, QgsMessageBar.WARNING, duration)               
-
-
-
 # Slots: Tab 'Dades expedient'
 def getTipusSol():
     
     if rbFisica.isChecked():
         cboSol.setVisible(True)
         cboSolCif.setVisible(False)
-        setText("lblSol", u"NIF sol·licitant")
+        #setText("lblSol", u"NIF sol·licitant")
     else:
         cboSolCif.setVisible(True)
         cboSol.setVisible(False)
-        setText("lblSol", u"CIF sol·licitant")
+        #setText("lblSol", "CIF sol·licitant")
     clearNotificacions()
 
 
-def entradaChanged():
+def validateRegEnt():
     
     entrada = txtRegEnt.text()
     if not entrada:
         showWarning(u"Cal especificar codi del registre d'entrada amb el format: <num>/<any>. Per exemple: 1234/15")
         return False
     if len(entrada) <> 7:
+        print "SS"
         showWarning(u"El registre d'entrada ha de tenir exactament 7 caràcters amb el format: <num>/<any>. Per exemple: 1234/15")
         txtRegEnt.selectAll()
-        return False
+        return False   
     return True
 
 
@@ -848,20 +830,21 @@ def bonChanged(widgetName):
 # Slots: Window buttons
 
 def generateExpedient():
+
     # Obtenir any a partir de número d'expedient
-    regEnt = txtRegEnt.text()
-    anyo = str(regEnt[-2:])
-    sql = "SELECT MAX(substr(num_exp, 0, 4)) FROM data.exp_om WHERE substr(reg_ent, 6) = '"+anyo+"'"
-    print sql
-    query = QSqlQuery(sql)
-    if (query.next()): 
-        if query.value(0) == '':
-            value = "001/"+str(anyo)
-        else:
-            code = int(query.value(0)) + 1
-            value = str(code).zfill(3)+"/"+str(anyo)
-        setText("txtNumExp", value) 
-        setDate("dateEntrada", current_date)
+    if validateRegEnt():
+        regEnt = txtRegEnt.text()
+        anyo = str(regEnt[-2:])
+        sql = "SELECT MAX(substr(num_exp, 0, 4)) FROM data.exp_om WHERE substr(reg_ent, 6) = '"+anyo+"'"
+        query = QSqlQuery(sql)
+        if (query.next()):
+            if query.isNull(0):
+                value = "001/"+str(anyo)
+            else:
+                code = int(query.value(0)) + 1
+                value = str(code).zfill(3)+"/"+str(anyo)
+            setText("txtNumExp", value) 
+            setDate("dateEntrada", current_date)
         
         
 def openPdfLiquidacio():

@@ -1,12 +1,11 @@
-﻿from PyQt4.QtCore import *  # @UnusedWildImport
-from PyQt4.QtGui import *  # @UnusedWildImport
-from PyQt4.QtSql import *  # @UnusedWildImport
+﻿from PyQt4.QtCore import *    # @UnusedWildImport
+from PyQt4.QtGui import *     # @UnusedWildImport
+from PyQt4.QtSql import *     # @UnusedWildImport
 from qgis.core import *
-from qgis.gui import QgsMessageBar  # @UnresolvedImport
 from qgis.utils import iface  # @UnresolvedImport
-from utils import *  # @UnusedWildImport
 from datetime import datetime
 import time
+from utils import *  # @UnusedWildImport
 from exp_om_dialog import ExpOmDialog
 import exp_om_controller
 from main_dao import MainDao
@@ -41,13 +40,6 @@ def formOpen(dialog,layerid,featureid):
     _dialog = dialog
     setDialog(dialog)
     widgetsToGlobal()
-
-    # Get 'Expedients' from selected 'parcela' and filter conditions
-    filter_ = "parcela_id = '"+refcat.text()+"'"
-    getExpedients(filter_)
-    
-    # Load 'immobles' from selected 'parcela'
-    loadImmobles()    
     
     # Initial configuration
     initConfig()
@@ -56,7 +48,6 @@ def formOpen(dialog,layerid,featureid):
 def connectDb():
 
     global mainDao
-
     mainDao = MainDao()
     status = mainDao.initDb()
     if status is False:
@@ -65,12 +56,20 @@ def connectDb():
 
 def widgetsToGlobal():
     
-    global refcat, tblExp
+    global refcat, tblExp, cboEmp
     refcat = _dialog.findChild(QLineEdit, "refcat")
     tblExp = _dialog.findChild(QTableView, "tblExp")
+    cboEmp = _dialog.findChild(QComboBox, "cboEmp")  
 
     
 def initConfig():
+    
+    # Load 'immobles' from selected 'parcela'
+    loadImmobles()
+    
+    # Get 'Expedients' from selected 'parcela' and filter conditions
+    filter_ = "parcela_id = '"+refcat.text()+"'"
+    getExpedients(filter_)
     
     # Wire up our own signals
     setSignals()    
@@ -106,7 +105,7 @@ def setSignals():
     _dialog.findChild(QPushButton, "btnDelete").clicked.connect(delete)
     _dialog.findChild(QPushButton, "btnRefresh").clicked.connect(refresh)
     _dialog.findChild(QPushButton, "btnClose").clicked.connect(close)
-    _dialog.findChild(QComboBox, "cboEmp").currentIndexChanged.connect(empChanged)
+    cboEmp.currentIndexChanged.connect(empChanged)
     #tblExp.doubleClicked.connect(update)
     
         
@@ -146,6 +145,7 @@ def hideColumns(tblExp):
     for i in range (24, 27):
         tblExp.hideColumn(i)
 
+        
 def dataChanged():
     ok = model.submitAll()
     if not ok:
@@ -159,34 +159,7 @@ def loadImmobles():
     # Append one to manage 'Comunitat de veins' o 'parceles sense immoble'
     listImmobles.append('9999')
     setComboModel("cboEmp", listImmobles)
-
-
-# Utility functions
-def showInfo(text, duration = None):
     
-    if duration is None:
-        _iface.messageBar().pushMessage("", text, QgsMessageBar.INFO, MSG_DURATION)  
-    else:
-        _iface.messageBar().pushMessage("", text, QgsMessageBar.INFO, duration)              
-    
-      
-def showWarning(text, duration = None):
-    
-    if duration is None:
-        _iface.messageBar().pushMessage("", text, QgsMessageBar.WARNING, MSG_DURATION)  
-    else:
-        _iface.messageBar().pushMessage("", text, QgsMessageBar.WARNING, duration)               
-
-
-def askQuestion(text, infText = None):
-
-    msgBox = QMessageBox()
-    msgBox.setText(text);
-    if infText is not None:
-        msgBox.setInformativeText(infText);
-    msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-    msgBox.setDefaultButton(QMessageBox.No)
-    return msgBox.exec_()  
 
 
 # Slots
@@ -213,7 +186,6 @@ def create():
          
 def update(modelIndex):
      
-    #print str(modelIndex)	
     dlg = ExpOmDialog()   
     if not dlg:        
         showWarning("No s'ha pogut carregar el formulari")            
@@ -248,7 +220,6 @@ def delete():
     for i in range(0, len(selectedList)):
         row = selectedList[i].row()
         id = model.record(row).value("id")
-        #reg_ent = model.record(row).value("reg_ent")
         msg+= str(id)+", "
         listId = listId + str(id) + ", "
     msg = msg[:-2]

@@ -1,6 +1,8 @@
 ﻿from PyQt4.QtCore import * #@UnusedWildImport
 from PyQt4.QtGui import * #@UnusedWildImport
 from PyQt4.QtSql import *  # @UnusedWildImport
+from qgis.gui import QgsMessageBar  # @UnresolvedImport
+from qgis.utils import iface  # @UnresolvedImport
 import logging
 import os.path
 
@@ -22,8 +24,8 @@ def setDialog(p_dialog):
     
     global _dialog
     _dialog = p_dialog
- 
-
+    
+    
 def setComboModel(widgetName, vector):
 
     elem = _dialog.findChild(QComboBox, widgetName)
@@ -229,7 +231,35 @@ def setVisible(widgetName, isVisible):
     elem = _dialog.findChild(QWidget, widgetName)
     if elem:    
         elem.setVisible(isVisible)
-        
+
+
+# User interaction functions
+def showInfo(text, duration = None):
+    
+    if duration is None:
+        iface.messageBar().pushMessage("", text, QgsMessageBar.INFO, 5)  
+    else:
+        iface.messageBar().pushMessage("", text, QgsMessageBar.INFO, duration)
+    
+      
+def showWarning(text, duration = None):
+    
+    if duration is None:
+        iface.messageBar().pushMessage("", text, QgsMessageBar.WARNING, 5)
+    else:
+        iface.messageBar().pushMessage("", text, QgsMessageBar.WARNING, duration)
+
+
+def askQuestion(text, infText = None):
+
+    msgBox = QMessageBox()
+    msgBox.setText(text);
+    if infText is not None:
+        msgBox.setInformativeText(infText);
+    msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+    msgBox.setDefaultButton(QMessageBox.No)
+    return msgBox.exec_()  
+    
 
 def setLogger(name, folder, filename):
     

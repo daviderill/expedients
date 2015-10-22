@@ -244,6 +244,9 @@
       <height>22</height>
      </rect>
     </property>
+    <property name="editable">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="lblRef_3">
     <property name="geometry">
