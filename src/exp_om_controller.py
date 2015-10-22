@@ -521,16 +521,14 @@ def getPress():
             value = value.replace(",", ".")
             setNumeric("txtLiqAj", value)
         if not isNumber(value):
-            #showWarning(u"Format numèric incorrecte")
             return default        
     else:
         value = getText("txtPress")
         if value is not None:
             value = value.replace(",", ".")
             setNumeric("txtPress", value)
-            if not isNumber(value):
-                #showWarning(u"Format numèric incorrecte")
-                return default
+        if not isNumber(value):
+            return default
     return float(value)
 
 
@@ -916,7 +914,7 @@ def save():
     result = saveDadesExpedient()
     if result:
         saveLiquidacio()
-        _dialog.accept()   
+        #_dialog.accept()   
 
 def close():
     _dialog.close()   
