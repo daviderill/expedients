@@ -177,9 +177,9 @@ def create():
     
     dlg = ExpOmDialog()   
     if not dlg:        
-        showWarning("No s'ha pogut carregar el formulari")            
+        showWarning("No s'ha pogut carregar el formulari")
         return	
-    exp_om_controller.openExpOm(dlg, refcat.text())	
+    exp_om_controller.openExpOm(dlg, refcat.text())
          
          
 def update(modelIndex):
@@ -213,7 +213,7 @@ def delete():
         showWarning("No ha seleccionat cap registre per eliminar")
         return
     
-    msg = "Ha seleccionat els expedients:\n"
+    msg = "Ha seleccionat les autoliquidacions:\n"
     listId = ''
     for i in range(0, len(selectedList)):
         row = selectedList[i].row()

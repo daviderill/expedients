@@ -18,7 +18,7 @@ def openExpOm(dialog, parcela, expOmId = None):
     current_path = os.path.dirname(os.path.abspath(__file__))
     date_aux = time.strftime("%d/%m/%Y")
     current_date = datetime.strptime(date_aux, "%d/%m/%Y")
-    report_folder = current_path+"/reports/"    
+    report_folder = current_path+"/reports/"
 
     # Save reference to the QGIS interface
     MSG_DURATION = 5
@@ -31,24 +31,31 @@ def openExpOm(dialog, parcela, expOmId = None):
     # Get dialog and his widgets
     _parcela = parcela
     _dialog = dialog
-    _expOmId = None
+    _expOmId = None 
     setDialog(dialog)
     widgetsToGlobal()
     
     # Initial configuration
     initConfig()
     
+    getNextId()
+        
     # Check if we are in mode 'Create' or 'Update'
     if expOmId is None:
-        # Fill 'Data AutoLiquidació' with current Date    
+        # Fill 'Dates' with current Date    
         setDate("dateLiquidacio", current_date)
+        setDate("dateEntrada", current_date)
+        setDate("dateLlicencia", current_date)
+        #elem = _dialog.findChild(QDateEdit, "dateLlicencia")
+        #if elem:    
+        #    elem.setMinimumDate(current_date)
         # Manage 'Tipus solicitant'
         getTipusSol()
     else:
         _expOmId = expOmId
         getDadesExpedient()
         getLiquidacio()
-        checkDocument()           
+        checkDocument()
     
     # Open form as modeless dialog
     _dialog.show()
@@ -181,12 +188,10 @@ def setSignals():
    
         
 # Load combos from domain tables (only first time)
-def loadData():
+def loadData(isRefresh = False):
 
     global listTipus, listNif, listCif, listTecnic, listClavPlu
     
-    sql = "SELECT id FROM data.tipus_om ORDER BY id"
-    listTipus = queryToList(sql)
     sql = "SELECT id FROM data.persona ORDER BY id"
     listNif = queryToList(sql)
     sql = "SELECT id FROM data.juridica ORDER BY id"
@@ -194,11 +199,15 @@ def loadData():
     sql = "SELECT id FROM data.tecnic ORDER BY id"
     listTecnic = queryToList(sql)
     
-    listClavPlu = []
-    listClavPlu.append('')
-    listClavPlu.append('2 a 5')
-    listClavPlu.append('6 a 9')
-    listClavPlu.append('10 a 13')
+    # Only process when not refreshing
+    if not isRefresh:
+        sql = "SELECT id FROM data.tipus_om ORDER BY id"
+        listTipus = queryToList(sql)
+        listClavPlu = []
+        listClavPlu.append('')
+        listClavPlu.append('2 a 5')
+        listClavPlu.append('6 a 9')
+        listClavPlu.append('10 a 13')
         
         
 def loadImmobles():
@@ -224,6 +233,20 @@ def getLayers():
             layerTecnic = layer
                     
 
+def getNextId():
+
+    global _nextId
+    
+    if _expOmId is None:    
+        sql = "SELECT last_value FROM data.exp_om_id_seq;"
+        query = QSqlQuery(sql) 
+        if (query.next()):   
+            _nextId = getQueryValue(query, 0) + 1
+            setText("txtId", _nextId)
+    else:
+        _nextId = None
+
+    
 def getDadesExpedient():
 
     sql = "SELECT num_exp, data_ent, data_llic, tipus_id, tipus_solic_id, solic_persona_id, solic_juridica_id, repre_id"
@@ -439,6 +462,8 @@ def saveDadesExpedient():
 # Save data from Tab 'Liquidació' into Database
 def saveLiquidacio():
  
+    global _expOmId
+    
     clavPlu = None
     selItem = getSelectedItem('cboClavPlu')
     if selItem is not None:
@@ -447,18 +472,14 @@ def saveLiquidacio():
             clavPlu = None
    
     # Create SQL
-    query = QSqlQuery()   
-    if _expOmId is None:    
-        # Get last id
-        sql = "SELECT last_value FROM data.exp_om_id_seq"
-        query = QSqlQuery(sql)
-        if (query.next()):
-            expId = query.value(0)
+    query = QSqlQuery()
+    if _expOmId is None:
         sql= "INSERT INTO data.press_om (pressupost, placa, plu, res, ende, car, mov, fig, leg, par, pro, clav_uni, clav_plu, clav_mes, gar_res, gar_ser"
         sql+= ", liq_aj, bon_icio, bon_llic, total_press, total_liq, om_id)"
         sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"         
-        query.prepare(sql)         
-        query.bindValue(21, expId)         
+        query.prepare(sql)     
+        query.bindValue(21, _nextId)
+        _expOmId = _nextId
     else:   
         sql = "UPDATE data.press_om SET"
         sql+= " pressupost=:0, placa=:1, plu=:2, res=:3, ende=:4, car=:5, mov=:6, fig=:7, leg=:8, par=:9, pro=:10"
@@ -584,7 +605,6 @@ def validateRegEnt():
         showWarning(u"Cal especificar codi del registre d'entrada amb el format: <num>/<any>. Per exemple: 1234/15")
         return False
     if len(entrada) <> 7:
-        print "SS"
         showWarning(u"El registre d'entrada ha de tenir exactament 7 caràcters amb el format: <num>/<any>. Per exemple: 1234/15")
         txtRegEnt.selectAll()
         return False   
@@ -901,8 +921,7 @@ def checkDocument():
             _dialog.findChild(QPushButton, "btnOpenDoc").setEnabled(True)         
 
 def refresh():
-    loadData()
-    setComboModel("cboTipus", listTipus)
+    loadData(True)
     setComboModel("cboSol", listNif)
     setComboModel("cboSolCif", listCif)
     setComboModel("cboRep", listNif)
@@ -913,8 +932,7 @@ def refresh():
 def save():
     result = saveDadesExpedient()
     if result:
-        saveLiquidacio()
-        #_dialog.accept()   
+        saveLiquidacio() 
 
 def close():
     _dialog.close()   
