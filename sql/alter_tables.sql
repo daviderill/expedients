@@ -84,4 +84,14 @@ $BODY$
 
 
 
+CREATE SEQUENCE "data"."tecnic_id_seq"
+ INCREMENT 1
+ MINVALUE 1
+ MAXVALUE 9223372036854775807
+ START 4
+ CACHE 1
+ OWNED BY "data"."tecnic"."id";
+ 
+ALTER TABLE "data"."tecnic"
+ALTER COLUMN "id" SET DEFAULT nextval('"data".tecnic_id_seq'::regclass);
 

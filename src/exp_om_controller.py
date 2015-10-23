@@ -668,7 +668,7 @@ def executorChanged():
 
 def tecnicChanged(cboName, widgetName):
     
-    sql = "SELECT COALESCE(nom, '') || ' ' || COALESCE(cognom_1, '') || ' ' || COALESCE(cognom_2, '') || '. Núm colegiat: ' || COALESCE(num_colegiat, '') AS tecnic "
+    sql = "SELECT COALESCE(nom, '') || ' ' || COALESCE(cognom_1, '') || ' ' || COALESCE(cognom_2, '') || ' - Num.colegiat: ' || COALESCE(num_colegiat, '') AS tecnic "
     sql+= "FROM data.tecnic WHERE id = "+getSelectedItem2(cboName)
     query = QSqlQuery(sql)
     if (query.next()):

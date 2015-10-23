@@ -17,7 +17,6 @@ def formOpen(dialog,layerid,featureid):
     global MSG_DURATION
        
     # Check if it is the first time we execute this module
-    #if True:
     if isFirstTime():
           
         # Get current path and save reference to the QGIS interface
@@ -32,9 +31,9 @@ def formOpen(dialog,layerid,featureid):
         connectDb()
 
     # If not, close previous dialog	if already opened
-    else:
-        if _dialog.isVisible():
-            _dialog.parent().setVisible(False)
+    #else:
+        #if _dialog.isVisible():
+            #_dialog.parent().setVisible(False)
 
     # Get dialog and his widgets
     _dialog = dialog

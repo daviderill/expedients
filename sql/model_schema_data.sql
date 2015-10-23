@@ -198,7 +198,7 @@ COMMENT ON COLUMN "data"."press_om"."placa" IS 'OF.7 Taxa Placa';
 
 DROP TABLE IF EXISTS "data"."tecnic"; 
 CREATE TABLE "data"."tecnic" (
-"id" varchar(25),
+"id" SERIAL,
 "dni" varchar(9),
 "nom" varchar(100),
 "cognom_1" varchar(100),
