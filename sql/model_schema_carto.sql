@@ -123,6 +123,31 @@ CREATE TABLE carto.ur_parcela(
 CREATE INDEX sidx_ur_parcela_geom ON carto.ur_parcela USING gist(geom);
 
 
+DROP TABLE IF EXISTS limit_admin."limit_TM_poly";
+CREATE TABLE limit_admin."limit_TM_poly"(
+  id serial NOT NULL,
+  geom geometry(MultiPolygon,25831),
+  id_sector integer,
+  area_m2 double precision,
+  area_km2 double precision,
+  CONSTRAINT "limit_TM_poly_pkey" PRIMARY KEY (id)
+);
+CREATE INDEX "sidx_limit_TM_poly_geom" ON limit_admin."limit_TM_poly" USING gist(geom);
+
+
+DROP TABLE IF EXISTS limit_admin.sectors;
+CREATE TABLE limit_admin.sectors(
+  id serial NOT NULL,
+  geom geometry(MultiPolygon,25831),
+  id_sector integer,
+  nom_sector character varying(100),
+  classifica character varying(50),
+  area double precision,
+  CONSTRAINT sectors_pkey PRIMARY KEY (id)
+);
+CREATE INDEX sidx_sectors_geom ON limit_admin.sectors USING gist(geom);
+ 
+
 DROP TABLE IF EXISTS topo.plani_line;
 CREATE TABLE topo.plani_line(
   id serial NOT NULL,

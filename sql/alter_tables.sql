@@ -83,7 +83,6 @@ $BODY$
   LANGUAGE 'plpgsql' VOLATILE COST 100;
 
 
-
 CREATE SEQUENCE "data"."tecnic_id_seq"
  INCREMENT 1
  MINVALUE 1
@@ -94,4 +93,28 @@ CREATE SEQUENCE "data"."tecnic_id_seq"
  
 ALTER TABLE "data"."tecnic"
 ALTER COLUMN "id" SET DEFAULT nextval('"data".tecnic_id_seq'::regclass);
+
+
+-- 26/10/2015
+DROP TABLE IF EXISTS "data"."tipus_doc";
+CREATE TABLE "data"."tipus_doc" (
+"id" varchar(200),
+"obs" varchar(200),
+PRIMARY KEY ("id") 
+);
+
+
+DROP TABLE IF EXISTS "data"."docs_om";
+CREATE TABLE "data"."docs_om" (
+"id" SERIAL,
+"om_id" int4,
+"data_ent" date,
+"tipus_id" varchar(200),
+"descripcio" text,
+"ruta" text,
+"obs" text,
+PRIMARY KEY ("id") 
+);
+
+ALTER TABLE "data"."docs_om" ADD CONSTRAINT "fk_docs_om_doc_tipus_id" FOREIGN KEY ("tipus_id") REFERENCES "data"."tipus_doc" ("id");
 

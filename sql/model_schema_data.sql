@@ -1,3 +1,16 @@
+DROP TABLE IF EXISTS "data"."docs_om";
+CREATE TABLE "data"."docs_om" (
+"id" SERIAL,
+"om_id" int4,
+"data_ent" date,
+"tipus_id" varchar(200),
+"descripcio" text,
+"ruta" text,
+"obs" text,
+PRIMARY KEY ("id") 
+);
+
+
 DROP TABLE IF EXISTS "data"."estat" CASCADE;
 CREATE TABLE "data"."estat" (
 "id" varchar(200),
@@ -210,6 +223,14 @@ PRIMARY KEY ("id")
 );
 
 
+DROP TABLE IF EXISTS "data"."tipus_doc";
+CREATE TABLE "data"."tipus_doc" (
+"id" varchar(200),
+"obs" varchar(200),
+PRIMARY KEY ("id") 
+);
+
+
 DROP TABLE IF EXISTS "data"."tipus_om"; 
 CREATE TABLE "data"."tipus_om" (
 "id" varchar(200),
@@ -218,6 +239,8 @@ PRIMARY KEY ("id")
 );
 
 
+
+ALTER TABLE "data"."docs_om" ADD CONSTRAINT "fk_docs_om_doc_tipus_id" FOREIGN KEY ("tipus_id") REFERENCES "data"."tipus_doc" ("id");
 
 ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_tipus_om" FOREIGN KEY ("tipus_id") REFERENCES "data"."tipus_om" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
 

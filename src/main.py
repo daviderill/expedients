@@ -15,10 +15,10 @@ def formOpen(dialog,layerid,featureid):
 
     global _dialog, _iface, current_path, current_date
     global MSG_DURATION
-       
+
     # Check if it is the first time we execute this module
     if isFirstTime():
-          
+
         # Get current path and save reference to the QGIS interface
         current_path = os.path.dirname(os.path.abspath(__file__))
         date_aux = time.strftime("%d/%m/%Y")
@@ -29,11 +29,6 @@ def formOpen(dialog,layerid,featureid):
         # Connect to Database (only once, when loading map)
         showInfo("Attempting to connect to DB")
         connectDb()
-
-    # If not, close previous dialog	if already opened
-    #else:
-        #if _dialog.isVisible():
-            #_dialog.parent().setVisible(False)
 
     # Get dialog and his widgets
     _dialog = dialog
@@ -81,11 +76,11 @@ def initConfig():
     _iface.mapCanvas().refresh()
 
     # TODO TEST
-#     dlg = ExpOmDialog()
-#     if not dlg:
-#         showInfo("UI form not loaded")
-#         return
-#     exp_om_controller.openExpOm(dlg, '7220201CF8672S', 105)
+    dlg = ExpOmDialog()
+    if not dlg:
+        showInfo("UI form not loaded")
+        return
+    exp_om_controller.openExpOm(dlg, '7220201CF8672S', 122)
     
     
 # Set Group Boxes title font to bold    
@@ -106,8 +101,8 @@ def setSignals():
     _dialog.findChild(QPushButton, "btnClose").clicked.connect(close)
     cboEmp.currentIndexChanged.connect(empChanged)
     #tblExp.doubleClicked.connect(update)
-    
-        
+
+
 # Get 'Expedients' from selected 'parcela' and filter conditions
 def getExpedients(filter_):
 
@@ -156,7 +151,7 @@ def loadImmobles():
     sql = "SELECT refcat20 || ' - ' || COALESCE(adreca_t, '') FROM data.ibi WHERE refcat14 = '"+refcat.text()+"' ORDER BY adreca_t"
     listImmobles = queryToList(sql)
     setComboModel("cboEmp", listImmobles)
-    
+
 
 
 # Slots
@@ -179,8 +174,8 @@ def create():
         showWarning("No s'ha pogut carregar el formulari")
         return	
     exp_om_controller.openExpOm(dlg, refcat.text())
-         
-         
+
+
 def update(modelIndex):
      
     dlg = ExpOmDialog()   
@@ -228,7 +223,7 @@ def delete():
         query = QSqlQuery()
         query.exec_(sql)
         refresh()
-    
+
 
 def refresh():
     # Refresh table and map

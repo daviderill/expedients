@@ -37,8 +37,6 @@ def openExpOm(dialog, parcela, expOmId = None):
     
     # Initial configuration
     initConfig()
-    
-    getNextId()
         
     # Check if we are in mode 'Create' or 'Update'
     if expOmId is None:
@@ -46,9 +44,6 @@ def openExpOm(dialog, parcela, expOmId = None):
         setDate("dateLiquidacio", current_date)
         setDate("dateEntrada", current_date)
         setDate("dateLlicencia", current_date)
-        #elem = _dialog.findChild(QDateEdit, "dateLlicencia")
-        #if elem:    
-        #    elem.setMinimumDate(current_date)
         # Manage 'Tipus solicitant'
         getTipusSol()
     else:
@@ -56,6 +51,7 @@ def openExpOm(dialog, parcela, expOmId = None):
         getDadesExpedient()
         getLiquidacio()
         checkDocument()
+        loadDocs()        
     
     # Open form as modeless dialog
     _dialog.show()
@@ -63,15 +59,13 @@ def openExpOm(dialog, parcela, expOmId = None):
 
 def widgetsToGlobal():
 
-    global refcat, txtNumExp, txtRegEnt
-    global rbFisica, rbJuridica, cboSol, cboSolCif
-    global cboClavPlu, chkBonIcio, chkBonLlic, chkLiqAj
+    global refcat, txtNumExp, txtRegEnt, rbFisica, rbJuridica, cboSol, cboSolCif
+    global cboClavPlu, chkBonIcio, chkBonLlic, chkLiqAj, tblDoc
 
     # Tab 'Dades Expedient'  
     refcat = _dialog.findChild(QLineEdit, "refcat")
     txtNumExp = _dialog.findChild(QLineEdit, "txtNumExp")
     txtRegEnt = _dialog.findChild(QLineEdit, "txtRegEnt")
-
     rbFisica = _dialog.findChild(QRadioButton, "rbFisica")
     rbJuridica = _dialog.findChild(QRadioButton, "rbJuridica")
     cboSol = _dialog.findChild(QComboBox, "cboSol")
@@ -82,6 +76,9 @@ def widgetsToGlobal():
     chkBonIcio = _dialog.findChild(QCheckBox, "chkBonIcio")
     chkBonLlic = _dialog.findChild(QCheckBox, "chkBonLlic")
     chkLiqAj = _dialog.findChild(QCheckBox, "chkLiqAj")
+    
+    # Tab 'Comunicació i esmenes'
+    tblDoc = _dialog.findChild(QTableView, "tblDoc")    
 
 
 def initConfig():    
@@ -106,6 +103,7 @@ def initConfig():
     setSignals()    
     
     # Other default configuration
+    getNextId()    
     boldGroupBoxes()
     _dialog.findChild(QPushButton, "btnOpenDoc").setEnabled(False) 
     txtRegEnt.setInputMask("9999/99")
@@ -215,8 +213,43 @@ def loadImmobles():
     global listImmobles
     sql = "SELECT refcat20 || ' - ' || COALESCE(adreca_t, '') FROM data.ibi WHERE refcat14 = '"+refcat.text()+"' ORDER BY adreca_t"
     listImmobles = queryToList(sql)
-    setComboModel("cboEmp", listImmobles)        
+    setComboModel("cboEmp", listImmobles)
+    
+    
+# Load docs from selected 'expedient' and filter conditions
+def loadDocs():
 
+    global modelDoc
+    
+    # Define model
+    modelDoc = QSqlTableModel();
+    modelDoc.setTable("data.docs_om")
+    if _expOmId is not None:
+        filter_ = "om_id = "+str(_expOmId)    
+        modelDoc.setFilter(filter_)
+    modelDoc.setSort(0, Qt.AscendingOrder)
+    modelDoc.setEditStrategy(QSqlTableModel.OnRowChange)
+    modelDoc.select()
+    modelDoc.setHeaderData(0, Qt.Horizontal, "Id")
+    modelDoc.setHeaderData(2, Qt.Horizontal, "D. Entrada")
+    modelDoc.setHeaderData(3, Qt.Horizontal, "Tipus doc.")
+    modelDoc.setHeaderData(4, Qt.Horizontal, u"Descripció")
+    modelDoc.setHeaderData(5, Qt.Horizontal, "Ruta")
+    modelDoc.setHeaderData(6, Qt.Horizontal, "Observacions")      
+    modelDoc.dataChanged.connect(tableDocChanged)
+
+    # Set this model to the view
+    tblDoc.setModel(modelDoc)
+    hideColumns()
+    verticalHeader = tblDoc.verticalHeader()
+    verticalHeader.setResizeMode(QHeaderView.ResizeToContents)
+    tblDoc.resizeColumnsToContents()
+
+    
+def hideColumns():
+    for i in range (1, 2):
+        tblDoc.hideColumn(i)
+        
     
 def getLayers():
     
@@ -236,7 +269,6 @@ def getLayers():
 def getNextId():
 
     global _nextId
-    
     if _expOmId is None:    
         sql = "SELECT last_value FROM data.exp_om_id_seq;"
         query = QSqlQuery(sql) 
@@ -918,7 +950,12 @@ def checkDocument():
     filePath = getText("txtDoc")
     if filePath is not None:
         if os.path.isfile(filePath):
-            _dialog.findChild(QPushButton, "btnOpenDoc").setEnabled(True)         
+            _dialog.findChild(QPushButton, "btnOpenDoc").setEnabled(True)
+
+def tableDocChanged():
+    ok = modelDoc.submitAll()
+    if not ok:
+        showWarning(u"Error d'actualització de la taula")
 
 def refresh():
     loadData(True)

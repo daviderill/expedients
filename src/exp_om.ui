@@ -29,7 +29,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="tabDades">
     <attribute name="title">
@@ -2516,6 +2516,148 @@
     <attribute name="title">
      <string>Comunicació i Esmenes</string>
     </attribute>
+    <widget class="QGroupBox" name="gbDoc">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>601</width>
+       <height>291</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Documentació</string>
+     </property>
+     <widget class="QTableView" name="tblDoc">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>581</width>
+        <height>211</height>
+       </rect>
+      </property>
+      <property name="dragEnabled">
+       <bool>false</bool>
+      </property>
+      <property name="dragDropMode">
+       <enum>QAbstractItemView::NoDragDrop</enum>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnRefresh_2">
+      <property name="geometry">
+       <rect>
+        <x>560</x>
+        <y>250</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Actualitzar</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>icons/refresh.png</normaloff>icons/refresh.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>23</width>
+        <height>23</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnCreate">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>250</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Afegir</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>icons/plus.png</normaloff>icons/plus.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>23</width>
+        <height>23</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnUpdate">
+      <property name="geometry">
+       <rect>
+        <x>480</x>
+        <y>250</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Editar</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>icons/edit.png</normaloff>icons/edit.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>23</width>
+        <height>23</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnDelete">
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>250</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Eliminar</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>icons/minus.png</normaloff>icons/minus.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>23</width>
+        <height>23</height>
+       </size>
+      </property>
+     </widget>
+    </widget>
    </widget>
   </widget>
   <widget class="QPushButton" name="btnSave">
