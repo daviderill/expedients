@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>649</width>
+    <width>654</width>
     <height>560</height>
    </rect>
   </property>
@@ -2461,7 +2461,7 @@
      <property name="title">
       <string>Documentació</string>
      </property>
-     <widget class="QPushButton" name="btnDoc">
+     <widget class="QPushButton" name="btnProjAttach">
       <property name="geometry">
        <rect>
         <x>460</x>
@@ -2497,7 +2497,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="btnOpenDoc">
+     <widget class="QPushButton" name="btnProjOpen">
       <property name="geometry">
        <rect>
         <x>460</x>
@@ -2522,19 +2522,19 @@
        <x>10</x>
        <y>10</y>
        <width>601</width>
-       <height>291</height>
+       <height>261</height>
       </rect>
      </property>
      <property name="title">
-      <string>Documentació</string>
+      <string>Documentació expedient</string>
      </property>
      <widget class="QTableView" name="tblDoc">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>30</y>
+        <y>20</y>
         <width>581</width>
-        <height>211</height>
+        <height>191</height>
        </rect>
       </property>
       <property name="dragEnabled">
@@ -2553,11 +2553,11 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="btnRefresh_2">
+     <widget class="QPushButton" name="btnDocRefresh">
       <property name="geometry">
        <rect>
         <x>560</x>
-        <y>250</y>
+        <y>220</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -2579,11 +2579,11 @@
        </size>
       </property>
      </widget>
-     <widget class="QPushButton" name="btnCreate">
+     <widget class="QPushButton" name="btnDocCreate">
       <property name="geometry">
        <rect>
-        <x>440</x>
-        <y>250</y>
+        <x>400</x>
+        <y>220</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -2605,11 +2605,11 @@
        </size>
       </property>
      </widget>
-     <widget class="QPushButton" name="btnUpdate">
+     <widget class="QPushButton" name="btnDocUpdate">
       <property name="geometry">
        <rect>
-        <x>480</x>
-        <y>250</y>
+        <x>440</x>
+        <y>220</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -2631,11 +2631,11 @@
        </size>
       </property>
      </widget>
-     <widget class="QPushButton" name="btnDelete">
+     <widget class="QPushButton" name="btnDocDelete">
       <property name="geometry">
        <rect>
-        <x>520</x>
-        <y>250</y>
+        <x>480</x>
+        <y>220</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -2655,6 +2655,123 @@
         <width>23</width>
         <height>23</height>
        </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnDocSave">
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>220</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Desar</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>icons/save.png</normaloff>icons/save.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>23</width>
+        <height>23</height>
+       </size>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="gbDocSel">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>280</y>
+       <width>601</width>
+       <height>171</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Document seleccionat</string>
+     </property>
+     <widget class="QPushButton" name="btnOpenDoc_2">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>140</y>
+        <width>111</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Veure Document</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblDoc_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>120</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Ruta documentació:</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnDoc_2">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>110</y>
+        <width>111</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Adjuntar Document</string>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="txtComDoc">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>110</y>
+        <width>301</width>
+        <height>41</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblPress_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Descripció:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtComDesc">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>80</y>
+        <width>101</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
       </property>
      </widget>
     </widget>

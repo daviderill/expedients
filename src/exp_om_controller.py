@@ -13,7 +13,7 @@ from utils import *  # @UnusedWildImport
 def openExpOm(dialog, parcela, expOmId = None):
 
     global _dialog, _iface, _parcela, _expOmId, current_path, current_date, report_folder
-    global MSG_DURATION
+    global MSG_DURATION, curRow
    
     current_path = os.path.dirname(os.path.abspath(__file__))
     date_aux = time.strftime("%d/%m/%Y")
@@ -22,6 +22,8 @@ def openExpOm(dialog, parcela, expOmId = None):
 
     # Save reference to the QGIS interface
     MSG_DURATION = 5
+    setTableStatus("w")
+    curRow = -1
     _iface = iface
     getLayers()
 
@@ -105,7 +107,7 @@ def initConfig():
     # Other default configuration
     getNextId()    
     boldGroupBoxes()
-    _dialog.findChild(QPushButton, "btnOpenDoc").setEnabled(False) 
+    _dialog.findChild(QPushButton, "btnProjOpen").setEnabled(False) 
     txtRegEnt.setInputMask("9999/99")
     txtNumExp.setEnabled(False)
     _dialog.findChild(QLabel, "lblRefcat20").setVisible(False)
@@ -133,8 +135,8 @@ def setSignals():
     _dialog.findChild(QPushButton, "btnFisica").clicked.connect(manageFisica)
     _dialog.findChild(QPushButton, "btnJuridica").clicked.connect(manageJuridica)
     _dialog.findChild(QPushButton, "btnTecnic").clicked.connect(manageTecnic)
-    _dialog.findChild(QPushButton, "btnDoc").clicked.connect(selectDocument)
-    _dialog.findChild(QPushButton, "btnOpenDoc").clicked.connect(openDocument)
+    _dialog.findChild(QPushButton, "btnProjAttach").clicked.connect(selectDocument)
+    _dialog.findChild(QPushButton, "btnProjOpen").clicked.connect(openDocument)
     _dialog.findChild(QPushButton, "btnPdfLiq").clicked.connect(openPdfLiquidacio)    
     _dialog.findChild(QPushButton, "btnRefresh").clicked.connect(refresh)    
     _dialog.findChild(QPushButton, "btnSave").clicked.connect(save)    
@@ -183,6 +185,13 @@ def setSignals():
     _dialog.findChild(QCheckBox, "chkGarSer").clicked.connect(partial(garChanged, 'chkGarSer'))
     chkBonIcio.clicked.connect(partial(bonChanged, 'chkBonIcio'))
     chkBonLlic.clicked.connect(partial(bonChanged, 'chkBonLlic'))
+    
+    # Tab 'Comunicació i esmenes'
+    _dialog.findChild(QPushButton, "btnDocUpdate").setVisible(False)    
+    _dialog.findChild(QPushButton, "btnDocCreate").clicked.connect(tableDocCreate)
+    _dialog.findChild(QPushButton, "btnDocDelete").clicked.connect(tableDocDelete)
+    _dialog.findChild(QPushButton, "btnDocSave").clicked.connect(tableDocSave)        
+    _dialog.findChild(QPushButton, "btnDocRefresh").clicked.connect(tableDocRefresh)
    
         
 # Load combos from domain tables (only first time)
@@ -219,7 +228,7 @@ def loadImmobles():
 # Load docs from selected 'expedient' and filter conditions
 def loadDocs():
 
-    global modelDoc
+    global modelDoc, mapper
     
     # Define model
     modelDoc = QSqlTableModel();
@@ -236,7 +245,7 @@ def loadDocs():
     modelDoc.setHeaderData(4, Qt.Horizontal, u"Descripció")
     modelDoc.setHeaderData(5, Qt.Horizontal, "Ruta")
     modelDoc.setHeaderData(6, Qt.Horizontal, "Observacions")      
-    modelDoc.dataChanged.connect(tableDocChanged)
+    #modelDoc.dataChanged.connect(tableDocUpdated)
 
     # Set this model to the view
     tblDoc.setModel(modelDoc)
@@ -244,6 +253,19 @@ def loadDocs():
     verticalHeader = tblDoc.verticalHeader()
     verticalHeader.setResizeMode(QHeaderView.ResizeToContents)
     tblDoc.resizeColumnsToContents()
+    tblDoc.setEditTriggers(QAbstractItemView.NoEditTriggers);    
+    
+    # Set signal
+    sm = tblDoc.selectionModel()
+    sm.currentRowChanged.connect(tableDocRowChanged)
+    
+    # Map edit widgets to model
+    mapper = QDataWidgetMapper()   # QDataWidgetMapper
+    mapper.setModel(modelDoc)
+    mapper.addMapping(_dialog.findChild(QLineEdit, "txtComDesc"), 4)
+    mapper.addMapping(_dialog.findChild(QTextEdit, "txtComDoc"), 5, "plainText")
+    mapper.setSubmitPolicy(1)   # Manual Submit
+    #mapper.toFirst();    
 
     
 def hideColumns():
@@ -277,7 +299,7 @@ def getNextId():
             setText("txtId", _nextId)
     else:
         _nextId = None
-
+        
     
 def getDadesExpedient():
 
@@ -879,6 +901,126 @@ def bonChanged(widgetName):
 
     
     
+# Slots: Tab 'Comunicació i esmenes'
+def enableTableEdition(enable = True):
+
+    # Enable buttons and table view
+    setEnabled("tblDoc", enable)       
+    setEnabled("btnDocCreate", enable)
+    setEnabled("btnDocUpdate", enable)
+    setEnabled("btnDocDelete", enable)    
+    
+
+def clearWidgetFields():
+    setText("txtComDoc", "")
+    setText("txtComDesc", "")
+
+def setTableStatus(status):
+    global tableStatus
+    tableStatus = status
+    
+def getTableStatus():
+    return tableStatus  
+    
+def tableDocCreate():
+
+    global curRow
+    
+    setTableStatus("c")
+    
+    # Disable buttons and table view. Clear widget fields
+    enableTableEdition(False)
+    clearWidgetFields()    
+    
+    curRow = modelDoc.rowCount()
+    modelDoc.insertRow(curRow)
+
+
+def tableDocSave():
+
+    #enableTableEdition()
+    taleStatus = getTableStatus()
+    if tableStatus == "c":
+        curRecord = modelDoc.record()
+        sql = "SELECT nextval('data.docs_om_id_seq');"
+        query = QSqlQuery(sql) 
+        if (query.next()):
+            docId = getQueryValue(query, 0)
+            curRecord.setValue(0, docId)
+            curRecord.setValue(1, _expOmId)
+    else:
+        curRecord = modelDoc.record(curIndex.row())
+        
+    curRecord.setValue(4, getText("txtComDesc"))
+    curRecord.setValue(5, getText("txtComDoc"))
+    
+    # Save record and refresh table
+    modelDoc.setRecord(curRow, curRecord)
+    modelDoc.submitAll()
+    tableDocRefresh()   
+    #modelDoc.setData(modelDoc.index(rowCount,4), "temp_4");
+
+
+def tableDocDelete():
+
+    # Get selected rows
+    tableStatus = "w"    
+    selectedList = tblDoc.selectionModel().selectedRows()    
+    if len(selectedList) == 0:
+        showWarning("No ha seleccionat cap registre per eliminar")
+        return
+    
+    msg = "Ha seleccionat els documents amb codi:\n"
+    listId = ''
+    for i in range(0, len(selectedList)):
+        row = selectedList[i].row()
+        id = modelDoc.record(row).value("id")
+        msg+= str(id)+", "
+        listId = listId + str(id) + ", "
+    msg = msg[:-2]
+    listId = listId[:-2]
+    infMsg = u"Està segur que desitja eliminar-los?"
+    ret = askQuestion(msg, infMsg)
+    if (ret == QMessageBox.Yes):
+        sql = "DELETE FROM data.docs_om WHERE id IN ("+listId+")"
+        query = QSqlQuery()
+        query.exec_(sql)
+        tableDocRefresh()
+
+        
+def tableDocRefresh():
+
+    setTableStatus("w")
+    modelDoc.select()
+    enableTableEdition()
+    #mapper.setCurrentModelIndex(curIndex)    
+    clearWidgetFields()    
+
+    
+def tableDocUpdated():
+
+    print "tableDocUpdated"
+    ok = modelDoc.submitAll()
+    if not ok:
+        showWarning(u"Error d'actualització de la taula")
+        
+        
+def tableDocRowChanged(p_curIndex, p_prevIndex):
+
+    global curIndex, curRow
+    
+    curIndex = p_curIndex
+    curRow = p_curIndex.row()
+    #print "tableDocRowChanged"
+    #print str(curIndex.row()) + " " + str(curIndex.column())
+    #print str(prevIndex.row()) + " " + str(prevIndex.column())
+    curRecord = modelDoc.record(curIndex.row())     # QSqlRecord
+    field = curRecord.field(4)                      # QSqlField
+    #print str(field.value())
+    mapper.setCurrentModelIndex(curIndex)
+    
+
+    
 # Slots: Window buttons
 
 def generateExpedient():
@@ -950,12 +1092,7 @@ def checkDocument():
     filePath = getText("txtDoc")
     if filePath is not None:
         if os.path.isfile(filePath):
-            _dialog.findChild(QPushButton, "btnOpenDoc").setEnabled(True)
-
-def tableDocChanged():
-    ok = modelDoc.submitAll()
-    if not ok:
-        showWarning(u"Error d'actualització de la taula")
+            _dialog.findChild(QPushButton, "btnProjOpen").setEnabled(True)
 
 def refresh():
     loadData(True)

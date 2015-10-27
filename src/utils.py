@@ -198,6 +198,13 @@ def setChecked(widgetName, value):
     elem = _dialog.findChild(QCheckBox, widgetName)
     if elem:    
         elem.setChecked(value)
+       
+       
+def setEnabled(widgetName, value = True):
+    
+    elem = _dialog.findChild(QWidget, widgetName)
+    if elem:    
+        elem.setEnabled(value)        
             
 
 def setText(widgetName, text):

@@ -76,11 +76,11 @@ def initConfig():
     _iface.mapCanvas().refresh()
 
     # TODO TEST
-    dlg = ExpOmDialog()
-    if not dlg:
-        showInfo("UI form not loaded")
-        return
-    exp_om_controller.openExpOm(dlg, '7220201CF8672S', 122)
+    #dlg = ExpOmDialog()
+    #if not dlg:
+    #    showInfo("UI form not loaded")
+    #    return
+    #exp_om_controller.openExpOm(dlg, '7220201CF8672S', 122)
     
     
 # Set Group Boxes title font to bold    
@@ -169,19 +169,19 @@ def empChanged():
   
 def create():
     
-    dlg = ExpOmDialog()   
-    if not dlg:        
+    dlg = ExpOmDialog()
+    if not dlg:
         showWarning("No s'ha pogut carregar el formulari")
-        return	
+        return
     exp_om_controller.openExpOm(dlg, refcat.text())
 
 
 def update(modelIndex):
      
-    dlg = ExpOmDialog()   
-    if not dlg:        
+    dlg = ExpOmDialog()
+    if not dlg:
         showWarning("No s'ha pogut carregar el formulari")            
-        return    
+        return
     
     # Get selected rows, but we only process first one
     selectedList = tblExp.selectionModel().selectedRows()    
