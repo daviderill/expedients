@@ -1,4 +1,5 @@
-﻿from PyQt4.QtCore import *    # @UnusedWildImport
+﻿# -*- coding: utf-8 -*-
+from PyQt4.QtCore import *    # @UnusedWildImport
 from PyQt4.QtGui import *     # @UnusedWildImport
 from PyQt4.QtSql import *     # @UnusedWildImport
 from qgis.core import *
@@ -46,6 +47,7 @@ def openExpOm(dialog, parcela, expOmId = None):
         setDate("dateLiquidacio", current_date)
         setDate("dateEntrada", current_date)
         setDate("dateLlicencia", current_date)
+        setDate("dateVisat", current_date)        
         # Manage 'Tipus solicitant'
         getTipusSol()
     else:

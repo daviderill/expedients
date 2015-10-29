@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'exp_om.ui'
 #
-# Created: Thu Oct 29 22:41:16 2015
+# Created: Thu Oct 29 23:27:19 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -92,6 +92,7 @@ class Ui_Dialog(object):
         self.lblId.setObjectName(_fromUtf8("lblId"))
         self.dateLiquidacio = QtGui.QDateEdit(self.gb1Expedient)
         self.dateLiquidacio.setGeometry(QtCore.QRect(330, 20, 81, 22))
+        self.dateLiquidacio.setDate(QtCore.QDate(2000, 1, 1))
         self.dateLiquidacio.setMinimumDateTime(QtCore.QDateTime(QtCore.QDate(2000, 1, 1), QtCore.QTime(0, 0, 0)))
         self.dateLiquidacio.setMaximumDate(QtCore.QDate(2099, 12, 31))
         self.dateLiquidacio.setCalendarPopup(True)
@@ -652,8 +653,8 @@ class Ui_Dialog(object):
         self.txtExecutor.setObjectName(_fromUtf8("txtExecutor"))
         self.dateVisat = QtGui.QDateEdit(self.gbProjecte)
         self.dateVisat.setGeometry(QtCore.QRect(140, 180, 91, 22))
-        self.dateVisat.setDateTime(QtCore.QDateTime(QtCore.QDate(2014, 1, 1), QtCore.QTime(0, 0, 0)))
-        self.dateVisat.setDate(QtCore.QDate(2014, 1, 1))
+        self.dateVisat.setDateTime(QtCore.QDateTime(QtCore.QDate(2000, 1, 1), QtCore.QTime(0, 0, 0)))
+        self.dateVisat.setDate(QtCore.QDate(2000, 1, 1))
         self.dateVisat.setMinimumDateTime(QtCore.QDateTime(QtCore.QDate(2000, 1, 1), QtCore.QTime(0, 0, 0)))
         self.dateVisat.setMaximumDate(QtCore.QDate(2099, 12, 31))
         self.dateVisat.setCalendarPopup(True)

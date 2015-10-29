@@ -1,4 +1,5 @@
-﻿from PyQt4.QtCore import *    # @UnusedWildImport
+﻿# -*- coding: utf-8 -*-
+from PyQt4.QtCore import *    # @UnusedWildImport
 from PyQt4.QtGui import *     # @UnusedWildImport
 from PyQt4.QtSql import *     # @UnusedWildImport
 from qgis.core import *

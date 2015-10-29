@@ -1,4 +1,5 @@
-﻿from PyQt4.QtCore import * #@UnusedWildImport
+﻿# -*- coding: utf-8 -*-
+from PyQt4.QtCore import * #@UnusedWildImport
 from PyQt4.QtGui import * #@UnusedWildImport
 from PyQt4.QtSql import *  # @UnusedWildImport
 from qgis.gui import QgsMessageBar  # @UnresolvedImport
@@ -209,17 +210,20 @@ def setEnabled(widgetName, value = True):
 
 def setText(widgetName, text):
     
+    if isNumber(text):
+        text = str(text)
+
     elem = _dialog.findChild(QLineEdit, widgetName)
     if elem:    
-        elem.setText(str(text))
+        elem.setText(text)
     else:
         elem = _dialog.findChild(QTextEdit, widgetName)    
         if elem:    
-            elem.setText(str(text))
+            elem.setText(text)
         else:
             elem = _dialog.findChild(QLabel, widgetName)    
             if elem:    
-                elem.setText(str(text))            
+                elem.setText(text)            
           
           
 def setDate(widgetName, value):
