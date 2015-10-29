@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'exp_om.ui'
 #
-# Created: Thu Oct 29 12:36:46 2015
+# Created: Thu Oct 29 22:15:01 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -746,15 +746,15 @@ class Ui_Dialog(object):
         self.gbDocSel = QtGui.QGroupBox(self.tabComunicacio)
         self.gbDocSel.setGeometry(QtCore.QRect(10, 280, 601, 171))
         self.gbDocSel.setObjectName(_fromUtf8("gbDocSel"))
-        self.btnOpenDoc_2 = QtGui.QPushButton(self.gbDocSel)
-        self.btnOpenDoc_2.setGeometry(QtCore.QRect(430, 120, 111, 23))
-        self.btnOpenDoc_2.setObjectName(_fromUtf8("btnOpenDoc_2"))
+        self.btnComOpen = QtGui.QPushButton(self.gbDocSel)
+        self.btnComOpen.setGeometry(QtCore.QRect(430, 120, 111, 23))
+        self.btnComOpen.setObjectName(_fromUtf8("btnComOpen"))
         self.lblDoc_2 = QtGui.QLabel(self.gbDocSel)
         self.lblDoc_2.setGeometry(QtCore.QRect(10, 100, 101, 21))
         self.lblDoc_2.setObjectName(_fromUtf8("lblDoc_2"))
-        self.btnDoc_2 = QtGui.QPushButton(self.gbDocSel)
-        self.btnDoc_2.setGeometry(QtCore.QRect(430, 90, 111, 23))
-        self.btnDoc_2.setObjectName(_fromUtf8("btnDoc_2"))
+        self.btnComAttach = QtGui.QPushButton(self.gbDocSel)
+        self.btnComAttach.setGeometry(QtCore.QRect(430, 90, 111, 23))
+        self.btnComAttach.setObjectName(_fromUtf8("btnComAttach"))
         self.txtComDoc = QtGui.QTextEdit(self.gbDocSel)
         self.txtComDoc.setGeometry(QtCore.QRect(120, 90, 301, 51))
         self.txtComDoc.setObjectName(_fromUtf8("txtComDoc"))
@@ -805,7 +805,7 @@ class Ui_Dialog(object):
         self.btnRefresh.setObjectName(_fromUtf8("btnRefresh"))
 
         self.retranslateUi(Dialog)
-        self.tabMain.setCurrentIndex(0)
+        self.tabMain.setCurrentIndex(3)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         Dialog.setTabOrder(self.tabMain, self.txtId)
         Dialog.setTabOrder(self.txtId, self.txtNumExp)
@@ -994,9 +994,9 @@ class Ui_Dialog(object):
         self.btnDocDelete.setToolTip(_translate("Dialog", "Eliminar", None))
         self.btnDocSave.setToolTip(_translate("Dialog", "Desar", None))
         self.gbDocSel.setTitle(_translate("Dialog", "Document seleccionat", None))
-        self.btnOpenDoc_2.setText(_translate("Dialog", "Veure Document", None))
+        self.btnComOpen.setText(_translate("Dialog", "Veure Document", None))
         self.lblDoc_2.setText(_translate("Dialog", "Ruta documentació:", None))
-        self.btnDoc_2.setText(_translate("Dialog", "Adjuntar Document", None))
+        self.btnComAttach.setText(_translate("Dialog", "Adjuntar Document", None))
         self.lblPress_2.setText(_translate("Dialog", "Descripció:", None))
         self.lblComDataEntrada.setText(_translate("Dialog", "Data Entrada:", None))
         self.lblRep_2.setText(_translate("Dialog", "Tipus:", None))

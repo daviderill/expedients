@@ -135,8 +135,8 @@ def setSignals():
     _dialog.findChild(QPushButton, "btnFisica").clicked.connect(manageFisica)
     _dialog.findChild(QPushButton, "btnJuridica").clicked.connect(manageJuridica)
     _dialog.findChild(QPushButton, "btnTecnic").clicked.connect(manageTecnic)
-    _dialog.findChild(QPushButton, "btnProjAttach").clicked.connect(selectDocument)
-    _dialog.findChild(QPushButton, "btnProjOpen").clicked.connect(openDocument)
+    _dialog.findChild(QPushButton, "btnProjAttach").clicked.connect(partial(attachDocument, 'txtDoc')))
+    _dialog.findChild(QPushButton, "btnProjOpen").clicked.connect(partial(openDocument, 'txtDoc'))
     _dialog.findChild(QPushButton, "btnPdfLiq").clicked.connect(openPdfLiquidacio)    
     _dialog.findChild(QPushButton, "btnRefresh").clicked.connect(refresh)    
     _dialog.findChild(QPushButton, "btnSave").clicked.connect(save)    
@@ -187,10 +187,12 @@ def setSignals():
     chkBonLlic.clicked.connect(partial(bonChanged, 'chkBonLlic'))
     
     # Tab 'Comunicació i esmenes'
-    _dialog.findChild(QPushButton, "btnDocUpdate").setVisible(False)    
+    _dialog.findChild(QPushButton, "btnDocUpdate").setVisible(False)
+    _dialog.findChild(QPushButton, "btnComAttach").clicked.connect(partial(attachDocument, 'txtComDoc'))
+    _dialog.findChild(QPushButton, "btnComOpen").clicked.connect(partial(openDocument, 'txtComDoc'))
     _dialog.findChild(QPushButton, "btnDocCreate").clicked.connect(tableDocCreate)
     _dialog.findChild(QPushButton, "btnDocDelete").clicked.connect(tableDocDelete)
-    _dialog.findChild(QPushButton, "btnDocSave").clicked.connect(tableDocSave)        
+    _dialog.findChild(QPushButton, "btnDocSave").clicked.connect(tableDocSave)
     _dialog.findChild(QPushButton, "btnDocRefresh").clicked.connect(tableDocRefresh)
    
         
@@ -1047,7 +1049,7 @@ def tableDocRowChanged(p_curIndex, p_prevIndex):
     setEnabled("btnDocSave", True)
     setEnabled("btnDocDelete", True)        
     
-
+    
     
 # Slots: Window buttons
 
@@ -1102,25 +1104,29 @@ def manageJuridica():
 def manageTecnic():
     iface.showAttributeTable(layerTecnic)
     
-def selectDocument():
+def attachDocument(widgetText):
     os.chdir(os.getcwd())
     fileDialog = QFileDialog()
     fileDialog.setFileMode(QFileDialog.ExistingFile);
     filePath = fileDialog.getOpenFileName(None, "Select doc file")
-    setText("txtDoc", filePath)
-    checkDocument()
+    setText(widgetText, filePath)
+    if widgetText == "txtDoc":
+        widgetButton = "btnProjOpen"
+    else:
+        widgetButton = "btnComOpen"   
+    checkDocument(widgetText, widgetButton)
 
-def openDocument():
-    filePath = getText("txtDoc")
+def openDocument(widgetText):
+    filePath = getText(widgetText)
     if filePath is not None:    
         if os.path.isfile(filePath):
             os.startfile(filePath)
 
-def checkDocument():
-    filePath = getText("txtDoc")
+def checkDocument(widgetText, widgetButton):
+    filePath = getText(widgetText)
     if filePath is not None:
         if os.path.isfile(filePath):
-            _dialog.findChild(QPushButton, "btnProjOpen").setEnabled(True)
+            _dialog.findChild(QPushButton, widgetButton).setEnabled(True)
 
 def refresh():
     loadData(True)
