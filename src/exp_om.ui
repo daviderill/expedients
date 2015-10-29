@@ -29,7 +29,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tabDades">
     <attribute name="title">
@@ -2487,7 +2487,7 @@
        <string>Ruta documentació:</string>
       </property>
      </widget>
-     <widget class="QTextEdit" name="txtDoc">
+     <widget class="QTextEdit" name="txtProjDoc">
       <property name="geometry">
        <rect>
         <x>140</x>

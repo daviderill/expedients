@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'exp_om.ui'
 #
-# Created: Thu Oct 29 22:15:01 2015
+# Created: Thu Oct 29 22:41:16 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -685,9 +685,9 @@ class Ui_Dialog(object):
         self.lblDoc = QtGui.QLabel(self.gbDocumentacio)
         self.lblDoc.setGeometry(QtCore.QRect(10, 30, 101, 21))
         self.lblDoc.setObjectName(_fromUtf8("lblDoc"))
-        self.txtDoc = QtGui.QTextEdit(self.gbDocumentacio)
-        self.txtDoc.setGeometry(QtCore.QRect(140, 20, 301, 51))
-        self.txtDoc.setObjectName(_fromUtf8("txtDoc"))
+        self.txtProjDoc = QtGui.QTextEdit(self.gbDocumentacio)
+        self.txtProjDoc.setGeometry(QtCore.QRect(140, 20, 301, 51))
+        self.txtProjDoc.setObjectName(_fromUtf8("txtProjDoc"))
         self.btnProjOpen = QtGui.QPushButton(self.gbDocumentacio)
         self.btnProjOpen.setGeometry(QtCore.QRect(460, 50, 111, 23))
         self.btnProjOpen.setObjectName(_fromUtf8("btnProjOpen"))
@@ -805,7 +805,7 @@ class Ui_Dialog(object):
         self.btnRefresh.setObjectName(_fromUtf8("btnRefresh"))
 
         self.retranslateUi(Dialog)
-        self.tabMain.setCurrentIndex(3)
+        self.tabMain.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         Dialog.setTabOrder(self.tabMain, self.txtId)
         Dialog.setTabOrder(self.txtId, self.txtNumExp)

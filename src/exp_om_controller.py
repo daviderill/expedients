@@ -52,8 +52,8 @@ def openExpOm(dialog, parcela, expOmId = None):
         _expOmId = expOmId
         getDadesExpedient()
         getLiquidacio()
-        checkDocument()
-        loadDocs()        
+        checkDocument("txtProjDoc", "btnProjOpen")
+        loadDocs()
     
     # Open form as modeless dialog
     _dialog.show()
@@ -135,8 +135,8 @@ def setSignals():
     _dialog.findChild(QPushButton, "btnFisica").clicked.connect(manageFisica)
     _dialog.findChild(QPushButton, "btnJuridica").clicked.connect(manageJuridica)
     _dialog.findChild(QPushButton, "btnTecnic").clicked.connect(manageTecnic)
-    _dialog.findChild(QPushButton, "btnProjAttach").clicked.connect(partial(attachDocument, 'txtDoc')))
-    _dialog.findChild(QPushButton, "btnProjOpen").clicked.connect(partial(openDocument, 'txtDoc'))
+    _dialog.findChild(QPushButton, "btnProjAttach").clicked.connect(partial(attachDocument, 'txtProjDoc'))
+    _dialog.findChild(QPushButton, "btnProjOpen").clicked.connect(partial(openDocument, 'txtProjDoc'))
     _dialog.findChild(QPushButton, "btnPdfLiq").clicked.connect(openPdfLiquidacio)    
     _dialog.findChild(QPushButton, "btnRefresh").clicked.connect(refresh)    
     _dialog.findChild(QPushButton, "btnSave").clicked.connect(save)    
@@ -373,7 +373,7 @@ def getDadesExpedient():
         setText("txtVisatNum", getQueryValue(query, 18))
         setDate("dateVisat", query.value(19))
         setText("txtObs", getQueryValue(query, 20))
-        setText("txtDoc", getQueryValue(query, 24))
+        setText("txtProjDoc", getQueryValue(query, 24))
         setText("txtNotifPersona", getQueryValue(query, 25))
                            
     else:
@@ -524,7 +524,7 @@ def saveDadesExpedient():
     query.bindValue(20, getText("txtObs"))  
     query.bindValue(21, getText("txtRegEnt"))  
     query.bindValue(22, dLiquidacio["value"])  
-    query.bindValue(23, getText("txtDoc"))
+    query.bindValue(23, getText("txtProjDoc"))
     query.bindValue(24, getText("txtNotifPersona"))
 
     # Execute SQL
@@ -1110,7 +1110,7 @@ def attachDocument(widgetText):
     fileDialog.setFileMode(QFileDialog.ExistingFile);
     filePath = fileDialog.getOpenFileName(None, "Select doc file")
     setText(widgetText, filePath)
-    if widgetText == "txtDoc":
+    if widgetText == "txtProjDoc":
         widgetButton = "btnProjOpen"
     else:
         widgetButton = "btnComOpen"   
