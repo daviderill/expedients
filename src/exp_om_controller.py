@@ -231,41 +231,61 @@ def loadDocs():
     global modelDoc, mapper
     
     # Define model
-    modelDoc = QSqlTableModel();
+    modelDoc = QSqlRelationalTableModel();
     modelDoc.setTable("data.docs_om")
     if _expOmId is not None:
         filter_ = "om_id = "+str(_expOmId)    
         modelDoc.setFilter(filter_)
     modelDoc.setSort(0, Qt.AscendingOrder)
     modelDoc.setEditStrategy(QSqlTableModel.OnRowChange)
-    modelDoc.select()
+    modelDoc.setRelation(3, QSqlRelation("data.tipus_doc", "id", "id"))
+    modelDoc.select()        
+    
+    # Headers
     modelDoc.setHeaderData(0, Qt.Horizontal, "Id")
     modelDoc.setHeaderData(2, Qt.Horizontal, "D. Entrada")
     modelDoc.setHeaderData(3, Qt.Horizontal, "Tipus doc.")
     modelDoc.setHeaderData(4, Qt.Horizontal, u"Descripció")
     modelDoc.setHeaderData(5, Qt.Horizontal, "Ruta")
-    modelDoc.setHeaderData(6, Qt.Horizontal, "Observacions")      
+    modelDoc.setHeaderData(6, Qt.Horizontal, "Observacions")
     #modelDoc.dataChanged.connect(tableDocUpdated)
 
     # Set this model to the view
-    tblDoc.setModel(modelDoc)
+    tblDoc.setModel(modelDoc)    
     hideColumns()
     verticalHeader = tblDoc.verticalHeader()
     verticalHeader.setResizeMode(QHeaderView.ResizeToContents)
     tblDoc.resizeColumnsToContents()
     tblDoc.setEditTriggers(QAbstractItemView.NoEditTriggers);    
+    tblDoc.setItemDelegate(QSqlRelationalDelegate(tblDoc))
+    tblDoc.setCurrentIndex(modelDoc.index(0, 0))
     
     # Set signal
     sm = tblDoc.selectionModel()
     sm.currentRowChanged.connect(tableDocRowChanged)
     
     # Map edit widgets to model
+    cboComTipus = _dialog.findChild(QComboBox, "cboComTipus")
+    relModel = modelDoc.relationModel(3);   # QSqlTableModel
+    cboComTipus.setModel(relModel);
+    cboComTipus.setModelColumn(relModel.fieldIndex("id"));
+    
     mapper = QDataWidgetMapper()   # QDataWidgetMapper
     mapper.setModel(modelDoc)
+    relDelegate = QSqlRelationalDelegate()
+    mapper.setItemDelegate(relDelegate)
+    mapper.addMapping(_dialog.findChild(QDateEdit, "dateComEntrada"), 2, "date")
+    mapper.addMapping(cboComTipus, 3)        
     mapper.addMapping(_dialog.findChild(QLineEdit, "txtComDesc"), 4)
     mapper.addMapping(_dialog.findChild(QTextEdit, "txtComDoc"), 5, "plainText")
     mapper.setSubmitPolicy(1)   # Manual Submit
-    #mapper.toFirst();    
+    mapper.toFirst()
+
+    if modelDoc.rowCount() > 0:
+        tableDocRowChanged(modelDoc.index(0, 0), modelDoc.index(0, 0))
+    else:
+        setEnabled("btnDocSave", False)
+        setEnabled("btnDocDelete", False)        
 
     
 def hideColumns():
@@ -912,6 +932,8 @@ def enableTableEdition(enable = True):
     
 
 def clearWidgetFields():
+    setDate("dateComEntrada", current_date)
+    setSelectedItem("cboComTipus", None)
     setText("txtComDoc", "")
     setText("txtComDesc", "")
 
@@ -930,17 +952,17 @@ def tableDocCreate():
     
     # Disable buttons and table view. Clear widget fields
     enableTableEdition(False)
-    clearWidgetFields()    
+    setEnabled("btnDocSave", True)
+    clearWidgetFields()
     
     curRow = modelDoc.rowCount()
     modelDoc.insertRow(curRow)
 
 
 def tableDocSave():
-
-    #enableTableEdition()
+   
     taleStatus = getTableStatus()
-    if tableStatus == "c":
+    if tableStatus == "c":    
         curRecord = modelDoc.record()
         sql = "SELECT nextval('data.docs_om_id_seq');"
         query = QSqlQuery(sql) 
@@ -949,16 +971,22 @@ def tableDocSave():
             curRecord.setValue(0, docId)
             curRecord.setValue(1, _expOmId)
     else:
-        curRecord = modelDoc.record(curIndex.row())
+        if modelDoc.rowCount() <= 0:    
+            return
+        curRecord = modelDoc.record(curRow)
         
+    modelIndex = modelDoc.createIndex(curRow, 3)        
+    dComEntrada = getDate("dateComEntrada")
+    curRecord.setValue(2, dComEntrada["value"])
+    value = getSelectedItem("cboComTipus")
     curRecord.setValue(4, getText("txtComDesc"))
     curRecord.setValue(5, getText("txtComDoc"))
     
     # Save record and refresh table
     modelDoc.setRecord(curRow, curRecord)
+    modelDoc.setData(modelIndex, value)
     modelDoc.submitAll()
-    tableDocRefresh()   
-    #modelDoc.setData(modelDoc.index(rowCount,4), "temp_4");
+    tableDocRefresh()
 
 
 def tableDocDelete():
@@ -985,7 +1013,7 @@ def tableDocDelete():
         sql = "DELETE FROM data.docs_om WHERE id IN ("+listId+")"
         query = QSqlQuery()
         query.exec_(sql)
-        tableDocRefresh()
+        tableDocRefresh()         
 
         
 def tableDocRefresh():
@@ -993,13 +1021,13 @@ def tableDocRefresh():
     setTableStatus("w")
     modelDoc.select()
     enableTableEdition()
-    #mapper.setCurrentModelIndex(curIndex)    
-    clearWidgetFields()    
+    clearWidgetFields()
+    setEnabled("btnDocSave", False)
+    setEnabled("btnDocDelete", False)
 
     
 def tableDocUpdated():
 
-    print "tableDocUpdated"
     ok = modelDoc.submitAll()
     if not ok:
         showWarning(u"Error d'actualització de la taula")
@@ -1007,17 +1035,17 @@ def tableDocUpdated():
         
 def tableDocRowChanged(p_curIndex, p_prevIndex):
 
-    global curIndex, curRow
+    global curRow
     
-    curIndex = p_curIndex
     curRow = p_curIndex.row()
-    #print "tableDocRowChanged"
     #print str(curIndex.row()) + " " + str(curIndex.column())
     #print str(prevIndex.row()) + " " + str(prevIndex.column())
-    curRecord = modelDoc.record(curIndex.row())     # QSqlRecord
-    field = curRecord.field(4)                      # QSqlField
+    #curRecord = modelDoc.record(curIndex.row())     # QSqlRecord
+    #field = curRecord.field(3)                      # QSqlField
     #print str(field.value())
-    mapper.setCurrentModelIndex(curIndex)
+    mapper.setCurrentModelIndex(p_curIndex)
+    setEnabled("btnDocSave", True)
+    setEnabled("btnDocDelete", True)        
     
 
     

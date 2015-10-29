@@ -29,7 +29,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tabDades">
     <attribute name="title">
@@ -2582,7 +2582,7 @@
      <widget class="QPushButton" name="btnDocCreate">
       <property name="geometry">
        <rect>
-        <x>400</x>
+        <x>440</x>
         <y>220</y>
         <width>31</width>
         <height>31</height>
@@ -2608,7 +2608,7 @@
      <widget class="QPushButton" name="btnDocUpdate">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>400</x>
         <y>220</y>
         <width>31</width>
         <height>31</height>
@@ -2700,7 +2700,7 @@
       <property name="geometry">
        <rect>
         <x>430</x>
-        <y>140</y>
+        <y>120</y>
         <width>111</width>
         <height>23</height>
        </rect>
@@ -2713,7 +2713,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>120</y>
+        <y>100</y>
         <width>101</width>
         <height>21</height>
        </rect>
@@ -2726,7 +2726,7 @@
       <property name="geometry">
        <rect>
         <x>430</x>
-        <y>110</y>
+        <y>90</y>
         <width>111</width>
         <height>23</height>
        </rect>
@@ -2739,9 +2739,9 @@
       <property name="geometry">
        <rect>
         <x>120</x>
-        <y>110</y>
+        <y>90</y>
         <width>301</width>
-        <height>41</height>
+        <height>51</height>
        </rect>
       </property>
      </widget>
@@ -2749,7 +2749,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>80</y>
+        <y>60</y>
         <width>81</width>
         <height>21</height>
        </rect>
@@ -2762,8 +2762,8 @@
       <property name="geometry">
        <rect>
         <x>120</x>
-        <y>80</y>
-        <width>101</width>
+        <y>60</y>
+        <width>421</width>
         <height>20</height>
        </rect>
       </property>
@@ -2772,6 +2772,75 @@
       </property>
       <property name="maxLength">
        <number>15</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblComDataEntrada">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Data Entrada:</string>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="dateComEntrada">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>30</y>
+        <width>81</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="minimumDateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2000</year>
+        <month>1</month>
+        <day>1</day>
+       </datetime>
+      </property>
+      <property name="maximumDate">
+       <date>
+        <year>2099</year>
+        <month>12</month>
+        <day>31</day>
+       </date>
+      </property>
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblRep_2">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>30</y>
+        <width>61</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Tipus:</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="cboComTipus">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>30</y>
+        <width>211</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>

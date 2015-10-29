@@ -143,7 +143,7 @@ def getText(widgetName):
     return elem_text
 
 
-def getDate(widgetName, fieldName):
+def getDate(widgetName, fieldName = "defaultName"):
 
     try:    
         date_widget = _dialog.findChild(QDateEdit, widgetName)
