@@ -742,7 +742,7 @@
       <rect>
        <x>110</x>
        <y>20</y>
-       <width>101</width>
+       <width>91</width>
        <height>20</height>
       </rect>
      </property>
@@ -756,9 +756,9 @@
     <widget class="QGroupBox" name="gbIcio">
      <property name="geometry">
       <rect>
-       <x>230</x>
+       <x>220</x>
        <y>10</y>
-       <width>381</width>
+       <width>391</width>
        <height>61</height>
       </rect>
      </property>
@@ -784,7 +784,7 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>310</x>
+        <x>320</x>
         <y>30</y>
         <width>51</width>
         <height>20</height>
@@ -800,7 +800,7 @@
      <widget class="QCheckBox" name="chkPlaca">
       <property name="geometry">
        <rect>
-        <x>250</x>
+        <x>270</x>
         <y>30</y>
         <width>51</width>
         <height>21</height>
@@ -861,7 +861,7 @@
      <widget class="QLabel" name="lblNumExp_91">
       <property name="geometry">
        <rect>
-        <x>360</x>
+        <x>370</x>
         <y>30</y>
         <width>16</width>
         <height>21</height>
@@ -1903,7 +1903,7 @@
       <rect>
        <x>110</x>
        <y>50</y>
-       <width>101</width>
+       <width>91</width>
        <height>20</height>
       </rect>
      </property>
@@ -1945,8 +1945,8 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>162</x>
-        <y>20</y>
+        <x>160</x>
+        <y>50</y>
         <width>81</width>
         <height>20</height>
        </rect>
@@ -1962,7 +1962,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>20</y>
+        <y>50</y>
         <width>81</width>
         <height>21</height>
        </rect>
@@ -1977,8 +1977,8 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>162</x>
-        <y>50</y>
+        <x>160</x>
+        <y>20</y>
         <width>81</width>
         <height>20</height>
        </rect>
@@ -1994,7 +1994,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>50</y>
+        <y>20</y>
         <width>81</width>
         <height>21</height>
        </rect>
@@ -2052,7 +2052,7 @@
     <widget class="QLabel" name="lblNumExp_87">
      <property name="geometry">
       <rect>
-       <x>210</x>
+       <x>200</x>
        <y>20</y>
        <width>16</width>
        <height>21</height>
@@ -2068,7 +2068,7 @@
     <widget class="QLabel" name="lblNumExp_88">
      <property name="geometry">
       <rect>
-       <x>210</x>
+       <x>200</x>
        <y>50</y>
        <width>16</width>
        <height>21</height>

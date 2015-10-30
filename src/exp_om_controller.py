@@ -155,9 +155,9 @@ def setSignals():
     _dialog.findChild(QComboBox, "cboEmp").activated.connect(empChanged)
     
     # Tab 'Projecte'
-    _dialog.findChild(QComboBox, "cboRedactor").activated.connect(redactorChanged)
-    _dialog.findChild(QComboBox, "cboDirector").activated.connect(directorChanged)
-    _dialog.findChild(QComboBox, "cboExecutor").activated.connect(executorChanged)
+    _dialog.findChild(QComboBox, "cboRedactor").activated.connect(partial(tecnicChanged, 'cboRedactor', 'txtRedactor'))
+    _dialog.findChild(QComboBox, "cboDirector").activated.connect(partial(tecnicChanged, 'cboDirector', 'txtDirector'))
+    _dialog.findChild(QComboBox, "cboExecutor").activated.connect(partial(tecnicChanged, 'cboExecutor', 'txtExecutor'))
     
     # Tab 'Liquidació'
     _dialog.findChild(QLineEdit, "txtPress").editingFinished.connect(partial(importEdited, 'txtPress'))
@@ -347,14 +347,17 @@ def getDadesExpedient():
             cboSolCif.setVisible(False)            
             setSelectedItem("cboSol", getQueryValue(query, 5))
             setSelectedItem("cboSolCif", None)
+            solChanged('persona')            
         else:
             rbJuridica.setChecked(True)
             setSelectedItem("cboSol", None)
             setSelectedItem("cboSolCif", getQueryValue(query, 6))
+            solChanged('juridica')             
              
         setSelectedItem("cboRep", getQueryValue(query, 7))
+        solChanged('representant')         
         setText("refcat", query.value(8))
-        
+                
         # Gestió immoble
         setText("txtRefcat20", getQueryValue(query, 9))
         _dialog.findChild(QComboBox, "cboEmp").setCurrentIndex(0);
@@ -377,6 +380,10 @@ def getDadesExpedient():
         setText("txtObs", getQueryValue(query, 20))
         setText("txtProjDoc", getQueryValue(query, 24))
         setText("txtNotifPersona", getQueryValue(query, 25))
+        
+        tecnicChanged("cboRedactor", "txtRedactor")
+        tecnicChanged("cboDirector", "txtDirector")
+        tecnicChanged("cboExecutor", "txtExecutor")
                            
     else:
         showWarning(query.lastError().text(), 100)
@@ -691,6 +698,8 @@ def validateRegEnt():
 
 def solChanged(aux):
 
+    #print "solChanged: "+aux
+    
     if aux == 'persona':
         table = 'persona'
         solId = getSelectedItem2("cboSol")
@@ -735,15 +744,6 @@ def empChanged():
 
 
 # Slots: Tab 'Projecte'        
-def redactorChanged():
-    tecnicChanged("cboRedactor", "txtRedactor")
-
-def directorChanged():
-    tecnicChanged("cboDirector", "txtDirector")
-
-def executorChanged():
-    tecnicChanged("cboExecutor", "txtExecutor")
-
 def tecnicChanged(cboName, widgetName):
     
     sql = "SELECT COALESCE(nom, '') || ' ' || COALESCE(cognom_1, '') || ' ' || COALESCE(cognom_2, '') || ' - Num.colegiat: ' || COALESCE(num_colegiat, '') AS tecnic "
@@ -897,12 +897,12 @@ def garChanged(widgetName):
     if widgetName == 'chkGarRes':
         value = ''
         if widget.isChecked():
-            value = max(1000, getPress() * 0.01)
+            value = max(600, getPress() * 0.01)
         setNumeric('txtGarRes', value)
     elif widgetName == 'chkGarSer':
         value = ''
         if widget.isChecked():
-            value = max(600, getPress() * 0.01)
+            value = max(1000, getPress() * 0.01)
         setNumeric('txtGarSer', value)
     updateTotal()
 
@@ -1130,14 +1130,35 @@ def checkDocument(widgetText, widgetButton):
         if os.path.isfile(filePath):
             _dialog.findChild(QPushButton, widgetButton).setEnabled(True)
 
+
 def refresh():
+
     loadData(True)
+    
+    # Save previous values before refresh combos
+    sol = getSelectedItem("cboSol")
+    solCif = getSelectedItem("cboSolCif")
+    rep = getSelectedItem("cboRep")
+    redactor = getSelectedItem("cboRedactor")
+    director = getSelectedItem("cboDirector")
+    executor = getSelectedItem("cboExecutor")
+    
+    # Refresh combos
     setComboModel("cboSol", listNif)
     setComboModel("cboSolCif", listCif)
     setComboModel("cboRep", listNif)
     setComboModel("cboRedactor", listTecnic)
     setComboModel("cboDirector", listTecnic)
     setComboModel("cboExecutor", listTecnic)
+    
+    # Restore previous selected items
+    setSelectedItem("cboSol", sol)
+    setSelectedItem("cboSolCif", solCif)
+    setSelectedItem("cboRep", rep)
+    setSelectedItem("cboRedactor", redactor)
+    setSelectedItem("cboDirector", director)
+    setSelectedItem("cboExecutor", executor)
+    
 
 def save():
     result = saveDadesExpedient()
