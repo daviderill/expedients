@@ -109,11 +109,14 @@ def initConfig():
     # Other default configuration
     getNextId()    
     boldGroupBoxes()
-    _dialog.findChild(QPushButton, "btnProjOpen").setEnabled(False) 
+    _dialog.findChild(QPushButton, "btnProjOpen").setEnabled(False)
     txtRegEnt.setInputMask("9999/99")
     txtNumExp.setEnabled(False)
     _dialog.findChild(QLabel, "lblRefcat20").setVisible(False)
     setVisible("txtRefcat20", False)
+    setText("txtBonIcio", 95)
+    setText("txtBonLlic", 95)
+    _dialog.findChild(QPushButton, "btnEditLiq").setEnabled(False)
 
         
 # Set Group Boxes title font to bold    
@@ -139,7 +142,8 @@ def setSignals():
     _dialog.findChild(QPushButton, "btnTecnic").clicked.connect(manageTecnic)
     _dialog.findChild(QPushButton, "btnProjAttach").clicked.connect(partial(attachDocument, 'txtProjDoc'))
     _dialog.findChild(QPushButton, "btnProjOpen").clicked.connect(partial(openDocument, 'txtProjDoc'))
-    _dialog.findChild(QPushButton, "btnPdfLiq").clicked.connect(openPdfLiquidacio)    
+    _dialog.findChild(QPushButton, "btnPdfLiq").clicked.connect(openPdfLiquidacio)
+    _dialog.findChild(QPushButton, "btnEditLiq").clicked.connect(editPdfLiquidacio)
     _dialog.findChild(QPushButton, "btnRefresh").clicked.connect(refresh)    
     _dialog.findChild(QPushButton, "btnSave").clicked.connect(save)    
     _dialog.findChild(QPushButton, "btnClose").clicked.connect(close)
@@ -271,6 +275,7 @@ def loadDocs():
     # Map edit widgets to model
     cboComTipus = _dialog.findChild(QComboBox, "cboComTipus")
     relModel = modelDoc.relationModel(3);   # QSqlTableModel
+    relModel.sort(0, 0)
     cboComTipus.setModel(relModel);
     cboComTipus.setModelColumn(relModel.fieldIndex("id"));
     
@@ -397,7 +402,7 @@ def getDadesExpedient():
 def getLiquidacio():
 
     sql = "SELECT pressupost, placa, plu, res, ende, car, mov, fig, leg, par, pro"
-    sql+= ", clav_uni, clav_plu, clav_mes, gar_res, gar_ser, liq_aj, bon_icio, bon_llic, total_press, total_liq"
+    sql+= ", clav_uni, clav_plu, clav_mes, gar_res, gar_ser, liq_aj, bon_icio, bon_llic, total_press, total_liq, bon_icio_value, bon_llic_value"
     sql+= " FROM data.press_om WHERE om_id = "+str(_expOmId)
     query = QSqlQuery(sql)
        
@@ -437,7 +442,12 @@ def getLiquidacio():
             setText("txtTotalPress", getQueryValue(query, 19))
         else:
             setText("txtTotalLiq", getQueryValue(query, 20))
-            
+        
+        if getQueryValue(query, 21) <> "":
+            setText("txtBonIcio", getQueryValue(query, 21))
+        if getQueryValue(query, 22) <> "":
+            setText("txtBonLlic", getQueryValue(query, 22))            
+         
         updateTabLiquidacio()
         importEdited(None)
 
@@ -561,16 +571,17 @@ def saveLiquidacio():
     if _expOmId is None:
         sql= "INSERT INTO data.press_om (pressupost, placa, plu, res, ende, car, mov, fig, leg, par, pro, clav_uni, clav_plu, clav_mes, gar_res, gar_ser"
         sql+= ", liq_aj, bon_icio, bon_llic, total_press, total_liq, om_id)"
-        sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"         
-        query.prepare(sql)     
+        sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        query.prepare(sql)
         query.bindValue(21, _nextId)
         _expOmId = _nextId
     else:   
         sql = "UPDATE data.press_om SET"
         sql+= " pressupost=:0, placa=:1, plu=:2, res=:3, ende=:4, car=:5, mov=:6, fig=:7, leg=:8, par=:9, pro=:10"
-        sql+= ", clav_uni=:11, clav_plu=:12, clav_mes=:13, gar_res=:14, gar_ser=:15, liq_aj=:16, bon_icio=:17, bon_llic=:18, total_press=:19, total_liq=:20"
-        sql+= " WHERE om_id=:om_id"                
-        query.prepare(sql)                
+        sql+= ", clav_uni=:11, clav_plu=:12, clav_mes=:13, gar_res=:14, gar_ser=:15, liq_aj=:16, bon_icio=:17"
+        sql+= ", bon_llic=:18, total_press=:19, total_liq=:20, bon_icio_value=:21, bon_llic_value=:22"
+        sql+= " WHERE om_id=:om_id"
+        query.prepare(sql)
         query.bindValue(":om_id", _expOmId) 
     
     # Bind values
@@ -586,15 +597,15 @@ def saveLiquidacio():
     if isChecked("chkFig"):
         query.bindValue(7, getText("txtFigM"))
     query.bindValue(8, isChecked("chkLeg"))
-    if isChecked("chkPar"):            
+    if isChecked("chkPar"):
         query.bindValue(9, getText("txtParM"))
     query.bindValue(10, isChecked("chkPro")) 
     if isChecked("chkClavUni"):
         aux = getText("txtClavUniN")
         if aux is None:
             aux = 1
-        query.bindValue(11, aux) 
-    if isChecked("chkClavPlu"):          
+        query.bindValue(11, aux)
+    if isChecked("chkClavPlu"):
         query.bindValue(12, clavPlu) 
     if isChecked("chkClavMes"):    
         aux = getText("txtClavMesN")
@@ -609,6 +620,8 @@ def saveLiquidacio():
     query.bindValue(18, isChecked("chkBonLlic"))
     query.bindValue(19, getText("txtTotalPress"))
     query.bindValue(20, getText("txtTotalLiq"))
+    query.bindValue(21, getText("txtBonIcio"))
+    query.bindValue(22, getText("txtBonLlic"))
     
     # Execute SQL
     result = query.exec_()
@@ -637,6 +650,15 @@ def getPress():
             return default
     return float(value)
 
+    
+def getBon(widgetName):
+    try:
+        aux = int(getText(widgetName))
+        bon = aux / 100.0
+    except:
+        bon = 0.95
+    return bon
+    
 
 def getTotalLlicUrb():
     totalLlic = getFloat('txtPlu')+getFloat('txtRes')+getFloat('txtEnd')+getFloat('txtCar')+getFloat('txtMov')+getFloat('txtFig')+getFloat('txtLeg')+getFloat('txtPar')+getFloat('txtPro')
@@ -646,8 +668,9 @@ def getTotalLlicUrb():
 def updateTotalLlicUrb():
     totalLlic = getTotalLlicUrb()
     if chkBonLlic.isChecked():
-        totalLlic = totalLlic * 0.05
-    setNumeric('txtLlicTot', totalLlic)
+        bonLlic = getBon("txtBonLlic")    
+        totalLlic = totalLlic * (1.00 - float(bonLlic))
+        setNumeric('txtLlicTot', totalLlic)
     updateTotal()    
         
         
@@ -675,11 +698,9 @@ def getTipusSol():
     if rbFisica.isChecked():
         cboSol.setVisible(True)
         cboSolCif.setVisible(False)
-        #setText("lblSol", u"NIF sol·licitant")
     else:
         cboSolCif.setVisible(True)
         cboSol.setVisible(False)
-        #setText("lblSol", "CIF sol·licitant")
     clearNotificacions()
 
 
@@ -698,8 +719,6 @@ def validateRegEnt():
 
 def solChanged(aux):
 
-    #print "solChanged: "+aux
-    
     if aux == 'persona':
         table = 'persona'
         solId = getSelectedItem2("cboSol")
@@ -914,12 +933,14 @@ def bonChanged(widgetName):
         press = getPress()
         icio = float(press) * 0.04
         if widget.isChecked():
-            icio = icio * 0.05
+            bonIcio = getBon("txtBonIcio")
+            icio = icio * (1.00 - float(bonIcio))
         setNumeric("txtIcio", icio)
     elif widgetName == 'chkBonLlic':
         totalLlic = getTotalLlicUrb()
         if widget.isChecked():
-            totalLlic = totalLlic * 0.05
+            bonLlic = getBon("txtBonLlic")
+            totalLlic = totalLlic * (1.00 - float(bonLlic))
         setNumeric("txtLlicTot", totalLlic)
     updateTotal()
 
@@ -1040,10 +1061,7 @@ def tableDocUpdated():
 def tableDocRowChanged(p_curIndex, p_prevIndex):
 
     global curRow
-    
     curRow = p_curIndex.row()
-    #print str(curIndex.row()) + " " + str(curIndex.column())
-    #print str(prevIndex.row()) + " " + str(prevIndex.column())
     #curRecord = modelDoc.record(curIndex.row())     # QSqlRecord
     #field = curRecord.field(3)                      # QSqlField
     #print str(field.value())
@@ -1085,7 +1103,8 @@ def openPdfLiquidacio():
         return
     
     # Obrim la composició
-    myComp = _iface.activeComposers()[0].composition()
+    compView = _iface.activeComposers()[0]
+    myComp = compView.composition()
     if myComp is not None:
         myComp.setAtlasMode(QgsComposition.PreviewAtlas)
         filePath = report_folder+getText("txtId")+"_liquidacio.pdf"
@@ -1094,8 +1113,11 @@ def openPdfLiquidacio():
             showInfo("Document PDF generat a: "+filePath)
             os.startfile(filePath)
         else:
-            showWarning("Document PDF no ha pogut ser generat a: "+filePath)        
-    
+            showWarning("Document PDF no ha pogut ser generat a: "+filePath)
+            
+            
+def editPdfLiquidacio():
+    pass    
     
 def manageFisica():
     iface.showAttributeTable(layerFisica)

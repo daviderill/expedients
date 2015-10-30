@@ -177,8 +177,8 @@ CREATE TABLE "data"."persona" (
 "tfon" varchar(15),
 "mail" varchar(200),
 "adreca" varchar(255),
-"poblacio" varchar(100),
-"cp" varchar(5),
+"poblacio" varchar(100) DEFAULT 'Cubelles'::character varying,
+"cp" varchar(5) DEFAULT '08880'::character varying,
 "observacions" text,
 PRIMARY KEY ("id") 
 );
@@ -204,6 +204,8 @@ CREATE TABLE "data"."press_om" (
 "gar_res" bool,
 "gar_ser" bool,
 "liq_aj" numeric(15,2),
+"bon_icio_value" int4,
+"bon_llic_value" int4,
 PRIMARY KEY ("om_id") 
 );
 COMMENT ON COLUMN "data"."press_om"."placa" IS 'OF.7 Taxa Placa';
