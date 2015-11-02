@@ -287,6 +287,7 @@ def loadDocs():
     mapper.addMapping(cboComTipus, 3)        
     mapper.addMapping(_dialog.findChild(QLineEdit, "txtComDesc"), 4)
     mapper.addMapping(_dialog.findChild(QTextEdit, "txtComDoc"), 5, "plainText")
+    mapper.addMapping(_dialog.findChild(QTextEdit, "txtComObs"), 6, "plainText")    
     mapper.setSubmitPolicy(1)   # Manual Submit
     mapper.toFirst()
 
@@ -961,6 +962,7 @@ def clearWidgetFields():
     setSelectedItem("cboComTipus", None)
     setText("txtComDoc", "")
     setText("txtComDesc", "")
+    setText("txtComObs", "")    
 
 def setTableStatus(status):
     global tableStatus
@@ -1006,6 +1008,7 @@ def tableDocSave():
     value = getSelectedItem("cboComTipus")
     curRecord.setValue(4, getText("txtComDesc"))
     curRecord.setValue(5, getText("txtComDoc"))
+    curRecord.setValue(6, getText("txtComObs"))    
     
     # Save record and refresh table
     modelDoc.setRecord(curRow, curRecord)
