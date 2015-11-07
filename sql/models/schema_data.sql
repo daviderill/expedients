@@ -204,6 +204,10 @@ CREATE TABLE "data"."press_om" (
 "gar_res" bool,
 "gar_ser" bool,
 "liq_aj" numeric(15,2),
+"bon_icio" boolean,
+"bon_llic" boolean,
+"total_press" numeric(15,2),
+"total_liq" numeric(15,2),
 "bon_icio_value" int4,
 "bon_llic_value" int4,
 PRIMARY KEY ("om_id") 
@@ -211,9 +215,17 @@ PRIMARY KEY ("om_id")
 COMMENT ON COLUMN "data"."press_om"."placa" IS 'OF.7 Taxa Placa';
 
 
+DROP SEQUENCE IF EXISTS "data".tecnic_id_seq;
+CREATE SEQUENCE "data".tecnic_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 7
+  CACHE 1;
+
 DROP TABLE IF EXISTS "data"."tecnic"; 
 CREATE TABLE "data"."tecnic" (
-"id" SERIAL,
+"id" varchar(25) NOT NULL DEFAULT nextval('data.tecnic_id_seq'::regclass),
 "dni" varchar(9),
 "nom" varchar(100),
 "cognom_1" varchar(100),
@@ -241,73 +253,16 @@ PRIMARY KEY ("id")
 );
 
 
-
 ALTER TABLE "data"."docs_om" ADD CONSTRAINT "fk_docs_om_doc_tipus_id" FOREIGN KEY ("tipus_id") REFERENCES "data"."tipus_doc" ("id");
-
 ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_tipus_om" FOREIGN KEY ("tipus_id") REFERENCES "data"."tipus_om" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
 ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_estat" FOREIGN KEY ("estat_id") REFERENCES "data"."estat" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
 ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_persona_1" FOREIGN KEY ("solic_persona_id") REFERENCES "data"."persona" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
 ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_juridica_1" FOREIGN KEY ("solic_juridica_id") REFERENCES "data"."juridica" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
 ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_persona_2" FOREIGN KEY ("repre_id") REFERENCES "data"."persona" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
 ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_tecnic" FOREIGN KEY ("redactor_id") REFERENCES "data"."tecnic" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
 ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_tecnic_1" FOREIGN KEY ("director_id") REFERENCES "data"."tecnic" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
 ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_tecnic_2" FOREIGN KEY ("executor_id") REFERENCES "data"."tecnic" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
 ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_immoble" FOREIGN KEY ("immoble_id") REFERENCES "data"."ibi" ("refcat20") ON DELETE SET NULL ON UPDATE CASCADE;
-
 ALTER TABLE "data"."press_om" ADD CONSTRAINT "fk_press_om_exp_om" FOREIGN KEY ("om_id") REFERENCES "data"."exp_om" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
---ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_ur_parcela" FOREIGN KEY ("parcela_id") REFERENCES "carto"."ur_parcela" ("refcat");
-
-
-DROP VIEW IF EXISTS "data"."v_exp_per_parcela";
-CREATE VIEW "data"."v_exp_per_parcela" AS 
- SELECT ur_parcela.id,
-    ur_parcela.geom,
-    ur_parcela.ninterno,
-    ur_parcela.parcela,
-    ur_parcela.refcat,
-        CASE
-            WHEN (( SELECT count(*) AS count
-               FROM data.exp_om
-              WHERE ((exp_om.parcela_id)::text = (ur_parcela.refcat)::text)) > 0) THEN ( SELECT count(*) AS count
-               FROM data.exp_om
-              WHERE ((exp_om.parcela_id)::text = (ur_parcela.refcat)::text))
-            ELSE NULL::bigint
-        END AS total
-   FROM carto.ur_parcela;
+--ALTER TABLE "data"."exp_om" ADD CONSTRAINT "fk_exp_om_ur_parcela" FOREIGN KEY ("parcela_id") REFERENCES "carto"."ur_parcela" ("refcat"); 
    
-   
-CREATE OR REPLACE FUNCTION "data"."create_immoble_extra"()
-  RETURNS "pg_catalog"."bool" AS $BODY$
-
-DECLARE
-  registro  record;
-	v_sql varchar;
-	refcat20 varchar;
-	
-BEGIN
-
-	FOR registro IN 
-		SELECT DISTINCT(refcat14) FROM "data".ibi ORDER BY refcat14
-	LOOP
-		refcat20:= registro.refcat14||'-9999/99';
-		v_sql:= 'INSERT INTO data.ibi (refcat14, refcat20) VALUES ('||quote_literal(registro.refcat14)||', '||quote_literal(refcat20)||')';
-		EXECUTE v_sql;
-	END LOOP;
-
-    RETURN TRUE;
-
-END;
-$BODY$
-  LANGUAGE 'plpgsql' VOLATILE COST 100
-;
-
-ALTER FUNCTION "data"."create_immoble_extra"() OWNER TO "gisadmin";
