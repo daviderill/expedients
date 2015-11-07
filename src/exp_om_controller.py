@@ -8,6 +8,7 @@ from functools import partial
 from datetime import datetime
 import time
 import os
+import csv
 from utils import *  # @UnusedWildImport
 
 
@@ -116,7 +117,6 @@ def initConfig():
     setVisible("txtRefcat20", False)
     setText("txtBonIcio", 95)
     setText("txtBonLlic", 95)
-    _dialog.findChild(QPushButton, "btnEditLiq").setEnabled(False)
 
         
 # Set Group Boxes title font to bold    
@@ -1118,9 +1118,38 @@ def openPdfLiquidacio():
         else:
             showWarning("Document PDF no ha pogut ser generat a: "+filePath)
             
-            
+
+# TODO: Function must search for action.text() rather than index because this changes...
 def editPdfLiquidacio():
-    pass    
+
+    # Getting QMenu widget related with Print Composers
+    widget = iface.mainWindow().findChild(QMenu, "mPrintComposersMenu")
+    if widget is not None:
+        actions = widget.actions()
+        action = actions[0]
+        #print action.text()
+        action.trigger()
+
+
+# TODO
+def csvTemplate():
+
+    sql = "SELECT * FROM data.persona"
+    csvPath = "C:\\Dropbox\\test.csv"
+    query = QSqlQuery(sql)
+    
+    #data = [["test", "data"], ["foo", "bar"]]    
+    with open(csvPath, 'wb') as fout:
+        writer = csv.writer(fout, delimiter=";")    
+        while (query.next()):
+            record = query.record()
+            row = []
+            for i in range(record.count()):
+                value = record.value(i)
+                if value is not None:
+                    row.append(value)
+            writer.writerow(row)
+
     
 def manageFisica():
     iface.showAttributeTable(layerFisica)
