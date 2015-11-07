@@ -130,6 +130,7 @@ def getExpedients(filter_):
     verticalHeader = tblExp.verticalHeader()
     verticalHeader.setResizeMode(QHeaderView.ResizeToContents)
     tblExp.resizeColumnsToContents()
+    tblExp.setCurrentIndex(model.index(0, 0))    
        
    
 def hideColumns(tblExp):

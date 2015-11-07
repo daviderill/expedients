@@ -256,7 +256,6 @@ def loadDocs():
     modelDoc.setHeaderData(4, Qt.Horizontal, u"Descripció")
     modelDoc.setHeaderData(5, Qt.Horizontal, "Ruta")
     modelDoc.setHeaderData(6, Qt.Horizontal, "Observacions")
-    #modelDoc.dataChanged.connect(tableDocUpdated)
 
     # Set this model to the view
     tblDoc.setModel(modelDoc)    
@@ -571,10 +570,10 @@ def saveLiquidacio():
     query = QSqlQuery()
     if _expOmId is None:
         sql= "INSERT INTO data.press_om (pressupost, placa, plu, res, ende, car, mov, fig, leg, par, pro, clav_uni, clav_plu, clav_mes, gar_res, gar_ser"
-        sql+= ", liq_aj, bon_icio, bon_llic, total_press, total_liq, om_id)"
-        sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        sql+= ", liq_aj, bon_icio, bon_llic, total_press, total_liq, bon_icio_value, bon_llic_value, om_id)"
+        sql+= " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
         query.prepare(sql)
-        query.bindValue(21, _nextId)
+        query.bindValue(23, _nextId)
         _expOmId = _nextId
     else:   
         sql = "UPDATE data.press_om SET"
