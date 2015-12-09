@@ -29,7 +29,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tabDades">
     <attribute name="title">
@@ -2506,7 +2506,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Observacions:</string>
+       <string>Descripció obra:</string>
       </property>
      </widget>
      <widget class="QTextEdit" name="txtObs">

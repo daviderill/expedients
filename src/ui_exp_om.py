@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'exp_om.ui'
 #
-# Created: Wed Dec 09 09:22:06 2015
+# Created: Wed Dec 09 16:31:27 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -860,7 +860,7 @@ class Ui_Dialog(object):
         self.btnRefresh.setObjectName(_fromUtf8("btnRefresh"))
 
         self.retranslateUi(Dialog)
-        self.tabMain.setCurrentIndex(4)
+        self.tabMain.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         Dialog.setTabOrder(self.tabMain, self.txtId)
         Dialog.setTabOrder(self.txtId, self.txtNumExp)
@@ -1038,7 +1038,7 @@ class Ui_Dialog(object):
         self.lblCons.setText(_translate("Dialog", "Constructor:", None))
         self.lblDat.setText(_translate("Dialog", "Data Visat:", None))
         self.btnTecnic.setText(_translate("Dialog", "Gestió Tècnics", None))
-        self.lblObs.setText(_translate("Dialog", "Observacions:", None))
+        self.lblObs.setText(_translate("Dialog", "Descripció obra:", None))
         self.gbDocumentacio.setTitle(_translate("Dialog", "Documentació", None))
         self.btnProjAttach.setText(_translate("Dialog", "Adjuntar Document", None))
         self.lblDoc.setText(_translate("Dialog", "Ruta documentació:", None))
