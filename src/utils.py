@@ -305,9 +305,5 @@ def setLogger(name, folder, filename):
     
 def removeHandlers(logger):    
     
-    #logger.info('Total: %d'%len(logger.handlers))    
     for h in logger.handlers:
-        #logger.info('removing handler %s'%str(h))
-        logger.removeHandler(h)     
-        
-        
+        logger.removeHandler(h)       

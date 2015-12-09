@@ -12,12 +12,12 @@ BEGIN
     -- Get fields of selected 'expedient'
     INSERT INTO rpt_report_3 (
         SELECT
-            exp_om.id, num_exp,
+            exp_om.id, exp_om.num_exp,
             CASE WHEN tipus_solic_id = 'persona' THEN solic_persona_id ELSE repre_id END AS notif_nif, 
-            notif_persona, notif_adreca, notif_cp, notif_poblacio,				
-            data_ent, reg_ent,parcela_id,immoble_id,     
+            notif_persona, notif_adreca, notif_cp, notif_poblacio,
+            data_ent, reg_ent, parcela_id, immoble_id,     
             COALESCE(tecnic.nom, '') || ' ' || COALESCE (tecnic.cognom_1, '') || ' ' || COALESCE(tecnic.cognom_2, '') AS executor_name,
-            visat_num, observacions,
+            visat_num, exp_om.observacions,
             press_om.total_press,
             taxa_placa + taxa_icio + taxa_llic AS liq_prov, taxa_placa, taxa_icio, taxa_llic, 
             rpt_expedient.gar_ser, rpt_expedient.gar_res

@@ -2,14 +2,14 @@
 from PyQt4.QtCore import *    # @UnusedWildImport
 from PyQt4.QtGui import *     # @UnusedWildImport
 from PyQt4.QtSql import *     # @UnusedWildImport
-from qgis.core import *
+from qgis.core import *       # @UnusedWildImport
 from qgis.utils import iface  # @UnresolvedImport
 from functools import partial
 from datetime import datetime
 import time
 import os
 import csv
-from utils import *  # @UnusedWildImport
+from utils import *           # @UnusedWildImport
 
 
 def openExpOm(dialog, parcela, expOmId = None):
@@ -991,7 +991,7 @@ def tableDocCreate():
 
 def tableDocSave():
    
-    taleStatus = getTableStatus()
+    tableStatus = getTableStatus()
     if tableStatus == "c":    
         curRecord = modelDoc.record()
         sql = "SELECT nextval('data.docs_om_id_seq');"
@@ -1033,9 +1033,9 @@ def tableDocDelete():
     listId = ''
     for i in range(0, len(selectedList)):
         row = selectedList[i].row()
-        id = modelDoc.record(row).value("id")
-        msg+= str(id)+", "
-        listId = listId + str(id) + ", "
+        doc_id = modelDoc.record(row).value("id")
+        msg+= str(doc_id)+", "
+        listId = listId + str(doc_id) + ", "
     msg = msg[:-2]
     listId = listId[:-2]
     infMsg = u"Està segur que desitja eliminar-los?"
@@ -1068,9 +1068,6 @@ def tableDocRowChanged(p_curIndex, p_prevIndex):
 
     global curRow
     curRow = p_curIndex.row()
-    #curRecord = modelDoc.record(curIndex.row())     # QSqlRecord
-    #field = curRecord.field(3)                      # QSqlField
-    #print str(field.value())
     mapper.setCurrentModelIndex(p_curIndex)
     setEnabled("btnDocSave", True)
     setEnabled("btnDocDelete", True)        
@@ -1150,26 +1147,6 @@ def editPdfLiquidacio():
         actions = widget.actions()
         action = actions[0]
         action.trigger()
-
-
-# TODO
-def csvTemplate():
-
-    sql = "SELECT * FROM data.persona"
-    csvPath = "C:\\Dropbox\\test.csv"
-    query = QSqlQuery(sql)
-    
-    #data = [["test", "data"], ["foo", "bar"]]    
-    with open(csvPath, 'wb') as fout:
-        writer = csv.writer(fout, delimiter=";")    
-        while (query.next()):
-            record = query.record()
-            row = []
-            for i in range(record.count()):
-                value = record.value(i)
-                if value is not None:
-                    row.append(value)
-            writer.writerow(row)
 
     
 def manageFisica():

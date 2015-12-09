@@ -2,11 +2,11 @@
 from PyQt4.QtCore import *    # @UnusedWildImport
 from PyQt4.QtGui import *     # @UnusedWildImport
 from PyQt4.QtSql import *     # @UnusedWildImport
-from qgis.core import *
+from qgis.core import *       # @UnusedWildImport
 from qgis.utils import iface  # @UnresolvedImport
 from datetime import datetime
 import time
-from utils import *  # @UnusedWildImport
+from utils import *           # @UnusedWildImport
 from exp_om_dialog import ExpOmDialog
 import exp_om_controller
 from main_dao import MainDao
@@ -101,7 +101,6 @@ def setSignals():
     _dialog.findChild(QPushButton, "btnRefresh").clicked.connect(refresh)
     _dialog.findChild(QPushButton, "btnClose").clicked.connect(close)
     cboEmp.currentIndexChanged.connect(empChanged)
-    #tblExp.doubleClicked.connect(update)
 
 
 # Get 'Expedients' from selected 'parcela' and filter conditions
@@ -213,9 +212,9 @@ def delete():
     listId = ''
     for i in range(0, len(selectedList)):
         row = selectedList[i].row()
-        id = model.record(row).value("id")
-        msg+= str(id)+", "
-        listId = listId + str(id) + ", "
+        om_id = model.record(row).value("id")
+        msg+= str(om_id)+", "
+        listId = listId + str(om_id) + ", "
     msg = msg[:-2]
     listId = listId[:-2]
     infMsg = u"Està segur que desitja eliminar-los?"
@@ -234,6 +233,5 @@ def refresh():
 
     
 def close():
-    #mainDao.close()
     _dialog.parent().setVisible(False) 
     
