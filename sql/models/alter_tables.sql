@@ -119,17 +119,19 @@ PRIMARY KEY ("id")
 ALTER TABLE "data"."docs_om" ADD CONSTRAINT "fk_docs_om_doc_tipus_id" FOREIGN KEY ("tipus_id") REFERENCES "data"."tipus_doc" ("id");
 
 
-
 -- 30/10/2015
-
 ALTER TABLE "data"."press_om"
 ADD COLUMN "bon_icio_value" int4,
 ADD COLUMN "bon_llic_value" int4;
-
 ALTER TABLE "data"."persona"
 ALTER COLUMN "poblacio" SET DEFAULT 'Cubelles',
 ALTER COLUMN "cp" SET DEFAULT '08880';
 
+
+-- 08/12/2015
+UPDATE tecnic SET id = dni WHERE dni is NOT NULL;
+ALTER TABLE "data"."tecnic" DROP COLUMN "dni";
+ALTER TABLE "data"."tecnic" ALTER COLUMN "id" DROP DEFAULT;
 
 
 

@@ -215,18 +215,9 @@ PRIMARY KEY ("om_id")
 COMMENT ON COLUMN "data"."press_om"."placa" IS 'OF.7 Taxa Placa';
 
 
-DROP SEQUENCE IF EXISTS "data".tecnic_id_seq;
-CREATE SEQUENCE "data".tecnic_id_seq
-  INCREMENT 1
-  MINVALUE 1
-  MAXVALUE 9223372036854775807
-  START 7
-  CACHE 1;
-
 DROP TABLE IF EXISTS "data"."tecnic"; 
 CREATE TABLE "data"."tecnic" (
-"id" varchar(25) NOT NULL DEFAULT nextval('data.tecnic_id_seq'::regclass),
-"dni" varchar(9),
+"id" varchar(25),
 "nom" varchar(100),
 "cognom_1" varchar(100),
 "cognom_2" varchar(100),

@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'exp_om.ui'
 #
-# Created: Mon Nov 02 10:45:38 2015
-#      by: PyQt4 UI code generator 4.10.4
+# Created: Wed Dec 09 09:22:06 2015
+#      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -808,6 +808,36 @@ class Ui_Dialog(object):
         self.lblDoc_3.setGeometry(QtCore.QRect(10, 140, 101, 21))
         self.lblDoc_3.setObjectName(_fromUtf8("lblDoc_3"))
         self.tabMain.addTab(self.tabDocumentacio, _fromUtf8(""))
+        self.tabModelsDoc = QtGui.QWidget()
+        self.tabModelsDoc.setObjectName(_fromUtf8("tabModelsDoc"))
+        self.label = QtGui.QLabel(self.tabModelsDoc)
+        self.label.setGeometry(QtCore.QRect(20, 33, 231, 20))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.label.setFont(font)
+        self.label.setObjectName(_fromUtf8("label"))
+        self.label_2 = QtGui.QLabel(self.tabModelsDoc)
+        self.label_2.setGeometry(QtCore.QRect(20, 70, 231, 20))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.label_2.setFont(font)
+        self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.label_3 = QtGui.QLabel(self.tabModelsDoc)
+        self.label_3.setGeometry(QtCore.QRect(20, 110, 361, 20))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.label_3.setFont(font)
+        self.label_3.setObjectName(_fromUtf8("label_3"))
+        self.btnDoc_1 = QtGui.QPushButton(self.tabModelsDoc)
+        self.btnDoc_1.setGeometry(QtCore.QRect(390, 30, 75, 23))
+        self.btnDoc_1.setObjectName(_fromUtf8("btnDoc_1"))
+        self.btnDoc_2 = QtGui.QPushButton(self.tabModelsDoc)
+        self.btnDoc_2.setGeometry(QtCore.QRect(390, 70, 75, 23))
+        self.btnDoc_2.setObjectName(_fromUtf8("btnDoc_2"))
+        self.btnDoc_3 = QtGui.QPushButton(self.tabModelsDoc)
+        self.btnDoc_3.setGeometry(QtCore.QRect(390, 110, 75, 23))
+        self.btnDoc_3.setObjectName(_fromUtf8("btnDoc_3"))
+        self.tabMain.addTab(self.tabModelsDoc, _fromUtf8(""))
         self.btnSave = QtGui.QPushButton(Dialog)
         self.btnSave.setGeometry(QtCore.QRect(510, 510, 61, 31))
         self.btnSave.setText(_fromUtf8(""))
@@ -830,7 +860,7 @@ class Ui_Dialog(object):
         self.btnRefresh.setObjectName(_fromUtf8("btnRefresh"))
 
         self.retranslateUi(Dialog)
-        self.tabMain.setCurrentIndex(0)
+        self.tabMain.setCurrentIndex(4)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         Dialog.setTabOrder(self.tabMain, self.txtId)
         Dialog.setTabOrder(self.txtId, self.txtNumExp)
@@ -1029,6 +1059,13 @@ class Ui_Dialog(object):
         self.lblRep_2.setText(_translate("Dialog", "Tipus:", None))
         self.lblDoc_3.setText(_translate("Dialog", "Observacions:", None))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabDocumentacio), _translate("Dialog", "Gestor documentació", None))
+        self.label.setText(_translate("Dialog", "Informe OM + liquidació provisional", None))
+        self.label_2.setText(_translate("Dialog", "Informe jurídic", None))
+        self.label_3.setText(_translate("Dialog", "Aprovacio, si escau, d’atorgament de la llicència urbanística OM", None))
+        self.btnDoc_1.setText(_translate("Dialog", "Generar doc", None))
+        self.btnDoc_2.setText(_translate("Dialog", "Generar doc", None))
+        self.btnDoc_3.setText(_translate("Dialog", "Generar doc", None))
+        self.tabMain.setTabText(self.tabMain.indexOf(self.tabModelsDoc), _translate("Dialog", "Models de documents", None))
         self.btnSave.setToolTip(_translate("Dialog", "Desar", None))
         self.btnClose.setToolTip(_translate("Dialog", "Sortir", None))
         self.btnRefresh.setToolTip(_translate("Dialog", "Actualitzar", None))

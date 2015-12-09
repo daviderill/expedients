@@ -14,16 +14,17 @@ from utils import *  # @UnusedWildImport
 
 def openExpOm(dialog, parcela, expOmId = None):
 
-    global _dialog, _iface, _parcela, _expOmId, current_path, current_date, report_folder
+    global _dialog, _iface, _parcela, _expOmId, current_path, current_date, doc_folder, report_folder
     global MSG_DURATION, curRow
    
     current_path = os.path.dirname(os.path.abspath(__file__))
     date_aux = time.strftime("%d/%m/%Y")
     current_date = datetime.strptime(date_aux, "%d/%m/%Y")
+    doc_folder = current_path+"/doc/"
     report_folder = current_path+"/reports/"
 
     # Save reference to the QGIS interface
-    MSG_DURATION = 5
+    MSG_DURATION = 10
     setTableStatus("w")
     curRow = -1
     _iface = iface
@@ -148,6 +149,9 @@ def setSignals():
     _dialog.findChild(QPushButton, "btnSave").clicked.connect(save)    
     _dialog.findChild(QPushButton, "btnClose").clicked.connect(close)
     _dialog.findChild(QPushButton, "btnGenExp").clicked.connect(generateExpedient)
+    _dialog.findChild(QPushButton, "btnDoc_1").clicked.connect(partial(generateDoc, '1'))
+    _dialog.findChild(QPushButton, "btnDoc_2").clicked.connect(partial(generateDoc, '2'))
+    _dialog.findChild(QPushButton, "btnDoc_3").clicked.connect(partial(generateDoc, '3'))
     
     # General and Tab 'Dades Expedient'   
     #txtRegEnt.editingFinished.connect(validateRegEnt)    
@@ -1092,7 +1096,26 @@ def generateExpedient():
             setText("txtNumExp", value) 
             setDate("dateEntrada", current_date)
         
-        
+
+def generateDoc(index): 
+    
+    # Executem funció que omple la taula de report
+    sql = "SELECT report.fill_report_3("+getText("txtId")+");"
+    query = QSqlQuery()
+    query.prepare(sql)
+    result = query.exec_()
+    if result is False:
+        showWarning("Error en la consulta: "+query.lastQuery(), MSG_DURATION)
+        return
+    
+    # Obrir document
+    filePath = doc_folder+"model_"+str(index)+".doc"    
+    if os.path.isfile(filePath):
+        os.startfile(filePath)   
+    else:
+        showWarning("No s'ha trobat el model de document a: "+filePath, MSG_DURATION)         
+    
+       
 def openPdfLiquidacio():
 
     # Executem funció que omple la taula de report
@@ -1101,7 +1124,7 @@ def openPdfLiquidacio():
     query.prepare(sql)
     result = query.exec_()
     if result is False:
-        showWarning("Error en la consulta: "+query.lastQuery(), 30)
+        showWarning("Error en la consulta: "+query.lastQuery(), MSG_DURATION)
         return
     
     # Obrim la composició
@@ -1118,15 +1141,14 @@ def openPdfLiquidacio():
             showWarning("Document PDF no ha pogut ser generat a: "+filePath)
             
 
-# TODO: Function must search for action.text() rather than index because this changes...
 def editPdfLiquidacio():
 
+    # Function search for action.text() rather than index because this changes...
     # Getting QMenu widget related with Print Composers
     widget = iface.mainWindow().findChild(QMenu, "mPrintComposersMenu")
     if widget is not None:
         actions = widget.actions()
         action = actions[0]
-        #print action.text()
         action.trigger()
 
 
@@ -1163,7 +1185,7 @@ def attachDocument(widgetText):
     os.chdir(os.getcwd())
     fileDialog = QFileDialog()
     fileDialog.setFileMode(QFileDialog.ExistingFile);
-    filePath = fileDialog.getOpenFileName(None, "Select doc file")
+    filePath = fileDialog.getOpenFileName(None, "Selecciona document")
     setText(widgetText, filePath)
     if widgetText == "txtProjDoc":
         widgetButton = "btnProjOpen"

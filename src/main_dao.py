@@ -10,17 +10,16 @@ class MainDao():
     PORT = 5432
     DB = "gis_cubelles"
     USER = "gisadmin"
-    PWD = "8u9ijn"	
+    PWD = "8u9ijn"
 
     def __init__(self): 
         pass
-        #print "initMainDao"
 
     def initDb(self):
 
         self.db = QSqlDatabase.addDatabase("QPSQL")
         self.db.setHostName(self.HOST)
-        self.db.setPort(self.PORT)	
+        self.db.setPort(self.PORT)
         self.db.setDatabaseName(self.DB)
         self.db.setUserName(self.USER)
         self.db.setPassword(self.PWD)
@@ -30,6 +29,6 @@ class MainDao():
     def getDb(self):
         return self.db
     
-    def close(self):		
+    def close(self):
         self.db.close()
 
