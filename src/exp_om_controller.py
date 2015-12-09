@@ -8,7 +8,7 @@ from functools import partial
 from datetime import datetime
 import time
 import os
-import csv
+import shutil
 from utils import *           # @UnusedWildImport
 
 
@@ -149,9 +149,9 @@ def setSignals():
     _dialog.findChild(QPushButton, "btnSave").clicked.connect(save)    
     _dialog.findChild(QPushButton, "btnClose").clicked.connect(close)
     _dialog.findChild(QPushButton, "btnGenExp").clicked.connect(generateExpedient)
-    _dialog.findChild(QPushButton, "btnDoc_1").clicked.connect(partial(generateDoc, '1'))
-    _dialog.findChild(QPushButton, "btnDoc_2").clicked.connect(partial(generateDoc, '2'))
-    _dialog.findChild(QPushButton, "btnDoc_3").clicked.connect(partial(generateDoc, '3'))
+    for i in range (1, 7):
+        widget = _dialog.findChild(QPushButton, "btnDoc_"+str(i))
+        widget.clicked.connect(partial(generateDoc, i))
     
     # General and Tab 'Dades Expedient'   
     #txtRegEnt.editingFinished.connect(validateRegEnt)    
@@ -1105,12 +1105,18 @@ def generateDoc(index):
         showWarning("Error en la consulta: "+query.lastQuery(), MSG_DURATION)
         return
     
-    # Obrir document
-    filePath = doc_folder+"model_"+str(index)+".doc"    
-    if os.path.isfile(filePath):
-        os.startfile(filePath)   
+    # Copiar plantilla a carpeta de reports
+    name = "model_"+str(index)
+    docPath = doc_folder+name+".doc"  
+    filePath = report_folder+name+"_"+getText("txtId")+".doc"
+    if os.path.isfile(docPath):
+        try:
+            shutil.copyfile(docPath, filePath)     
+            os.startfile(filePath)   
+        except IOError:
+            showWarning("Error al generar el document a: "+filePath, MSG_DURATION) 
     else:
-        showWarning("No s'ha trobat el model de document a: "+filePath, MSG_DURATION)         
+        showWarning("No s'ha trobat el model de document a: "+docPath, MSG_DURATION)         
     
        
 def openPdfLiquidacio():

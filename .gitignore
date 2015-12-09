@@ -5,6 +5,7 @@
 *.qgs~
 sql/exp_om.sql
 src/doc*
+src/reports*
 
 
 #################

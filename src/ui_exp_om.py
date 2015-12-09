@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'exp_om.ui'
 #
-# Created: Wed Dec 09 16:31:27 2015
+# Created: Wed Dec 09 18:19:22 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -837,6 +837,33 @@ class Ui_Dialog(object):
         self.btnDoc_3 = QtGui.QPushButton(self.tabModelsDoc)
         self.btnDoc_3.setGeometry(QtCore.QRect(390, 110, 75, 23))
         self.btnDoc_3.setObjectName(_fromUtf8("btnDoc_3"))
+        self.btnDoc_4 = QtGui.QPushButton(self.tabModelsDoc)
+        self.btnDoc_4.setGeometry(QtCore.QRect(390, 150, 75, 23))
+        self.btnDoc_4.setObjectName(_fromUtf8("btnDoc_4"))
+        self.btnDoc_5 = QtGui.QPushButton(self.tabModelsDoc)
+        self.btnDoc_5.setGeometry(QtCore.QRect(390, 190, 75, 23))
+        self.btnDoc_5.setObjectName(_fromUtf8("btnDoc_5"))
+        self.btnDoc_6 = QtGui.QPushButton(self.tabModelsDoc)
+        self.btnDoc_6.setGeometry(QtCore.QRect(390, 230, 75, 23))
+        self.btnDoc_6.setObjectName(_fromUtf8("btnDoc_6"))
+        self.label_4 = QtGui.QLabel(self.tabModelsDoc)
+        self.label_4.setGeometry(QtCore.QRect(20, 150, 361, 20))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.label_4.setFont(font)
+        self.label_4.setObjectName(_fromUtf8("label_4"))
+        self.label_5 = QtGui.QLabel(self.tabModelsDoc)
+        self.label_5.setGeometry(QtCore.QRect(20, 190, 361, 20))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.label_5.setFont(font)
+        self.label_5.setObjectName(_fromUtf8("label_5"))
+        self.label_6 = QtGui.QLabel(self.tabModelsDoc)
+        self.label_6.setGeometry(QtCore.QRect(20, 230, 361, 20))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.label_6.setFont(font)
+        self.label_6.setObjectName(_fromUtf8("label_6"))
         self.tabMain.addTab(self.tabModelsDoc, _fromUtf8(""))
         self.btnSave = QtGui.QPushButton(Dialog)
         self.btnSave.setGeometry(QtCore.QRect(510, 510, 61, 31))
@@ -1065,6 +1092,12 @@ class Ui_Dialog(object):
         self.btnDoc_1.setText(_translate("Dialog", "Generar doc", None))
         self.btnDoc_2.setText(_translate("Dialog", "Generar doc", None))
         self.btnDoc_3.setText(_translate("Dialog", "Generar doc", None))
+        self.btnDoc_4.setText(_translate("Dialog", "Generar doc", None))
+        self.btnDoc_5.setText(_translate("Dialog", "Generar doc", None))
+        self.btnDoc_6.setText(_translate("Dialog", "Generar doc", None))
+        self.label_4.setText(_translate("Dialog", "Certificació  ", None))
+        self.label_5.setText(_translate("Dialog", "Notificació a interessat", None))
+        self.label_6.setText(_translate("Dialog", "Llicència urbanística de construcció", None))
         self.tabMain.setTabText(self.tabMain.indexOf(self.tabModelsDoc), _translate("Dialog", "Models de documents", None))
         self.btnSave.setToolTip(_translate("Dialog", "Desar", None))
         self.btnClose.setToolTip(_translate("Dialog", "Sortir", None))
