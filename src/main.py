@@ -1,7 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 from PyQt4.QtCore import *    # @UnusedWildImport
 from PyQt4.QtGui import *     # @UnusedWildImport
-from PyQt4.QtSql import *     # @UnusedWildImport
 from qgis.core import *       # @UnusedWildImport
 from qgis.utils import iface  # @UnresolvedImport
 from datetime import datetime
@@ -14,9 +13,13 @@ from main_dao import MainDao
 
 def formOpen(dialog,layerid,featureid):
 
-    global _dialog, _iface, current_path, current_date
-    global MSG_DURATION
+    global _dialog, _iface, current_path, current_date, MSG_DURATION
 
+    # Get dialog and his widgets
+    _dialog = dialog
+    setDialog(dialog)
+    widgetsToGlobal()
+    
     # Check if it is the first time we execute this module
     if isFirstTime():
 
@@ -25,28 +28,56 @@ def formOpen(dialog,layerid,featureid):
         date_aux = time.strftime("%d/%m/%Y")
         current_date = datetime.strptime(date_aux, "%d/%m/%Y")
         _iface = iface
-        MSG_DURATION = 5
+        MSG_DURATION = 10
 
         # Connect to Database (only once, when loading map)
-        showInfo("Attempting to connect to DB")
-        connectDb()
-
-    # Get dialog and his widgets
-    _dialog = dialog
-    setDialog(dialog)
-    widgetsToGlobal()
+        if not loadSettings():
+            return False
+        #showInfo("Attempting to connect to DB")
+        if not connectDb():
+            return False
     
     # Initial configuration
     initConfig()
 
 
+def loadSettings():
+    
+    global settings 
+
+    # Load local settings of the plugin
+    setting_file = os.path.join(current_path, 'config', 'expedients.config')
+    if not os.path.isfile(setting_file):
+        showWarning("Config file not found at: "+setting_file)
+        return False
+    
+    settings = QSettings(setting_file, QSettings.IniFormat)
+    return True
+        
+
 def connectDb():
 
     global mainDao
+    
+    # Get database parameters from configuration file
+    try:
+        host = str(settings.value('database/host'))
+        port = int(settings.value('database/port', '5432'))
+        db = str(settings.value('database/db'))
+        user = str(settings.value('database/user'))
+        pwd = str(settings.value('database/pwd'))
+    except Exception as ex:
+        showWarning('Error %s' % ex)
+        return False        
+         
+    # Set database connection   
     mainDao = MainDao()
+    mainDao.setParams(host, port, db, user, pwd)
     status = mainDao.initDb()
     if status is False:
         showWarning("Error connecting to Database")
+    
+    return status
 
 
 def widgetsToGlobal():
@@ -58,7 +89,7 @@ def widgetsToGlobal():
 
     
 def initConfig():
-    
+       
     # Load 'immobles' from selected 'parcela'
     loadImmobles()
     
@@ -197,10 +228,6 @@ def update(modelIndex):
 
 
 def delete():
-   
-    #selModel = tblExp.selectionModel()   #QItemSelectionModel
-    #itemSel = selModel.selection()       #QItemSelection
-    #indexes = itemSel.indexes()          #QModelIndexList
 
     # Get selected rows
     selectedList = tblExp.selectionModel().selectedRows()    
@@ -234,4 +261,5 @@ def refresh():
     
 def close():
     _dialog.parent().setVisible(False) 
+    
     
