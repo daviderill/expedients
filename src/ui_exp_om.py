@@ -8,6 +8,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
+import os
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -25,6 +26,8 @@ except AttributeError:
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
+        current_path = os.path.dirname(os.path.abspath(__file__))   
+        icons_folder = current_path+"/icons/"
         Dialog.setObjectName(_fromUtf8("Dialog"))
         Dialog.resize(654, 560)
         self.tabMain = QtGui.QTabWidget(Dialog)
@@ -598,7 +601,7 @@ class Ui_Dialog(object):
         self.btnPdfLiq.setGeometry(QtCore.QRect(280, 430, 61, 31))
         self.btnPdfLiq.setText(_fromUtf8(""))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(_fromUtf8("icons/pdf.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(icons_folder+"pdf.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btnPdfLiq.setIcon(icon)
         self.btnPdfLiq.setIconSize(QtCore.QSize(24, 24))
         self.btnPdfLiq.setObjectName(_fromUtf8("btnPdfLiq"))
@@ -609,7 +612,7 @@ class Ui_Dialog(object):
         self.btnEditLiq.setGeometry(QtCore.QRect(350, 430, 61, 31))
         self.btnEditLiq.setText(_fromUtf8(""))
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(_fromUtf8("icons/edit.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(_fromUtf8(icons_folder+"edit.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btnEditLiq.setIcon(icon1)
         self.btnEditLiq.setIconSize(QtCore.QSize(24, 24))
         self.btnEditLiq.setObjectName(_fromUtf8("btnEditLiq"))
@@ -728,7 +731,7 @@ class Ui_Dialog(object):
         self.btnDocRefresh.setGeometry(QtCore.QRect(560, 200, 31, 31))
         self.btnDocRefresh.setText(_fromUtf8(""))
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(_fromUtf8("icons/refresh.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(QtGui.QPixmap(_fromUtf8(icons_folder+"refresh.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btnDocRefresh.setIcon(icon2)
         self.btnDocRefresh.setIconSize(QtCore.QSize(23, 23))
         self.btnDocRefresh.setObjectName(_fromUtf8("btnDocRefresh"))
@@ -736,7 +739,7 @@ class Ui_Dialog(object):
         self.btnDocCreate.setGeometry(QtCore.QRect(440, 200, 31, 31))
         self.btnDocCreate.setText(_fromUtf8(""))
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap(_fromUtf8("icons/plus.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon3.addPixmap(QtGui.QPixmap(_fromUtf8(icons_folder+"plus.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btnDocCreate.setIcon(icon3)
         self.btnDocCreate.setIconSize(QtCore.QSize(23, 23))
         self.btnDocCreate.setObjectName(_fromUtf8("btnDocCreate"))
@@ -750,7 +753,7 @@ class Ui_Dialog(object):
         self.btnDocDelete.setGeometry(QtCore.QRect(480, 200, 31, 31))
         self.btnDocDelete.setText(_fromUtf8(""))
         icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap(_fromUtf8("icons/minus.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon4.addPixmap(QtGui.QPixmap(_fromUtf8(icons_folder+"minus.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btnDocDelete.setIcon(icon4)
         self.btnDocDelete.setIconSize(QtCore.QSize(23, 23))
         self.btnDocDelete.setObjectName(_fromUtf8("btnDocDelete"))
@@ -758,7 +761,7 @@ class Ui_Dialog(object):
         self.btnDocSave.setGeometry(QtCore.QRect(520, 200, 31, 31))
         self.btnDocSave.setText(_fromUtf8(""))
         icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap(_fromUtf8("icons/save.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon5.addPixmap(QtGui.QPixmap(_fromUtf8(icons_folder+"save.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btnDocSave.setIcon(icon5)
         self.btnDocSave.setIconSize(QtCore.QSize(23, 23))
         self.btnDocSave.setObjectName(_fromUtf8("btnDocSave"))
@@ -875,7 +878,7 @@ class Ui_Dialog(object):
         self.btnClose.setGeometry(QtCore.QRect(580, 510, 61, 31))
         self.btnClose.setText(_fromUtf8(""))
         icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap(_fromUtf8("icons/exit.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon6.addPixmap(QtGui.QPixmap(_fromUtf8(icons_folder+"exit.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btnClose.setIcon(icon6)
         self.btnClose.setIconSize(QtCore.QSize(24, 24))
         self.btnClose.setObjectName(_fromUtf8("btnClose"))
