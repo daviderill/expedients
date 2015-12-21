@@ -77,6 +77,9 @@ BEGIN
 	-- 'ICIO'
 	taxa_icio:= press * 0.04;
 	IF r_exp.bon_icio THEN
+		IF r_exp.bon_icio_value is null THEN
+			r_exp.bon_icio_value = 95;
+		END IF;
 		bonif_icio:= 100 - r_exp.bon_icio_value;
     taxa_icio = (taxa_icio * bonif_icio) / 100;
 	END IF;
@@ -139,6 +142,9 @@ BEGIN
 	--RAISE NOTICE 'valors = % % % % % % % % %', v_plu, v_res, v_ende, v_car, v_mov, v_fig, v_leg, v_par, v_pro;
 	taxa_llic:= v_plu + v_res + v_ende + v_car + v_mov + v_fig + v_leg + v_par + v_pro;
 	IF r_exp.bon_llic THEN
+		IF r_exp.bon_llic_value is null THEN
+			r_exp.bon_llic_value = 95;
+		END IF;
 		bonif_llic:= 100 - r_exp.bon_llic_value;
     taxa_llic = (taxa_llic * bonif_llic) / 100;
 	END IF;
