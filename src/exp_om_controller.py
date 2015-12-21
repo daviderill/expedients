@@ -674,7 +674,7 @@ def updateTotalLlicUrb():
     if chkBonLlic.isChecked():
         bonLlic = getBon("txtBonLlic")    
         totalLlic = totalLlic * (1.00 - float(bonLlic))
-        setNumeric('txtLlicTot', totalLlic)
+    setNumeric('txtLlicTot', totalLlic)
     updateTotal()    
         
         
@@ -685,6 +685,7 @@ def updateTotal():
     if chkLiqAj.isChecked():  
         setNumeric('txtTotalLiq', total)  
     else:
+        setText('txtTotalLiq', '')          
         setNumeric('txtTotalPress', total)  
 
         

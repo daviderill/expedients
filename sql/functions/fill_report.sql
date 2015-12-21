@@ -20,7 +20,9 @@ DECLARE
 	v_pro numeric(15,2);
 	taxa_llic numeric(15,2);
 	v_clav_uni numeric(15,2);
-	v_clav_plu numeric(15,2);
+	v_clav_plu_2 numeric(15,2);
+	v_clav_plu_6 numeric(15,2);
+	v_clav_plu_10 numeric(15,2);	
 	v_clav_mes numeric(15,2);
 	taxa_clav numeric(15,2);
 	tot_liq numeric(15,2);
@@ -49,7 +51,9 @@ BEGIN
 	v_par:= 0;
 	v_pro:= 0;
 	v_clav_uni:= 0;
-	v_clav_plu:= 0;
+	v_clav_plu_2:= 0;
+	v_clav_plu_6:= 0;
+	v_clav_plu_10:= 0;	
 	v_clav_mes:= 0;
 	v_gar_res:= 0;
 	v_gar_ser:= 0;
@@ -67,7 +71,7 @@ BEGIN
 		taxa_placa:= 12.9;
 	END IF;
 
-	-- 'Llicències urbanístiques'
+	-- 'LlicÃ¨ncies urbanÃ­stiques'
 	IF r_exp.plu THEN
 		v_plu:= greatest(38.15, r_exp.pressupost * 0.0096);
 	END IF;
@@ -87,7 +91,7 @@ BEGIN
 		v_fig:= greatest(725.4, r_exp.fig * 0.02);
 	END IF;
 	IF r_exp.leg THEN
-		v_leg:= v_plu + v_car + v_ende;
+		v_leg:= v_plu + v_car + v_res;
 	END IF;
 	IF r_exp.par IS NOT NULL THEN
 		v_par:= greatest(244, r_exp.fig * 0.02);
@@ -102,11 +106,11 @@ BEGIN
 	END IF;
 	IF r_exp.clav_plu IS NOT NULL THEN
 		IF r_exp.clav_plu = 2 THEN
-			v_clav_plu:= 650.76;
+			v_clav_plu_2:= 650.76;
 		ELSIF r_exp.clav_plu = 6 THEN
-			v_clav_plu:= 910.86;
+			v_clav_plu_6:= 910.86;
 		ELSIF r_exp.clav_plu = 10 THEN
-			v_clav_plu:= 1170.96;
+			v_clav_plu_10:= 1170.96;
 		END IF;
 	END IF;
 	IF r_exp.clav_mes IS NOT NULL THEN
@@ -116,12 +120,12 @@ BEGIN
 		END IF;
 	END IF;
 	
-	-- 'Taxa llicència'
+	-- 'Taxa llicÃ¨ncia'
 	taxa_llic:= v_plu + v_res + v_ende + v_car + v_mov + v_fig + v_leg + v_par + v_pro;
 	--RAISE NOTICE 'valors = % % % % % % % % %', v_plu, v_res, v_ende, v_car, v_mov, v_fig, v_leg, v_par, v_pro;
 
 	-- 'Taxa clavegueram'
-	taxa_clav:= v_clav_uni + v_clav_plu + v_clav_mes;
+	taxa_clav:= v_clav_uni + v_clav_plu_2 + v_clav_plu_6 + v_clav_plu_10 + v_clav_mes;
 
 	-- 'Total a liquidar'
 	tot_liq:= taxa_icio + taxa_placa + taxa_llic + taxa_clav;
@@ -140,14 +144,16 @@ BEGIN
 	v_sql_1:= 'INSERT INTO rpt_expedient (om_id, num_exp, parcela, immoble, 
 		pressupost, liq_aj, taxa_icio, taxa_placa, 
 		v_plu, v_res, v_ende, v_car, v_mov, v_fig, v_leg, v_par, v_pro, taxa_llic,
-		clav_uni, v_clav_uni, clav_plu, v_clav_plu, clav_mes, v_clav_mes, taxa_clav, 
-		tot_liq, gar_res, gar_ser, total
+		clav_uni, v_clav_uni, clav_plu, v_clav_plu_2, v_clav_plu_6, v_clav_plu_10, 
+		clav_mes, v_clav_mes, taxa_clav, tot_liq, gar_res, gar_ser, total,
+		notif_persona, notif_adreca, notif_cp, notif_poblacio
 		) VALUES (';
 	v_sql_2:= r_exp.id||', '||quote_nullable(r_exp.num_exp)||', '||quote_nullable(r_exp.parcela_id)||', '||quote_nullable(r_exp.immoble_id)||', 
 		'||quote_nullable(r_exp.pressupost)||', '||quote_nullable(r_exp.liq_aj)||', '||taxa_icio||', '||taxa_placa||', 
 		'||v_plu||', '||v_res||', '||v_ende||', '||v_car||', '||v_mov||', '||v_fig||', '||v_leg||', '||v_par||', '||v_pro||', '||taxa_llic||',
-		'||quote_nullable(r_exp.clav_uni)||', '||v_clav_uni||', '||quote_nullable(r_exp.clav_plu)||', '||v_clav_plu||', '||quote_nullable(r_exp.clav_mes)||', '||v_clav_mes||', '||taxa_clav||', 
-		'||tot_liq||', '||v_gar_res||', '||v_gar_ser||', '||total;
+		'||quote_nullable(r_exp.clav_uni)||', '||v_clav_uni||', '||quote_nullable(r_exp.clav_plu)||', '||v_clav_plu_2||', '||v_clav_plu_6||', '||v_clav_plu_10||',
+		'||quote_nullable(r_exp.clav_mes)||', '||v_clav_mes||', '||taxa_clav||', '||tot_liq||', '||v_gar_res||', '||v_gar_ser||', '||total||',
+		'||quote_nullable(r_exp.notif_persona)||', '||quote_nullable(r_exp.notif_adreca)||', '||quote_nullable(r_exp.notif_cp)||', '||quote_nullable(r_exp.notif_poblacio);
 	
 	v_sql:= v_sql_1 || v_sql_2 || ');';
 	--RAISE NOTICE 'sql = %', quote_literal(v_sql);

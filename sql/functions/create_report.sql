@@ -26,7 +26,9 @@ CREATE TABLE "report"."rpt_expedient" (
 "clav_uni" int4,
 "v_clav_uni" numeric (15,2),
 "clav_plu" int4,
-"v_clav_plu" numeric (15,2),
+"v_clav_plu_2" numeric (15,2),
+"v_clav_plu_6" numeric (15,2),
+"v_clav_plu_10" numeric (15,2),
 "clav_mes" int4,
 "v_clav_mes" numeric (15,2),
 "taxa_clav" numeric(15,2),
@@ -34,6 +36,10 @@ CREATE TABLE "report"."rpt_expedient" (
 "gar_res" numeric(15,2),
 "gar_ser" numeric(15,2),
 "total" numeric(15,2),
+"notif_persona" varchar,
+"notif_adreca" varchar,
+"notif_cp" varchar,
+"notif_poblacio" varchar,
 CONSTRAINT "rpt_expedient_pkey" PRIMARY KEY ("om_id")
 );
 
