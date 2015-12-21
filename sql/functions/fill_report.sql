@@ -2,8 +2,9 @@ CREATE OR REPLACE FUNCTION "report"."fill_report"(p_id int4)
   RETURNS "pg_catalog"."bool" AS $BODY$
 
 DECLARE
-    r_exp record;
-    v_sql varchar;
+  
+	r_exp record;
+  v_sql varchar;
 	v_sql_1 varchar;
 	v_sql_2 varchar;	
 	v_aux numeric(15,2);
@@ -29,6 +30,9 @@ DECLARE
 	v_gar_res numeric(15,2);
 	v_gar_ser numeric(15,2);
 	total numeric(15,2);
+	press numeric(15,2);
+	bonif_icio numeric(15,2);
+	bonif_llic numeric(15,2);
 
 BEGIN
 
@@ -64,22 +68,33 @@ BEGIN
 	FROM exp_om INNER JOIN press_om ON exp_om.id = press_om.om_id 
 	WHERE exp_om.id = p_id;
 		
-	--RAISE NOTICE 'aa = %', quote_nullable(r_exp.immoble_id);
-	-- 'ICIO i placa'
-	taxa_icio:= r_exp.pressupost * 0.04;
+	-- 'Pressupost' o 'Liquidació Aj.'
+	press:= r_exp.pressupost;
+	IF r_exp.liq_aj > 0 THEN
+		press:= r_exp.liq_aj;
+	END IF;
+
+	-- 'ICIO'
+	taxa_icio:= press * 0.04;
+	IF r_exp.bon_icio THEN
+		bonif_icio:= 100 - r_exp.bon_icio_value;
+    taxa_icio = (taxa_icio * bonif_icio) / 100;
+	END IF;
+
+	-- 'Placa'
 	IF r_exp.placa THEN
 		taxa_placa:= 12.9;
 	END IF;
 
 	-- 'Llicències urbanístiques'
 	IF r_exp.plu THEN
-		v_plu:= greatest(38.15, r_exp.pressupost * 0.0096);
+		v_plu:= greatest(38.15, press * 0.0096);
 	END IF;
 	IF r_exp.res THEN
-		v_res:= greatest(38.15, r_exp.pressupost * 0.0094);
+		v_res:= greatest(38.15, press * 0.0094);
 	END IF;
 	IF r_exp.ende THEN
-		v_ende:= r_exp.pressupost * 0.0367;
+		v_ende:= press * 0.0367;
 	END IF;
 	IF r_exp.car IS NOT NULL THEN
 		v_car:= r_exp.car * 8.9;
@@ -120,9 +135,13 @@ BEGIN
 		END IF;
 	END IF;
 	
-	-- 'Taxa llicència'
-	taxa_llic:= v_plu + v_res + v_ende + v_car + v_mov + v_fig + v_leg + v_par + v_pro;
+	-- 'Taxa llicències urbanístiques'
 	--RAISE NOTICE 'valors = % % % % % % % % %', v_plu, v_res, v_ende, v_car, v_mov, v_fig, v_leg, v_par, v_pro;
+	taxa_llic:= v_plu + v_res + v_ende + v_car + v_mov + v_fig + v_leg + v_par + v_pro;
+	IF r_exp.bon_llic THEN
+		bonif_llic:= 100 - r_exp.bon_llic_value;
+    taxa_llic = (taxa_llic * bonif_llic) / 100;
+	END IF;
 
 	-- 'Taxa clavegueram'
 	taxa_clav:= v_clav_uni + v_clav_plu_2 + v_clav_plu_6 + v_clav_plu_10 + v_clav_mes;
@@ -132,10 +151,10 @@ BEGIN
 
 	-- 'Garanties'
 	IF r_exp.gar_res THEN
-		v_gar_res:= greatest(1000, r_exp.pressupost * 0.01);
+		v_gar_res:= greatest(1000, press * 0.01);
 	END IF;
 	IF r_exp.gar_ser THEN
-		v_gar_ser:= greatest(600, r_exp.pressupost * 0.01);
+		v_gar_ser:= greatest(600, press * 0.01);
 	END IF;
 
 	-- 'Total'
